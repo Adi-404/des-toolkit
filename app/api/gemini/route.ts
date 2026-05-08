@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-// Imagen 3 by default — override with GEMINI_IMAGE_MODEL if needed.
-const DEFAULT_MODEL = 'imagen-3.0-generate-002';
+// Imagen 3.0 (generate-001) — override with GEMINI_IMAGE_MODEL env var if needed.
+const DEFAULT_MODEL = 'imagen-3.0-generate-001';
 const ALLOWED_ASPECT = new Set(['1:1', '3:4', '4:3', '9:16', '16:9']);
 
 interface ImagenPrediction {
