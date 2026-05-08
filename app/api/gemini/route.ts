@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 
-// Imagen 3 uses :generateImages; Gemini flash models use :generateContent.
-// Set GEMINI_IMAGE_MODEL to override (e.g. gemini-2.0-flash-exp-image-generation).
-const DEFAULT_MODEL = 'imagen-3.0-generate-001';
+// Gemini flash image generation uses :generateContent.
+// Imagen models (imagen-3.*) use :generateImages but require Vertex AI / allowlist access.
+// Set GEMINI_IMAGE_MODEL env var to override.
+const DEFAULT_MODEL = 'gemini-2.0-flash-exp-image-generation';
 const ALLOWED_ASPECT = new Set(['1:1', '3:4', '4:3', '9:16', '16:9']);
 
 // ── Response shapes ──────────────────────────────────────────────────────────
