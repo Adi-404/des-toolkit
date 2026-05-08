@@ -204,9 +204,12 @@
 
 /* ── Wide sectioned dropdown (Tools) ── */
 .dropdownWide {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
+    /* Fixed so it's always centered in the viewport, never clipped by the
+       groupWrap's position or the navbar's right edge */
+    position: fixed;
+    top: 66px;  /* navbar height (58px) + 8px gap */
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 60;
     width: 680px;
     max-width: calc(100vw - var(--clay-space-xl) * 2);
@@ -226,8 +229,8 @@
 }
 
 @keyframes dropIn {
-    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.98); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 @media (max-width: 900px) {
