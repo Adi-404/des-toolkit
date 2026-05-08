@@ -1,0 +1,206 @@
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--clay-space-xl);
+    align-items: stretch;
+}
+
+.controlCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-md);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-xs);
+}
+
+.fieldRow {
+    display: flex;
+    gap: var(--clay-space-xs);
+    align-items: stretch;
+}
+
+.swatch {
+    width: 56px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    cursor: pointer;
+    background: transparent;
+}
+
+.swatch::-webkit-color-swatch-wrapper { padding: 4px; }
+.swatch::-webkit-color-swatch { border: none; border-radius: 6px; }
+
+.swap {
+    align-self: flex-start;
+    margin-top: var(--clay-space-xs);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    cursor: pointer;
+    color: var(--clay-muted);
+    font-size: 14px;
+    transition: border-color 120ms ease, color 120ms ease;
+}
+
+.swap:hover { border-color: var(--clay-ink); color: var(--clay-ink); }
+
+/* ── Result preview ── */
+
+.result {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--clay-radius-xl);
+    overflow: hidden;
+    min-height: 360px;
+    box-shadow: 0 0 0 1px var(--clay-hairline);
+}
+
+.previewBlock {
+    flex: 1;
+    padding: var(--clay-space-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    transition: background 200ms ease, color 200ms ease;
+}
+
+.previewLarge {
+    font-family: var(--clay-font-display);
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    line-height: 1.1;
+}
+
+.previewSmall {
+    font-size: 14px;
+    line-height: 1.55;
+    opacity: 0.92;
+}
+
+.ratioBar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--clay-space-md);
+    padding: var(--clay-space-lg) var(--clay-space-xl);
+    background: var(--clay-canvas);
+    border-top: 1px solid var(--clay-hairline);
+}
+
+.ratioNum {
+    font-family: var(--clay-font-display);
+    font-size: 48px;
+    font-weight: 500;
+    letter-spacing: -1.5px;
+    color: var(--clay-ink);
+    line-height: 1;
+}
+
+.ratioSuffix {
+    font-size: 14px;
+    color: var(--clay-muted);
+    margin-left: 4px;
+}
+
+.badges {
+    display: flex;
+    gap: var(--clay-space-xs);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--clay-radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    border: 1px solid;
+}
+
+.pass {
+    background: rgba(34, 197, 94, 0.12);
+    color: #166534;
+    border-color: rgba(34, 197, 94, 0.35);
+}
+
+.fail {
+    background: rgba(239, 68, 68, 0.10);
+    color: #991b1b;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.partial {
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400e;
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* ── Color-blindness grid ── */
+
+.blindGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--clay-space-md);
+}
+
+.blindCard {
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
+    overflow: hidden;
+}
+
+.blindHeader {
+    padding: var(--clay-space-md) var(--clay-space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--clay-space-sm);
+    border-bottom: 1px solid var(--clay-hairline);
+}
+
+.blindTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+.blindPop {
+    font-size: 12px;
+    color: var(--clay-muted);
+}
+
+.blindSwatchPair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.blindSwatch {
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 200ms ease, color 200ms ease;
+}
+
+@media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .blindGrid { grid-template-columns: 1fr; }
+}

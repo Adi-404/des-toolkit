@@ -1,0 +1,386 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    font-family: var(--clay-font-body);
+}
+
+/* ── Toolbar ── */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    min-height: 64px;
+    padding: 0 var(--clay-space-xl);
+    background: var(--clay-canvas);
+    border-bottom: 1px solid var(--clay-hairline);
+    flex-shrink: 0;
+    gap: var(--clay-space-md);
+}
+
+.toolbarLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toolbarEyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+}
+
+.toolbarTitle {
+    font-family: var(--clay-font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--clay-ink);
+}
+
+.toolbarActions {
+    display: flex;
+    align-items: center;
+    gap: var(--clay-space-xs);
+}
+
+.actionBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 36px;
+    padding: 0 14px;
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    font-family: var(--clay-font-body);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    cursor: pointer;
+    transition: border-color 120ms ease, background 120ms ease;
+    white-space: nowrap;
+}
+
+.actionBtn:hover { border-color: var(--clay-ink); }
+
+/* ── Editors row ── */
+.editors {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    min-width: 0;
+    overflow: hidden;
+    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panelFull { width: 100%; }
+.panelHidden { width: 0; }
+
+.divider {
+    width: 1px;
+    background: var(--clay-hairline);
+    flex-shrink: 0;
+    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dividerHidden {
+    width: 0;
+    opacity: 0;
+}
+
+/* ── Panel header ── */
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 var(--clay-space-md);
+    background: var(--clay-surface-soft);
+    border-bottom: 1px solid var(--clay-hairline);
+    flex-shrink: 0;
+    gap: var(--clay-space-sm);
+}
+
+.panelLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+    flex-shrink: 0;
+}
+
+.panelHeaderActions {
+    display: flex;
+    gap: 4px;
+}
+
+/* ── Insert buttons ── */
+.insertBar {
+    display: flex;
+    gap: 3px;
+}
+
+.insertBtn {
+    padding: 3px 8px;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: 6px;
+    color: var(--clay-muted);
+    font-size: 11px;
+    font-family: var(--clay-font-body);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 120ms ease, color 120ms ease;
+    line-height: 1.4;
+}
+
+.insertBtn:hover {
+    border-color: var(--clay-ink);
+    color: var(--clay-ink);
+}
+
+/* ── Editor area ── */
+.editorArea {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.gutter {
+    width: 44px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: var(--clay-surface-soft);
+    border-right: 1px solid var(--clay-hairline);
+    padding: 12px 0;
+    user-select: none;
+}
+
+.lineNum {
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 11px;
+    color: var(--clay-muted-soft);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+}
+
+.textarea {
+    flex: 1;
+    resize: none;
+    background: var(--clay-canvas);
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--clay-ink);
+    caret-color: var(--clay-ink);
+}
+
+.textarea::selection {
+    background: var(--clay-brand-peach);
+    color: var(--clay-ink);
+}
+
+/* ── Preview area ── */
+.previewArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--clay-space-xl) var(--clay-space-xxl);
+    background: var(--clay-canvas);
+}
+
+/* ── Markdown rendered content ── */
+.markdown {
+    max-width: 70ch;
+    margin: 0 auto;
+    font-family: var(--clay-font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--clay-body);
+}
+
+.inlineCode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    border-radius: 6px;
+    padding: 1px 6px;
+    color: var(--clay-ink);
+}
+
+.markdown :global(h1) {
+    font-family: var(--clay-font-display);
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--clay-hairline);
+    color: var(--clay-ink);
+    line-height: 1.1;
+}
+
+.markdown :global(h2) {
+    font-family: var(--clay-font-display);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin: 32px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--clay-hairline-soft);
+    color: var(--clay-ink);
+    line-height: 1.2;
+}
+
+.markdown :global(h3) {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 24px 0 8px;
+    color: var(--clay-ink);
+    letter-spacing: -0.2px;
+}
+
+.markdown :global(h4),
+.markdown :global(h5),
+.markdown :global(h6) {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 18px 0 6px;
+    color: var(--clay-ink);
+}
+
+.markdown :global(p) {
+    margin: 0 0 16px;
+}
+
+.markdown :global(a) {
+    color: var(--clay-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--clay-brand-pink);
+    text-decoration-thickness: 2px;
+}
+
+.markdown :global(a:hover) {
+    text-decoration-color: var(--clay-ink);
+}
+
+.markdown :global(ul),
+.markdown :global(ol) {
+    margin: 0 0 16px;
+    padding-left: 24px;
+}
+
+.markdown :global(li) {
+    margin-bottom: 6px;
+}
+
+.markdown :global(blockquote) {
+    border-left: 3px solid var(--clay-ink);
+    margin: 0 0 16px;
+    padding: 4px 16px;
+    background: var(--clay-surface-soft);
+    border-radius: 0 var(--clay-radius-sm) var(--clay-radius-sm) 0;
+    color: var(--clay-body-strong);
+    font-style: italic;
+}
+
+.markdown :global(hr) {
+    border: none;
+    border-top: 1px solid var(--clay-hairline);
+    margin: 24px 0;
+}
+
+.markdown :global(pre) {
+    margin: 0 0 16px;
+    border-radius: var(--clay-radius-md);
+    border: 1px solid var(--clay-hairline);
+    overflow: hidden;
+}
+
+.markdown :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 0 16px;
+    font-size: 14px;
+}
+
+.markdown :global(th) {
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+.markdown :global(td) {
+    border: 1px solid var(--clay-hairline);
+    padding: 8px 12px;
+    color: var(--clay-body);
+}
+
+.markdown :global(tr:nth-child(even) td) {
+    background: var(--clay-surface-soft);
+}
+
+.markdown :global(strong) {
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+.markdown :global(em) {
+    color: var(--clay-body-strong);
+}
+
+.markdown :global(img) {
+    max-width: 100%;
+    border-radius: var(--clay-radius-md);
+    border: 1px solid var(--clay-hairline);
+}
+
+/* ── Status bar ── */
+.statusBar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0 var(--clay-space-md);
+    background: var(--clay-surface-soft);
+    border-top: 1px solid var(--clay-hairline);
+    font-size: 12px;
+    color: var(--clay-muted);
+    flex-shrink: 0;
+}
+
+.statusItem {
+    white-space: nowrap;
+    padding: 0 6px;
+}
+
+.statusDivider {
+    color: var(--clay-muted-soft);
+}

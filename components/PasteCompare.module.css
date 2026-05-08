@@ -1,0 +1,196 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--clay-space-md);
+    margin-bottom: var(--clay-space-md);
+    flex-wrap: wrap;
+}
+
+.toolbarGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--clay-space-xs);
+}
+
+.toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--clay-surface-card);
+    padding: 4px;
+    border-radius: var(--clay-radius-pill);
+}
+
+.toggleBtn {
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    color: var(--clay-muted);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--clay-radius-pill);
+    cursor: pointer;
+}
+
+.toggleBtnActive {
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    font-weight: 600;
+}
+
+.viewportSelect {
+    height: 32px;
+    padding: 0 12px;
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    font-family: var(--clay-font-body);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.scrollSync {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--clay-muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+.scrollSync input[type="checkbox"] {
+    accent-color: var(--clay-ink);
+}
+
+/* ── Layouts ── */
+
+.split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--clay-space-md);
+}
+
+.stacked {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--clay-space-md);
+}
+
+.pane {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-xs);
+    min-width: 0;
+}
+
+.paneHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--clay-space-sm);
+    padding: 6px 10px;
+}
+
+.paneLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+}
+
+.paneActions {
+    display: flex;
+    gap: 4px;
+}
+
+.paneBtn {
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    color: var(--clay-muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--clay-font-body);
+    transition: border-color 120ms ease, color 120ms ease;
+}
+
+.paneBtn:hover { border-color: var(--clay-ink); color: var(--clay-ink); }
+
+/* ── Editor + preview within a pane ── */
+
+.editor {
+    width: 100%;
+    height: 220px;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    background: var(--clay-canvas);
+    padding: var(--clay-space-sm) var(--clay-space-md);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--clay-ink);
+    resize: none;
+    outline: none;
+    white-space: pre;
+    overflow: auto;
+}
+
+.editor:focus { border-color: var(--clay-ink); }
+
+.previewBox {
+    background:
+        linear-gradient(45deg, var(--clay-hairline-soft) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--clay-hairline-soft) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--clay-hairline-soft) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--clay-hairline-soft) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    background-color: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: var(--clay-space-md);
+    min-height: 360px;
+}
+
+.iframeFrame {
+    background: white;
+    border-radius: var(--clay-radius-sm);
+    box-shadow: 0 0 0 1px var(--clay-hairline);
+    transition: width 200ms ease;
+}
+
+.iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: white;
+    border-radius: var(--clay-radius-sm);
+}
+
+.viewportLabel {
+    position: absolute;
+    bottom: var(--clay-space-md);
+    right: var(--clay-space-md);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--clay-muted);
+    background: var(--clay-canvas);
+    padding: 4px 8px;
+    border-radius: var(--clay-radius-sm);
+    border: 1px solid var(--clay-hairline);
+}
+
+@media (max-width: 960px) {
+    .split { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,118 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+}
+
+.wheelMenu {
+    position: fixed;
+    z-index: 9999;
+    width: 0;
+    height: 0;
+    font-family: 'JetBrains Mono', monospace;
+    animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.wheelBackground {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    left: 0;
+    top: 0;
+    margin-left: -180px;
+    margin-top: -180px;
+    background: color-mix(in srgb, var(--bg-primary) 20%, transparent);
+    backdrop-filter: blur(24px);
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wheelCenter {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 0;
+    top: 0;
+    margin-left: -50px;
+    margin-top: -50px;
+    background: color-mix(in srgb, var(--bg-secondary) 30%, transparent);
+    backdrop-filter: blur(24px);
+    border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-active);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.wheelCenter span {
+    padding: 10px;
+    word-break: break-word;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.wheelItem {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    margin-top: -25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--bg-sidebar) 30%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.wheelItem:hover,
+.activeItem {
+    background: color-mix(in srgb, var(--bg-active) 60%, transparent);
+    color: var(--text-active);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 40%, transparent);
+    z-index: 3;
+    transform: scale(1.35);
+}
+
+.wheelIcon {
+    position: relative;
+    font-size: 22px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,179 @@
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--clay-space-xl);
+    align-items: stretch;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-md);
+    min-height: 0;
+}
+
+.columnHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--clay-space-sm);
+}
+
+.columnLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+}
+
+.editor {
+    flex: 1;
+    min-height: 360px;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
+    background: var(--clay-canvas);
+    padding: var(--clay-space-md);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--clay-ink);
+    resize: none;
+    outline: none;
+    white-space: pre;
+    overflow: auto;
+}
+
+.editor:focus { border-color: var(--clay-ink); }
+
+.preview {
+    flex: 1;
+    min-height: 360px;
+    border-radius: var(--clay-radius-lg);
+    background:
+        linear-gradient(45deg, var(--clay-hairline-soft) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--clay-hairline-soft) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--clay-hairline-soft) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--clay-hairline-soft) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    background-color: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: var(--clay-space-md);
+    transition: background-color 200ms ease;
+}
+
+.previewDark {
+    background-color: var(--clay-surface-dark);
+}
+
+.previewSvg {
+    max-width: 100%;
+    max-height: 100%;
+    /* Transparent SVGs need a defined size — let the inner SVG control its own dimensions. */
+}
+
+.previewSvg svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--clay-surface-card);
+    padding: 4px;
+    border-radius: var(--clay-radius-pill);
+}
+
+.toggleBtn {
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    color: var(--clay-muted);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--clay-radius-pill);
+    cursor: pointer;
+}
+
+.toggleBtnActive {
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    font-weight: 600;
+}
+
+/* ── Stats row ── */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--clay-space-sm);
+}
+
+.statCard {
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    padding: var(--clay-space-sm) var(--clay-space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.statLabel {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+}
+
+.statValue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+.statSaving {
+    color: var(--clay-success);
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.dropZone {
+    border: 1px dashed var(--clay-muted-soft);
+    border-radius: var(--clay-radius-md);
+    padding: var(--clay-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--clay-space-sm);
+    color: var(--clay-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+}
+
+.dropZone:hover {
+    border-color: var(--clay-ink);
+    color: var(--clay-ink);
+}
+
+.dropZoneDragging {
+    border-color: var(--clay-brand-pink);
+    background: var(--clay-surface-card);
+    color: var(--clay-ink);
+}
+
+@media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+}
