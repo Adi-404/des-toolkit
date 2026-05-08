@@ -13,21 +13,25 @@
     z-index: 50;
 }
 
-/* Gradient bottom border instead of a flat hairline */
+/* Flowing gradient stripe at bottom — left-to-right sweep, always in motion */
 .nav::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 1px;
+    height: 2px;
+    overflow: hidden;
     background: linear-gradient(
         90deg,
         transparent 0%,
-        var(--clay-brand-pink) 15%,
-        var(--clay-brand-lavender) 45%,
-        var(--clay-brand-peach) 75%,
+        var(--clay-brand-pink) 18%,
+        var(--clay-brand-lavender) 40%,
+        var(--clay-brand-peach) 62%,
+        var(--clay-brand-mint) 82%,
         transparent 100%
     );
-    opacity: 0.45;
+    background-size: 50% 100%;
+    animation: clay-stripe-flow 2.4s linear infinite;
+    opacity: 0.65;
 }
 
 /* ── Brand ── */
@@ -107,8 +111,37 @@
     white-space: nowrap;
 }
 
+/* Animated gradient border ring — fades in on hover */
+.menuItem::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--clay-radius-pill);
+    padding: 1.5px;
+    background: linear-gradient(
+        var(--nav-item-angle, 135deg),
+        var(--clay-brand-pink) 0%,
+        var(--clay-brand-lavender) 50%,
+        var(--clay-brand-peach) 100%
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    animation: nav-item-sweep 3s linear infinite;
+    transition: opacity 180ms ease;
+}
+
+.menuItem:hover::before,
+.menuItemOpen::before {
+    opacity: 1;
+}
+
 .menuItem:hover {
-    background: var(--clay-surface-card);
+    background: var(--clay-surface-soft);
     color: var(--clay-ink);
 }
 

@@ -13,7 +13,9 @@ import styles from './MoodboardDemo.module.css';
  */
 
 const URL_TEXT = 'pinterest.com/pin/3729612269442333';
-const CYCLE_MS = 18000;
+// 23s total: phases 1+2 keep their absolute timings; claymation holds ~10s
+// before looping (fully settled at ~12.6s, loop at 23s → ~10.4s hold).
+const CYCLE_MS = 23000;
 
 interface DemoTag { name: string; color: string; }
 const TAGS: DemoTag[] = [
@@ -89,8 +91,8 @@ function Frame() {
                 animate={{ opacity: [0, 1, 1, 0] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // browser: 0–1s fade in, hold to 7s, fade out by 8.5s
-                    times: [0, 0.0556, 0.3889, 0.4722],
+                    // browser: 0–1s fade in, hold to 7s, fade out by 8.5s  [/23]
+                    times: [0, 0.0435, 0.3043, 0.3696],
                     ease: 'easeInOut',
                 }}
             >
@@ -187,8 +189,8 @@ function Frame() {
                 animate={{ opacity: [0, 0, 1, 1, 0] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // fontbook: invisible 0–7s, fade in by 8s, hold to 10s, fade out by 10.5s
-                    times: [0, 0.3889, 0.4444, 0.5556, 0.5833],
+                    // fontbook: 0–7s invisible, fade in by 8s, hold to 10s, out by 10.5s  [/23]
+                    times: [0, 0.3043, 0.3478, 0.4348, 0.4565],
                     ease: 'easeInOut',
                 }}
             >
@@ -239,11 +241,9 @@ function Frame() {
                 animate={{ opacity: [0, 0, 1] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // claymation: invisible 0–10s, fully opaque by 11s, then
-                    // holds at full opacity until the cycle resets at 18s.
-                    // Mountains animate in *after* full opacity so colors
-                    // never fight the cream backdrop during fade-in.
-                    times: [0, 0.5556, 0.6111],
+                    // claymation: invisible 0–10s, fully opaque by 11s, holds
+                    // until the 23s loop (~10.4s visible).  [/23]
+                    times: [0, 0.4348, 0.4783],
                     ease: 'easeInOut',
                 }}
             >

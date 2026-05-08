@@ -183,7 +183,7 @@ body {
     var(--clay-brand-lavender) 50%,
     var(--clay-brand-peach) 100%
   );
-  animation: clay-gradient-sweep 8s linear infinite;
+  animation: clay-gradient-sweep 3s linear infinite;
 }
 
 @property --gradient-angle {
@@ -192,8 +192,24 @@ body {
   inherits: false;
 }
 
+@property --nav-item-angle {
+  syntax: '<angle>';
+  initial-value: 135deg;
+  inherits: false;
+}
+
 @keyframes clay-gradient-sweep {
   to { --gradient-angle: 495deg; }
+}
+
+@keyframes nav-item-sweep {
+  to { --nav-item-angle: 495deg; }
+}
+
+/* Flowing left-to-right gradient stripe — used by the navbar bottom bar */
+@keyframes clay-stripe-flow {
+  from { background-position: 0% 0; }
+  to   { background-position: 50% 0; }
 }
 
 /* Solid-fill variant — for primary CTAs that want the gradient to BE the
