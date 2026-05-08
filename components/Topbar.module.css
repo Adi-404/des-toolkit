@@ -111,21 +111,24 @@
     white-space: nowrap;
 }
 
-/* Conic gradient ring — fades in on hover via mask-composite (no z-index needed) */
+/* Flowing gradient ring — fades in on hover, same animation as buttons/cards */
 .menuItem::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: var(--clay-radius-pill);
     padding: 1.5px;
-    background: conic-gradient(
-        from var(--nav-item-angle, 0deg),
+    background: linear-gradient(
+        60deg,
         var(--clay-brand-pink),
         var(--clay-brand-lavender),
         var(--clay-brand-peach),
         var(--clay-brand-coral),
+        var(--clay-brand-mint),
+        var(--clay-brand-ochre),
         var(--clay-brand-pink)
     );
+    background-size: 300% 300%;
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -133,7 +136,7 @@
     mask-composite: exclude;
     opacity: 0;
     pointer-events: none;
-    animation: nav-item-conic-spin 3s linear infinite;
+    animation: clay-border-flow 3s ease alternate infinite;
     transition: opacity 180ms ease;
 }
 
@@ -351,6 +354,7 @@
 }
 
 .cta {
+    --borderWidth: 1.5px;   /* thinner ring than default 2px */
     display: inline-flex;
     align-items: center;
     height: 36px;
