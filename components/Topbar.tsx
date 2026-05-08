@@ -43,7 +43,6 @@ const menu: MenuItem[] = [
             '/color/', '/css/', '/assets/', '/diff', '/json-formatter',
             '/markdown-preview', '/clipboard', '/download', '/csv-viewer',
             '/jwt-decoder', '/notes-pad', '/notes/', '/compare',
-            '/gemini',
         ],
         sections: [
             {
@@ -54,7 +53,7 @@ const menu: MenuItem[] = [
                     { label: 'Token lab',    href: '/assets/tokens',  glyph: '⌗', desc: 'CSS ⇄ Tailwind ⇄ tokens.json translator',         swatch: '#b8a4ed' },
                     { label: 'SVG viewer',   href: '/assets/svg',     glyph: '⌬', desc: 'Render and lightly clean up SVG',                swatch: '#ff4d8b' },
                     { label: 'Image kit',    href: '/assets/image',   glyph: '◰', desc: 'Base64, dimensions, favicon set',                swatch: '#e8b94a' },
-                    { label: 'Gemini imagery', href: '/gemini',       glyph: '✦', desc: 'Prompt → image via Imagen',                       swatch: '#b8a4ed' },
+                    { label: 'Palette extractor', href: '/color/palette', glyph: '◈', desc: 'Extract dominant colors from any image',      swatch: '#a4d4c5' },
                 ],
             },
             {

@@ -1,0 +1,298 @@
+.scroll {
+    flex: 1;
+    overflow-y: auto;
+    background: transparent;
+    color: var(--clay-ink);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--clay-space-xxl) var(--clay-space-xl);
+    background: linear-gradient(
+        to bottom,
+        var(--clay-canvas) 0%,
+        var(--clay-canvas) calc(100% - 64px),
+        rgba(255, 250, 240, 0) 100%
+    );
+}
+
+/* ── Header ── */
+.header {
+    margin-bottom: var(--clay-space-xxl);
+}
+
+.eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
+    margin-bottom: var(--clay-space-xs);
+}
+
+.title {
+    font-family: var(--clay-font-display);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -1px;
+    color: var(--clay-ink);
+    line-height: 1.05;
+    margin-bottom: var(--clay-space-xs);
+}
+
+.lede {
+    color: var(--clay-body);
+    font-size: 15px;
+    max-width: 480px;
+    line-height: 1.55;
+}
+
+/* ── Workspace ── */
+.workspace {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--clay-space-lg);
+    align-items: start;
+}
+
+@media (max-width: 720px) {
+    .workspace { grid-template-columns: 1fr; }
+}
+
+/* ── Drop zone ── */
+.dropZone {
+    aspect-ratio: 4 / 3;
+    border: 2px dashed var(--clay-hairline);
+    border-radius: var(--clay-radius-xl);
+    background: var(--clay-surface-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 150ms ease, background 150ms ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.dropZone:hover,
+.dropZoneOver {
+    border-color: var(--clay-ink);
+    background: var(--clay-surface-card);
+}
+
+.dropZoneHasImage {
+    border-style: solid;
+    border-color: var(--clay-hairline);
+    background: #000;
+}
+
+.dropZoneHasImage:hover {
+    border-color: var(--clay-ink);
+}
+
+.dropPrompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--clay-space-xs);
+    pointer-events: none;
+}
+
+.dropGlyph {
+    font-size: 40px;
+    line-height: 1;
+    color: var(--clay-muted-soft);
+}
+
+.dropTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--clay-body);
+}
+
+.dropSub {
+    font-size: 13px;
+    color: var(--clay-muted);
+}
+
+.preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* ── Palette panel ── */
+.palettePanel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-md);
+    min-height: 200px;
+}
+
+.busyState {
+    display: flex;
+    align-items: center;
+    gap: var(--clay-space-sm);
+    color: var(--clay-muted);
+    font-size: 14px;
+    padding: var(--clay-space-xl) 0;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--clay-hairline);
+    border-top-color: var(--clay-ink);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--clay-space-xxl) 0;
+    color: var(--clay-muted);
+    font-size: 14px;
+}
+
+/* ── Proportion bar ── */
+.proportionBar {
+    display: flex;
+    height: 10px;
+    border-radius: var(--clay-radius-pill);
+    overflow: hidden;
+    gap: 2px;
+}
+
+.proportionSegment {
+    border-radius: var(--clay-radius-pill);
+    transition: flex 300ms ease;
+}
+
+/* ── Swatches ── */
+.swatches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--clay-space-xs);
+}
+
+@media (max-width: 520px) {
+    .swatches { grid-template-columns: repeat(4, 1fr); }
+}
+
+.swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: var(--clay-space-xs) var(--clay-space-xs) var(--clay-space-sm);
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    cursor: pointer;
+    font-family: var(--clay-font-body);
+    transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+    position: relative;
+}
+
+.swatch:hover {
+    border-color: var(--clay-ink);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.08);
+}
+
+.swatchColor {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--clay-radius-sm);
+    display: block;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+}
+
+.swatchHex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--clay-ink);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.swatchPct {
+    font-size: 10px;
+    color: var(--clay-muted);
+}
+
+.swatchCopied {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 250, 240, 0.88);
+    border-radius: var(--clay-radius-md);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--clay-success);
+}
+
+/* ── Export ── */
+.exportRow {
+    display: flex;
+    align-items: center;
+    gap: var(--clay-space-xs);
+    flex-wrap: wrap;
+    padding-top: var(--clay-space-xs);
+    border-top: 1px solid var(--clay-hairline-soft);
+}
+
+.exportLabel {
+    font-size: 12px;
+    color: var(--clay-muted);
+    font-weight: 500;
+    margin-right: 2px;
+}
+
+.exportBtn {
+    height: 32px;
+    padding: 0 14px;
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-pill);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--clay-body);
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.exportBtn:hover {
+    background: var(--clay-surface-strong);
+    color: var(--clay-ink);
+    border-color: var(--clay-surface-strong);
+}
+
+.exportBtnSecondary {
+    height: 32px;
+    padding: 0 14px;
+    background: transparent;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-pill);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    color: var(--clay-muted);
+    cursor: pointer;
+    margin-left: auto;
+    transition: color 120ms ease, border-color 120ms ease;
+}
+
+.exportBtnSecondary:hover {
+    color: var(--clay-error);
+    border-color: var(--clay-error);
+}

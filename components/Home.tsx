@@ -19,7 +19,7 @@ const designTools: ToolCard[] = [
     { label: 'Token lab',      href: '/assets/tokens',  desc: 'Translate colour tokens between CSS, Tailwind, and W3C tokens.json.', glyph: '⌗', tag: 'Tokens', variant: 'peach' },
     { label: 'SVG viewer',     href: '/assets/svg',     desc: 'Render any SVG, inspect dimensions, strip metadata.',                glyph: '⌬', tag: 'Assets', variant: 'pink',  darkTag: true },
     { label: 'Image kit',      href: '/assets/image',   desc: 'Drop an image to get base64, dimensions, and a full favicon set.',    glyph: '◰', tag: 'Assets', variant: 'ochre' },
-    { label: 'Gemini imagery', href: '/gemini',         desc: 'Generate placeholder art from a prompt with Imagen via the Gemini API.', glyph: '✦', tag: 'AI',     variant: 'teal',  darkTag: true },
+    { label: 'Palette extractor', href: '/color/palette', desc: 'Drop an image to pull out its dominant colors. Export as hex, CSS vars, or Tailwind.', glyph: '◈', tag: 'Color', variant: 'teal', darkTag: true },
 ];
 
 // ── Code & utility tools — pure dev work, not Figma-overlap ──

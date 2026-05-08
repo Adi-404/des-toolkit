@@ -21,7 +21,7 @@ const tools: ToolEntry[] = [
     { label: 'Token lab',     href: '/assets/tokens',    desc: 'Translate CSS ⇄ Tailwind ⇄ tokens.json',           swatch: '#b8a4ed', glyph: '⌗', category: 'Design' },
     { label: 'SVG viewer',    href: '/assets/svg',       desc: 'Render and lightly clean up SVG markup',           swatch: '#ff4d8b', glyph: '⌬', category: 'Design' },
     { label: 'Image kit',     href: '/assets/image',     desc: 'Base64, dimensions, favicon set',                  swatch: '#e8b94a', glyph: '◰', category: 'Design' },
-    { label: 'Gemini imagery', href: '/gemini',          desc: 'Generate images from a prompt with Imagen',        swatch: '#b8a4ed', glyph: '✦', category: 'AI' },
+    { label: 'Palette extractor', href: '/color/palette', desc: 'Extract dominant colors from any image',           swatch: '#a4d4c5', glyph: '◈', category: 'Design' },
     { label: 'Diff Checker',  href: '/diff',             desc: 'Side-by-side text diff with merge',                swatch: '#f5f0e0', glyph: '⇄', category: 'Code' },
     { label: 'JSON Formatter', href: '/json-formatter',  desc: 'Format, validate and tree-view JSON',              swatch: '#e8b94a', glyph: '{}', category: 'Code' },
     { label: 'Paste & compare', href: '/compare',        desc: 'Render two HTML/CSS snippets side-by-side',        swatch: '#ff4d8b', glyph: '⏃', category: 'Code' },
