@@ -29,16 +29,41 @@ interface MenuItem {
     label: string;
     href: string;
     matchPrefixes: string[];
-    /** When present, the item renders as a sectioned dropdown. */
+    /** Glyph shown as a small colored badge next to the label */
+    glyph?: string;
+    /** Background color of the glyph badge */
+    glyphColor?: string;
+    /** CSS custom property value for the active-dot color */
+    dotColor?: string;
     sections?: ToolSection[];
 }
 
 const menu: MenuItem[] = [
     {
+        id: 'moodboard',
+        label: 'Moodboard',
+        href: '/moodboard',
+        glyph: '✿',
+        glyphColor: '#ff4d8b',
+        dotColor: '#ff4d8b',
+        matchPrefixes: ['/moodboard'],
+    },
+    {
+        id: 'fonts',
+        label: 'Fonts',
+        href: '/fonts',
+        glyph: 'Aa',
+        glyphColor: '#b8a4ed',
+        dotColor: '#b8a4ed',
+        matchPrefixes: ['/fonts'],
+    },
+    {
         id: 'tools',
         label: 'Tools',
-        // Default landing for an accidental click on the pill itself.
         href: '/color/contrast',
+        glyph: '⬡',
+        glyphColor: '#e8b94a',
+        dotColor: '#e8b94a',
         matchPrefixes: [
             '/color/', '/css/', '/assets/', '/diff', '/json-formatter',
             '/markdown-preview', '/clipboard', '/download', '/csv-viewer',
@@ -48,45 +73,42 @@ const menu: MenuItem[] = [
             {
                 title: 'Design',
                 tools: [
-                    { label: 'Contrast',     href: '/color/contrast', glyph: '◐', desc: 'WCAG ratio + colour-blindness preview',          swatch: '#f5f0e0' },
-                    { label: 'Bezier',       href: '/css/bezier',     glyph: '∿', desc: 'Cubic-bezier easing with motion preview',         swatch: '#b8a4ed' },
-                    { label: 'Token lab',    href: '/assets/tokens',  glyph: '⌗', desc: 'CSS ⇄ Tailwind ⇄ tokens.json translator',         swatch: '#b8a4ed' },
-                    { label: 'SVG viewer',   href: '/assets/svg',     glyph: '⌬', desc: 'Render and lightly clean up SVG',                swatch: '#ff4d8b' },
-                    { label: 'Image kit',    href: '/assets/image',   glyph: '◰', desc: 'Base64, dimensions, favicon set',                swatch: '#e8b94a' },
-                    { label: 'Palette extractor', href: '/color/palette', glyph: '◈', desc: 'Extract dominant colors from any image',      swatch: '#a4d4c5' },
+                    { label: 'Contrast',          href: '/color/contrast',  glyph: '◐', desc: 'WCAG ratio + colour-blindness preview',     swatch: '#f5f0e0' },
+                    { label: 'Bezier',             href: '/css/bezier',      glyph: '∿', desc: 'Cubic-bezier easing with motion preview',    swatch: '#b8a4ed' },
+                    { label: 'Token lab',          href: '/assets/tokens',   glyph: '⌗', desc: 'CSS ⇄ Tailwind ⇄ tokens.json translator',    swatch: '#b8a4ed' },
+                    { label: 'SVG viewer',         href: '/assets/svg',      glyph: '⌬', desc: 'Render and lightly clean up SVG',            swatch: '#ff4d8b' },
+                    { label: 'Image kit',          href: '/assets/image',    glyph: '◰', desc: 'Base64, dimensions, favicon set',            swatch: '#e8b94a' },
+                    { label: 'Palette extractor',  href: '/color/palette',   glyph: '◈', desc: 'Extract dominant colors from any image',     swatch: '#a4d4c5' },
                 ],
             },
             {
                 title: 'Code',
                 tools: [
-                    { label: 'Diff Checker',     href: '/diff',             glyph: '⇄',  desc: 'Side-by-side text diff with merge',     swatch: '#f5f0e0' },
-                    { label: 'JSON Formatter',   href: '/json-formatter',   glyph: '{}', desc: 'Format, validate, tree-view JSON',       swatch: '#e8b94a' },
-                    { label: 'Paste & compare',  href: '/compare',          glyph: '⏃',  desc: 'Two HTML/CSS panes side-by-side',        swatch: '#ff4d8b' },
-                    { label: 'Markdown Preview', href: '/markdown-preview', glyph: '¶',  desc: 'Live two-pane GFM editor',               swatch: '#f5f0e0' },
-                    { label: 'Clipboard',        href: '/clipboard',        glyph: '⧉',  desc: 'Tabbed scratchpad with line numbers',    swatch: '#ff4d8b' },
+                    { label: 'Diff Checker',     href: '/diff',             glyph: '⇄',  desc: 'Side-by-side text diff with merge',    swatch: '#f5f0e0' },
+                    { label: 'JSON Formatter',   href: '/json-formatter',   glyph: '{}', desc: 'Format, validate, tree-view JSON',      swatch: '#e8b94a' },
+                    { label: 'Paste & compare',  href: '/compare',          glyph: '⏃',  desc: 'Two HTML/CSS panes side-by-side',       swatch: '#ff4d8b' },
+                    { label: 'Markdown Preview', href: '/markdown-preview', glyph: '¶',  desc: 'Live two-pane GFM editor',              swatch: '#f5f0e0' },
+                    { label: 'Clipboard',        href: '/clipboard',        glyph: '⧉',  desc: 'Tabbed scratchpad with line numbers',   swatch: '#ff4d8b' },
                 ],
             },
             {
                 title: 'Utility',
                 tools: [
                     { label: 'Download',    href: '/download',     glyph: '↓', desc: 'One-key save of clipboard text or image', swatch: '#f5f0e0' },
-                    { label: 'CSV Viewer',  href: '/csv-viewer',   glyph: '▦', desc: 'Sort, search, export CSV',                 swatch: '#ffb084' },
-                    { label: 'JWT Decoder', href: '/jwt-decoder',  glyph: '⚿', desc: 'Decode JWT header + payload',              swatch: '#b8a4ed' },
-                    { label: 'Notes Pad',   href: '/notes-pad',    glyph: '≡', desc: 'Personal scratchpad notes',                swatch: '#ffb084' },
+                    { label: 'CSV Viewer',  href: '/csv-viewer',   glyph: '▦', desc: 'Sort, search, export CSV',                swatch: '#ffb084' },
+                    { label: 'JWT Decoder', href: '/jwt-decoder',  glyph: '⚿', desc: 'Decode JWT header + payload',             swatch: '#b8a4ed' },
+                    { label: 'Notes Pad',   href: '/notes-pad',    glyph: '≡', desc: 'Personal scratchpad notes',               swatch: '#ffb084' },
                 ],
             },
         ],
     },
     {
-        id: 'fonts',
-        label: 'Fonts',
-        href: '/fonts',
-        matchPrefixes: ['/fonts'],
-    },
-    {
         id: 'pomodoro',
         label: 'Focus',
         href: '/pomodoro',
+        glyph: '◔',
+        glyphColor: '#1a3a3a',
+        dotColor: '#1a3a3a',
         matchPrefixes: ['/pomodoro'],
     },
 ];
@@ -161,9 +183,12 @@ export default function Topbar() {
             <header className={styles.nav} ref={navRef}>
                 <Link href="/" className={styles.brand}>
                     <span>des</span>
-                    <span className={styles.brandDot}>/</span>
-                    <span className={styles.brandAccent}>toolkit</span>
+                    <span className={styles.brandSlash}>/</span>
+                    <span>toolkit</span>
+                    <span className={styles.brandBadge}>alpha</span>
                 </Link>
+
+                <div className={styles.divider} aria-hidden="true" />
 
                 <nav className={styles.menu}>
                     {menu.map((item) => {
@@ -180,8 +205,18 @@ export default function Topbar() {
                                 <Link
                                     href={item.href}
                                     className={`${styles.menuItem} ${active ? styles.menuItemActive : ''} ${open ? styles.menuItemOpen : ''}`}
+                                    style={active && item.dotColor ? { '--item-dot-color': item.dotColor } as React.CSSProperties : undefined}
                                     onClick={() => setOpenGroupId(null)}
                                 >
+                                    {item.glyph && (
+                                        <span
+                                            className={styles.navGlyph}
+                                            style={{ background: item.glyphColor ?? 'var(--clay-surface-strong)' }}
+                                            aria-hidden="true"
+                                        >
+                                            {item.glyph}
+                                        </span>
+                                    )}
                                     <span>{item.label}</span>
                                     {hasDropdown && (
                                         <span className={styles.menuChevron} aria-hidden="true">▾</span>
