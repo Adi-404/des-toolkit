@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
@@ -124,6 +125,7 @@ export default function Topbar() {
 
     const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     function clearTimers() {
         if (openTimerRef.current) { clearTimeout(openTimerRef.current); openTimerRef.current = null; }
@@ -162,7 +164,9 @@ export default function Topbar() {
         }
         function onClick(e: MouseEvent) {
             if (!navRef.current) return;
-            if (!navRef.current.contains(e.target as Node)) setOpenGroupId(null);
+            const inNav = navRef.current.contains(e.target as Node);
+            const inDropdown = dropdownRef.current?.contains(e.target as Node);
+            if (!inNav && !inDropdown) setOpenGroupId(null);
         }
         window.addEventListener('keydown', onKey);
         window.addEventListener('mousedown', onClick);
@@ -223,8 +227,9 @@ export default function Topbar() {
                                     )}
                                 </Link>
 
-                                {hasDropdown && open && (
+                                {hasDropdown && open && createPortal(
                                     <div
+                                        ref={dropdownRef}
                                         className={styles.dropdownWide}
                                         onMouseEnter={clearTimers}
                                         onMouseLeave={scheduleClose}
@@ -260,7 +265,8 @@ export default function Topbar() {
                                                 </div>
                                             </div>
                                         ))}
-                                    </div>
+                                    </div>,
+                                    document.body
                                 )}
                             </div>
                         );

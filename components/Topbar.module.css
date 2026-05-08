@@ -203,16 +203,15 @@
 }
 
 /* ── Wide sectioned dropdown (Tools) ── */
+/* Rendered via React portal into document.body so backdrop-filter on .nav
+   cannot create a new containing block and break position:fixed centering */
 .dropdownWide {
-    /* Fixed so it's always centered in the viewport, never clipped by the
-       groupWrap's position or the navbar's right edge */
     position: fixed;
-    top: 66px;  /* navbar height (58px) + 8px gap */
+    top: 66px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 60;
-    width: 680px;
-    max-width: calc(100vw - var(--clay-space-xl) * 2);
+    z-index: 9999;
+    width: min(800px, calc(100vw - 32px));
     padding: var(--clay-space-md);
     background: rgba(255, 250, 240, 0.96);
     backdrop-filter: blur(20px);
@@ -226,6 +225,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: var(--clay-space-md);
     animation: dropIn 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    overflow: hidden;
 }
 
 @keyframes dropIn {
@@ -233,8 +233,12 @@
     to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
-@media (max-width: 900px) {
-    .dropdownWide { grid-template-columns: 1fr; width: 300px; }
+@media (max-width: 720px) {
+    .dropdownWide { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .dropdownWide { grid-template-columns: 1fr; }
 }
 
 .dropdownSection {
@@ -307,9 +311,9 @@
     color: var(--clay-muted);
     line-height: 1.35;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 190px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 /* ── Right side ── */
