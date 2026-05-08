@@ -143,73 +143,106 @@ body {
   color: var(--clay-ink);
 }
 
-/* ── Gradient border utility ──────────────────────────────────────────────
-   Drop .clay-gradient-border on any element to give it a 2px tri-colour
-   sweep border. The trick: the ::after layer sits on top of the parent's
-   background, drawn as a filled gradient, then mask-composited so only the
-   2px outer ring is visible. No z-index hacks, no isolation tricks — keeps
-   working even when the parent has its own background or transform.        */
+/* ── Gradient border utility (conic-gradient / theosoti.com technique) ───────
+   Drop .clay-gradient-border on any element for a spinning conic ring.
+   Add .clay-gradient-border-animated to make it spin + glow.
 
-.clay-gradient-border {
-  position: relative;
-}
+   How it works:
+   - ::after extends 2px outside the element (inset: -2px) and sits BEHIND
+     its content (z-index: -1). The element's own background covers the
+     interior; only the 2px ring outside the boundary shows the gradient.
+   - ::before is the identical layer but blurred — this is the glow halo.
+   - The element must have z-index: 1 to establish a stacking context so that
+     z-index: -1 on pseudo-elements stays inside it (not leaking behind parent).
+   - @property --conic-angle lets CSS animate a custom property used inside
+     conic-gradient(), giving a smooth continuous spin.                       */
 
-.clay-gradient-border::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2px;
-  background: linear-gradient(
-    135deg,
-    var(--clay-brand-pink) 0%,
-    var(--clay-brand-lavender) 50%,
-    var(--clay-brand-peach) 100%
-  );
-  /* mask-composite: exclude leaves only the 2px ring (the part NOT covered
-     by the inner content-box mask) visible. */
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
-}
-
-.clay-gradient-border-animated::after {
-  background: linear-gradient(
-    var(--gradient-angle, 135deg),
-    var(--clay-brand-pink) 0%,
-    var(--clay-brand-lavender) 50%,
-    var(--clay-brand-peach) 100%
-  );
-  animation: clay-gradient-sweep 3s linear infinite;
-}
-
-@property --gradient-angle {
+@property --conic-angle {
   syntax: '<angle>';
-  initial-value: 135deg;
+  initial-value: 0deg;
   inherits: false;
 }
 
+/* Kept for the navbar hover ring (uses mask-composite, not z-index) */
 @property --nav-item-angle {
   syntax: '<angle>';
-  initial-value: 135deg;
+  initial-value: 0deg;
   inherits: false;
 }
 
-@keyframes clay-gradient-sweep {
-  to { --gradient-angle: 495deg; }
+@keyframes clay-conic-spin {
+  to { --conic-angle: 360deg; }
 }
 
-@keyframes nav-item-sweep {
-  to { --nav-item-angle: 495deg; }
+@keyframes nav-item-conic-spin {
+  to { --nav-item-angle: 360deg; }
 }
 
-/* Flowing left-to-right gradient stripe — used by the navbar bottom bar */
+/* Flowing left-to-right gradient stripe — navbar bottom bar */
 @keyframes clay-stripe-flow {
   from { background-position: 0% 0; }
   to   { background-position: 50% 0; }
+}
+
+.clay-gradient-border {
+  position: relative;
+  z-index: 1;
+}
+
+/* Sharp conic ring — sits behind the element's background via z-index: -1 */
+.clay-gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--conic-angle, 0deg),
+    var(--clay-brand-pink),
+    var(--clay-brand-lavender),
+    var(--clay-brand-peach),
+    var(--clay-brand-coral),
+    var(--clay-brand-pink)
+  );
+  pointer-events: none;
+}
+
+/* Blurred glow copy — sits even further back */
+.clay-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -2;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--conic-angle, 0deg),
+    var(--clay-brand-pink),
+    var(--clay-brand-lavender),
+    var(--clay-brand-peach),
+    var(--clay-brand-coral),
+    var(--clay-brand-pink)
+  );
+  filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+}
+
+/* Animated: spin the ring and show the glow */
+.clay-gradient-border-animated::after,
+.clay-gradient-border-animated::before {
+  animation: clay-conic-spin 3s linear infinite;
+}
+
+.clay-gradient-border-animated::before {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clay-gradient-border-animated::after,
+  .clay-gradient-border-animated::before {
+    animation: none;
+  }
 }
 
 /* Solid-fill variant — for primary CTAs that want the gradient to BE the

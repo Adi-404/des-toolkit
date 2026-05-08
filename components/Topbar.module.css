@@ -111,18 +111,20 @@
     white-space: nowrap;
 }
 
-/* Animated gradient border ring — fades in on hover */
+/* Conic gradient ring — fades in on hover via mask-composite (no z-index needed) */
 .menuItem::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: var(--clay-radius-pill);
     padding: 1.5px;
-    background: linear-gradient(
-        var(--nav-item-angle, 135deg),
-        var(--clay-brand-pink) 0%,
-        var(--clay-brand-lavender) 50%,
-        var(--clay-brand-peach) 100%
+    background: conic-gradient(
+        from var(--nav-item-angle, 0deg),
+        var(--clay-brand-pink),
+        var(--clay-brand-lavender),
+        var(--clay-brand-peach),
+        var(--clay-brand-coral),
+        var(--clay-brand-pink)
     );
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
@@ -131,7 +133,7 @@
     mask-composite: exclude;
     opacity: 0;
     pointer-events: none;
-    animation: nav-item-sweep 3s linear infinite;
+    animation: nav-item-conic-spin 3s linear infinite;
     transition: opacity 180ms ease;
 }
 
