@@ -3,7 +3,7 @@
 .scroll {
     flex: 1;
     overflow-y: auto;
-    background: var(--clay-canvas);
+    background: transparent;
     color: var(--clay-ink);
 }
 
@@ -11,6 +11,12 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: var(--clay-space-xxl) var(--clay-space-xl) var(--clay-space-xxl);
+    background: linear-gradient(
+        to bottom,
+        var(--clay-canvas) 0%,
+        var(--clay-canvas) calc(100% - 64px),
+        rgba(255, 250, 240, 0) 100%
+    );
 }
 
 .header {

@@ -1,13 +1,20 @@
 .scroll {
     flex: 1;
     overflow-y: auto;
-    background: var(--clay-canvas);
+    background: transparent;
 }
 
 .container {
     max-width: 1280px;
     margin: 0 auto;
     padding: var(--clay-space-xxl) var(--clay-space-xl) var(--clay-space-section);
+    /* Fade the cream background into the stripe at the bottom of the page */
+    background: linear-gradient(
+        to bottom,
+        var(--clay-canvas) 0%,
+        var(--clay-canvas) calc(100% - 120px),
+        rgba(255, 250, 240, 0) 100%
+    );
 }
 
 /* ── Hero ── */
@@ -287,6 +294,24 @@
     line-height: 1.5;
     opacity: 0.85;
     max-width: 32ch;
+}
+
+.cardFeatures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.cardFeature {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: var(--clay-radius-pill);
+    background: rgba(255, 250, 240, 0.55);
+    border: 1px solid rgba(255, 250, 240, 0.7);
+    color: var(--clay-ink);
+    font-weight: 500;
+    backdrop-filter: blur(4px);
 }
 
 .cardFoot {

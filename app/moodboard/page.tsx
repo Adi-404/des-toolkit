@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import MoodboardIndex from '@/components/MoodboardIndex';
+import Moodboard from '@/components/Moodboard';
 
 export const metadata: Metadata = {
     title: 'des/toolkit — Moodboard',
-    description: 'Save and arrange design inspiration from Pinterest, Dribbble, Canva and more.',
+    description: 'Save and tag design inspiration links — bento-style layout with iOS-style colour tags.',
 };
 
-export default function MoodboardIndexPage() {
-    return <MoodboardIndex />;
+export default function MoodboardPage() {
+    return <Moodboard />;
 }

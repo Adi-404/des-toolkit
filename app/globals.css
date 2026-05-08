@@ -91,7 +91,15 @@ body {
 
 body {
   font-family: var(--clay-font-body);
-  background: var(--clay-canvas);
+  background-color: var(--clay-canvas);
+  /* Diagonal lines, right-to-left, warm amber, 3 px thick, 3 px gap */
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(165, 105, 35, 0.038) 0px,
+    rgba(165, 105, 35, 0.038) 3px,
+    transparent                3px,
+    transparent                6px
+  );
   color: var(--clay-ink);
   font-size: 14px;
   line-height: 1.55;
@@ -133,4 +141,68 @@ body {
 ::selection {
   background: var(--clay-brand-peach);
   color: var(--clay-ink);
+}
+
+/* ── Gradient border utility ──────────────────────────────────────────────
+   Drop .clay-gradient-border on any element to give it a 2px tri-colour
+   sweep border. The trick: the ::after layer sits on top of the parent's
+   background, drawn as a filled gradient, then mask-composited so only the
+   2px outer ring is visible. No z-index hacks, no isolation tricks — keeps
+   working even when the parent has its own background or transform.        */
+
+.clay-gradient-border {
+  position: relative;
+}
+
+.clay-gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    var(--clay-brand-pink) 0%,
+    var(--clay-brand-lavender) 50%,
+    var(--clay-brand-peach) 100%
+  );
+  /* mask-composite: exclude leaves only the 2px ring (the part NOT covered
+     by the inner content-box mask) visible. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.clay-gradient-border-animated::after {
+  background: linear-gradient(
+    var(--gradient-angle, 135deg),
+    var(--clay-brand-pink) 0%,
+    var(--clay-brand-lavender) 50%,
+    var(--clay-brand-peach) 100%
+  );
+  animation: clay-gradient-sweep 8s linear infinite;
+}
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 135deg;
+  inherits: false;
+}
+
+@keyframes clay-gradient-sweep {
+  to { --gradient-angle: 495deg; }
+}
+
+/* Solid-fill variant — for primary CTAs that want the gradient to BE the
+   background, not just a border. */
+.clay-gradient-fill {
+  background: linear-gradient(
+    135deg,
+    var(--clay-brand-pink) 0%,
+    var(--clay-brand-lavender) 50%,
+    var(--clay-brand-peach) 100%
+  );
 }

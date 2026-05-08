@@ -1,30 +1,131 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import styles from './Topbar.module.css';
 import CommandPalette from './CommandPalette';
 
-interface MenuItem {
+// NEXT_PUBLIC_* values are inlined at build time, so this is a static check
+// equivalent to "did the developer wire up Clerk for this build?".
+const CLERK_ENABLED = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+interface ToolEntry {
     label: string;
     href: string;
-    /** Optional path prefixes that should also light the item up. */
-    matchPrefixes?: string[];
+    glyph: string;
+    desc: string;
+    swatch: string;
+}
+
+interface ToolSection {
+    title: string;
+    tools: ToolEntry[];
+}
+
+interface MenuItem {
+    id: string;
+    label: string;
+    href: string;
+    matchPrefixes: string[];
+    /** When present, the item renders as a sectioned dropdown. */
+    sections?: ToolSection[];
 }
 
 const menu: MenuItem[] = [
-    { label: 'Moodboard',  href: '/moodboard',      matchPrefixes: ['/moodboard'] },
-    { label: 'Color lab',  href: '/color/contrast', matchPrefixes: ['/color/', '/color-picker'] },
-    { label: 'CSS lab',    href: '/css/shadow',     matchPrefixes: ['/css/'] },
-    { label: 'Type lab',   href: '/type/scale',     matchPrefixes: ['/type/', '/markdown-preview'] },
-    { label: 'Assets lab', href: '/assets/svg',     matchPrefixes: ['/assets/', '/download'] },
-    { label: 'AI lab',     href: '/gemini',         matchPrefixes: ['/gemini'] },
+    {
+        id: 'tools',
+        label: 'Tools',
+        // Default landing for an accidental click on the pill itself.
+        href: '/color/contrast',
+        matchPrefixes: [
+            '/color/', '/css/', '/assets/', '/diff', '/json-formatter',
+            '/markdown-preview', '/clipboard', '/download', '/csv-viewer',
+            '/jwt-decoder', '/notes-pad', '/notes/', '/compare',
+            '/gemini',
+        ],
+        sections: [
+            {
+                title: 'Design',
+                tools: [
+                    { label: 'Contrast',     href: '/color/contrast', glyph: '◐', desc: 'WCAG ratio + colour-blindness preview',          swatch: '#f5f0e0' },
+                    { label: 'Bezier',       href: '/css/bezier',     glyph: '∿', desc: 'Cubic-bezier easing with motion preview',         swatch: '#b8a4ed' },
+                    { label: 'Token lab',    href: '/assets/tokens',  glyph: '⌗', desc: 'CSS ⇄ Tailwind ⇄ tokens.json translator',         swatch: '#b8a4ed' },
+                    { label: 'SVG viewer',   href: '/assets/svg',     glyph: '⌬', desc: 'Render and lightly clean up SVG',                swatch: '#ff4d8b' },
+                    { label: 'Image kit',    href: '/assets/image',   glyph: '◰', desc: 'Base64, dimensions, favicon set',                swatch: '#e8b94a' },
+                    { label: 'Gemini imagery', href: '/gemini',       glyph: '✦', desc: 'Prompt → image via Imagen',                       swatch: '#b8a4ed' },
+                ],
+            },
+            {
+                title: 'Code',
+                tools: [
+                    { label: 'Diff Checker',     href: '/diff',             glyph: '⇄',  desc: 'Side-by-side text diff with merge',     swatch: '#f5f0e0' },
+                    { label: 'JSON Formatter',   href: '/json-formatter',   glyph: '{}', desc: 'Format, validate, tree-view JSON',       swatch: '#e8b94a' },
+                    { label: 'Paste & compare',  href: '/compare',          glyph: '⏃',  desc: 'Two HTML/CSS panes side-by-side',        swatch: '#ff4d8b' },
+                    { label: 'Markdown Preview', href: '/markdown-preview', glyph: '¶',  desc: 'Live two-pane GFM editor',               swatch: '#f5f0e0' },
+                    { label: 'Clipboard',        href: '/clipboard',        glyph: '⧉',  desc: 'Tabbed scratchpad with line numbers',    swatch: '#ff4d8b' },
+                ],
+            },
+            {
+                title: 'Utility',
+                tools: [
+                    { label: 'Download',    href: '/download',     glyph: '↓', desc: 'One-key save of clipboard text or image', swatch: '#f5f0e0' },
+                    { label: 'CSV Viewer',  href: '/csv-viewer',   glyph: '▦', desc: 'Sort, search, export CSV',                 swatch: '#ffb084' },
+                    { label: 'JWT Decoder', href: '/jwt-decoder',  glyph: '⚿', desc: 'Decode JWT header + payload',              swatch: '#b8a4ed' },
+                    { label: 'Notes Pad',   href: '/notes-pad',    glyph: '≡', desc: 'Personal scratchpad notes',                swatch: '#ffb084' },
+                ],
+            },
+        ],
+    },
+    {
+        id: 'fonts',
+        label: 'Fonts',
+        href: '/fonts',
+        matchPrefixes: ['/fonts'],
+    },
+    {
+        id: 'pomodoro',
+        label: 'Focus',
+        href: '/pomodoro',
+        matchPrefixes: ['/pomodoro'],
+    },
 ];
+
+const HOVER_OPEN_DELAY = 80;
+const HOVER_CLOSE_DELAY = 180;
 
 export default function Topbar() {
     const pathname = usePathname();
     const [paletteOpen, setPaletteOpen] = useState(false);
+    const [openGroupId, setOpenGroupId] = useState<string | null>(null);
+    const navRef = useRef<HTMLElement>(null);
+
+    const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    function clearTimers() {
+        if (openTimerRef.current) { clearTimeout(openTimerRef.current); openTimerRef.current = null; }
+        if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+    }
+
+    function scheduleOpen(id: string) {
+        clearTimers();
+        openTimerRef.current = setTimeout(() => setOpenGroupId(id), HOVER_OPEN_DELAY);
+    }
+
+    function scheduleClose() {
+        clearTimers();
+        closeTimerRef.current = setTimeout(() => setOpenGroupId(null), HOVER_CLOSE_DELAY);
+    }
+
+    // Close on route change. Render-phase state derivation avoids the
+    // react-hooks/set-state-in-effect rule.
+    const [lastPathname, setLastPathname] = useState(pathname);
+    if (lastPathname !== pathname) {
+        setLastPathname(pathname);
+        if (openGroupId !== null) setOpenGroupId(null);
+    }
 
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
@@ -33,15 +134,32 @@ export default function Topbar() {
                 e.preventDefault();
                 setPaletteOpen((o) => !o);
             }
-            if (e.key === 'Escape') setPaletteOpen(false);
+            if (e.key === 'Escape') {
+                setPaletteOpen(false);
+                setOpenGroupId(null);
+            }
+        }
+        function onClick(e: MouseEvent) {
+            if (!navRef.current) return;
+            if (!navRef.current.contains(e.target as Node)) setOpenGroupId(null);
         }
         window.addEventListener('keydown', onKey);
-        return () => window.removeEventListener('keydown', onKey);
+        window.addEventListener('mousedown', onClick);
+        return () => {
+            window.removeEventListener('keydown', onKey);
+            window.removeEventListener('mousedown', onClick);
+        };
     }, []);
+
+    function isItemActive(item: MenuItem): boolean {
+        return item.matchPrefixes.some((p) =>
+            pathname === p || pathname.startsWith(p.endsWith('/') ? p : p + '/'),
+        );
+    }
 
     return (
         <>
-            <header className={styles.nav}>
+            <header className={styles.nav} ref={navRef}>
                 <Link href="/" className={styles.brand}>
                     <span>des</span>
                     <span className={styles.brandDot}>/</span>
@@ -50,18 +168,67 @@ export default function Topbar() {
 
                 <nav className={styles.menu}>
                     {menu.map((item) => {
-                        const active = item.href === '/'
-                            ? pathname === '/'
-                            : pathname.startsWith(item.href) ||
-                              (item.matchPrefixes?.some((p) => pathname.startsWith(p)) ?? false);
+                        const active = isItemActive(item);
+                        const open = openGroupId === item.id;
+                        const hasDropdown = !!item.sections;
                         return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={`${styles.menuItem} ${active ? styles.menuItemActive : ''}`}
+                            <div
+                                key={item.id}
+                                className={styles.groupWrap}
+                                onMouseEnter={() => hasDropdown && scheduleOpen(item.id)}
+                                onMouseLeave={() => hasDropdown && scheduleClose()}
                             >
-                                {item.label}
-                            </Link>
+                                <Link
+                                    href={item.href}
+                                    className={`${styles.menuItem} ${active ? styles.menuItemActive : ''} ${open ? styles.menuItemOpen : ''}`}
+                                    onClick={() => setOpenGroupId(null)}
+                                >
+                                    <span>{item.label}</span>
+                                    {hasDropdown && (
+                                        <span className={styles.menuChevron} aria-hidden="true">▾</span>
+                                    )}
+                                </Link>
+
+                                {hasDropdown && open && (
+                                    <div
+                                        className={styles.dropdownWide}
+                                        onMouseEnter={clearTimers}
+                                        onMouseLeave={scheduleClose}
+                                    >
+                                        {item.sections!.map((section) => (
+                                            <div key={section.title} className={styles.dropdownSection}>
+                                                <div className={styles.dropdownSectionTitle}>
+                                                    {section.title}
+                                                </div>
+                                                <div className={styles.dropdownSectionItems}>
+                                                    {section.tools.map((tool) => {
+                                                        const here = pathname === tool.href;
+                                                        return (
+                                                            <Link
+                                                                key={tool.href}
+                                                                href={tool.href}
+                                                                className={`${styles.dropdownItem} ${here ? styles.dropdownItemActive : ''}`}
+                                                                onClick={() => setOpenGroupId(null)}
+                                                            >
+                                                                <span
+                                                                    className={styles.dropdownGlyph}
+                                                                    style={{ background: tool.swatch }}
+                                                                >
+                                                                    {tool.glyph}
+                                                                </span>
+                                                                <span className={styles.dropdownBody}>
+                                                                    <span className={styles.dropdownLabel}>{tool.label}</span>
+                                                                    <span className={styles.dropdownDesc}>{tool.desc}</span>
+                                                                </span>
+                                                            </Link>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         );
                     })}
                 </nav>
@@ -76,7 +243,30 @@ export default function Topbar() {
                         <span className={styles.searchIcon}>⌕ Search tools…</span>
                         <span className={styles.searchKbd}>⌘K</span>
                     </button>
-                    <Link href="/moodboard" className={styles.cta}>Open moodboard</Link>
+
+                    {CLERK_ENABLED ? (
+                        <>
+                            <SignedOut>
+                                <Link href="/sign-in" className={styles.signInBtn}>Sign in</Link>
+                                <Link href="/sign-up" className={`${styles.cta} clay-gradient-border clay-gradient-border-animated`}>
+                                    Sign up
+                                </Link>
+                            </SignedOut>
+                            <SignedIn>
+                                <Link href="/moodboard" className={`${styles.cta} clay-gradient-border clay-gradient-border-animated`}>
+                                    Open moodboard
+                                </Link>
+                                <UserButton
+                                    appearance={{ elements: { avatarBox: { width: 36, height: 36 } } }}
+                                    afterSignOutUrl="/"
+                                />
+                            </SignedIn>
+                        </>
+                    ) : (
+                        <Link href="/moodboard" className={`${styles.cta} clay-gradient-border clay-gradient-border-animated`}>
+                            Open moodboard
+                        </Link>
+                    )}
                 </div>
             </header>
 

@@ -1,17 +1,6 @@
-import type { Metadata } from 'next';
-import MoodboardBoard from '@/components/MoodboardBoard';
+import { redirect } from 'next/navigation';
 
-type Props = { params: Promise<{ id: string }> };
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    await params;
-    return {
-        title: 'des/toolkit — Moodboard',
-        description: 'Saved design references and inspiration links.',
-    };
-}
-
-export default async function MoodboardBoardPage({ params }: Props) {
-    const { id } = await params;
-    return <MoodboardBoard boardId={id} />;
+// Multi-board UI is gone — old per-board URLs land on the single feed.
+export default function LegacyBoardPage() {
+    redirect('/moodboard');
 }

@@ -14,6 +14,97 @@ const MIN_SAMPLES = 5;
 
 function pad(n: number) { return n.toString().padStart(2, '0'); }
 
+// ── Flip-clock digit ──
+function FlipDigit({ value }: { value: string }) {
+    const [curr, setCurr] = useState(value);
+    const [prev, setPrev] = useState(value);
+    const [flipping, setFlipping] = useState(false);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // Always tracks the latest prop so the timeout closure never goes stale.
+    const latestRef = useRef(value);
+    latestRef.current = value;
+
+    useEffect(() => {
+        if (value === curr || flipping) return;
+        setPrev(curr);
+        setFlipping(true);
+        timerRef.current = setTimeout(() => {
+            timerRef.current = null;
+            setCurr(latestRef.current);
+            setFlipping(false);
+        }, 520);
+        // No cleanup return — returning a cleanup here would cancel the timer
+        // every time React re-runs this effect (e.g. when flipping→true triggers
+        // a re-render), which is exactly the bug we're fixing.
+    }, [value, curr, flipping]);
+
+    // Cancel only on unmount.
+    useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+    /*
+     * Physical flip-clock layout:
+     *
+     *  ┌──────────────────┐
+     *  │  static top      │  ← shows INCOMING digit (top flap covers it, then folds away)
+     *  ├──────────────────┤
+     *  │  static bottom   │  ← shows OUTGOING digit (bottom flap comes from behind and covers it)
+     *  └──────────────────┘
+     *
+     * Top flap    : OUTGOING digit, rotates 0 → -90° (folds down, reveals incoming top)
+     * Bottom flap : INCOMING digit, rotates 90° → 0  (unfolds up, covers outgoing bottom)
+     */
+    const incoming = flipping ? latestRef.current : curr;
+    const outgoing = flipping ? prev : curr;
+
+    return (
+        <div className={styles.flipDigit}>
+            <div className={styles.cardTop}>
+                <div className={styles.faceTop}><span>{incoming}</span></div>
+            </div>
+            <div className={styles.cardBot}>
+                <div className={styles.faceBot}><span>{outgoing}</span></div>
+            </div>
+
+            {flipping && (
+                <>
+                    <div className={styles.flapTopOuter}>
+                        <div className={styles.flapTopInner}>
+                            <div className={styles.faceTop}><span>{outgoing}</span></div>
+                        </div>
+                    </div>
+                    <div className={styles.flapBotOuter}>
+                        <div className={styles.flapBotInner}>
+                            <div className={styles.faceBot}><span>{incoming}</span></div>
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+}
+
+function FlipClock({ mins, secs, scale }: { mins: number; secs: number; scale: number }) {
+    return (
+        <div className={styles.flipClock} style={{ '--flip-scale': scale } as React.CSSProperties}>
+            <div className={styles.flipUnit}>
+                <div className={styles.flipGroup}>
+                    <FlipDigit value={String(Math.floor(mins / 10))} />
+                    <FlipDigit value={String(mins % 10)} />
+                </div>
+                <span className={styles.flipLabel}>MIN</span>
+            </div>
+            <span className={styles.flipColon}>:</span>
+            <div className={styles.flipUnit}>
+                <div className={styles.flipGroup}>
+                    <FlipDigit value={String(Math.floor(secs / 10))} />
+                    <FlipDigit value={String(secs % 10)} />
+                </div>
+                <span className={styles.flipLabel}>SEC</span>
+            </div>
+        </div>
+    );
+}
+
 function playBeep(freq = 660, dur = 180) {
     try {
         const ctx = new AudioContext();
@@ -74,6 +165,26 @@ export default function Pomodoro() {
 
     // Complete
     const [postureScore, setPostureScore] = useState(0);
+
+    // Clock size (drag-to-resize)
+    const [clockScale, setClockScale] = useState(1.0);
+    const gripStartY = useRef<number | null>(null);
+    const gripStartScale = useRef(1.0);
+
+    function handleGripDown(e: React.PointerEvent<HTMLDivElement>) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        gripStartY.current = e.clientY;
+        gripStartScale.current = clockScale;
+    }
+    function handleGripMove(e: React.PointerEvent<HTMLDivElement>) {
+        if (gripStartY.current === null) return;
+        const delta = gripStartY.current - e.clientY; // drag up → bigger
+        setClockScale(Math.max(0.5, Math.min(1.8, gripStartScale.current + delta / 180)));
+    }
+    function handleGripUp(e: React.PointerEvent<HTMLDivElement>) {
+        gripStartY.current = null;
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    }
 
     useEffect(() => {
         Promise.all([
@@ -477,8 +588,21 @@ export default function Pomodoro() {
                             </div>
                         )}
 
-                        <div className={styles.countdown}>{pad(mins)}:{pad(secs)}</div>
-                        <p className={styles.durLabel}>{duration} min session</p>
+                        <div className={styles.clockSizer}>
+                            <FlipClock mins={mins} secs={secs} scale={clockScale} />
+                            <div
+                                className={styles.clockGrip}
+                                onPointerDown={handleGripDown}
+                                onPointerMove={handleGripMove}
+                                onPointerUp={handleGripUp}
+                                title="Drag up/down to resize clock"
+                            >
+                                <div className={styles.clockGripDots}>
+                                    {[...Array(6)].map((_, i) => <span key={i} className={styles.clockGripDot} />)}
+                                </div>
+                            </div>
+                        </div>
+                        <p className={styles.durLabel}>{duration} min session{paused ? ' · paused' : ''}</p>
                         <div className={styles.progressBar}><div className={styles.progressFill} style={{ width: `${progress}%` }} /></div>
                         <div className={styles.timerBtns}>
                             <button className={styles.actionBtn} onClick={togglePause}>{paused ? '▶ Resume' : '❚❚ Pause'}</button>
@@ -490,9 +614,22 @@ export default function Pomodoro() {
                 {/* ── BREAK ── */}
                 {phase === 'break' && (
                     <div className={styles.timerBox}>
-                        <p className={styles.breakLabel}>Break</p>
-                        <div className={styles.countdown}>{pad(mins)}:{pad(secs)}</div>
-                        <div className={styles.progressBar}><div className={styles.progressFill} style={{ width: `${progress}%` }} /></div>
+                        <p className={styles.breakLabel}>Break time</p>
+                        <div className={styles.clockSizer}>
+                            <FlipClock mins={mins} secs={secs} scale={clockScale} />
+                            <div
+                                className={styles.clockGrip}
+                                onPointerDown={handleGripDown}
+                                onPointerMove={handleGripMove}
+                                onPointerUp={handleGripUp}
+                                title="Drag up/down to resize clock"
+                            >
+                                <div className={styles.clockGripDots}>
+                                    {[...Array(6)].map((_, i) => <span key={i} className={styles.clockGripDot} />)}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.progressBar}><div className={`${styles.progressFill} ${styles.progressFillBreak}`} style={{ width: `${progress}%` }} /></div>
                         <button className={styles.actionBtn} onClick={newSession}>Skip Break</button>
                     </div>
                 )}

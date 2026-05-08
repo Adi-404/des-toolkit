@@ -1,0 +1,416 @@
+.stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.05 / 1;
+    background: var(--clay-surface-soft);
+    border-radius: var(--clay-radius-xl);
+    overflow: hidden;
+    isolation: isolate;
+    /* room for the demo content to feel airy on tall screens */
+    min-height: 420px;
+}
+
+/* Tinted gradient backdrop that subtly shifts through the brand palette */
+.backdrop {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 25% 20%, rgba(255, 77, 139, 0.18), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(184, 164, 237, 0.20), transparent 55%),
+        radial-gradient(circle at 50% 90%, rgba(255, 176, 132, 0.22), transparent 55%);
+    z-index: 0;
+}
+
+.frame {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Generic absolute-fill centering layer — every animated layer (browser,
+   bento, claymation) uses this so the three can crossfade in place. */
+.layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--clay-space-xl);
+}
+
+/* ── Mock browser shell that frames each step ── */
+
+.browser {
+    width: min(440px, 100%);
+    background: var(--clay-canvas);
+    border-radius: var(--clay-radius-lg);
+    box-shadow:
+        0 20px 50px rgba(10, 10, 10, 0.10),
+        0 0 0 1px var(--clay-hairline);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.browserBar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--clay-surface-soft);
+    border-bottom: 1px solid var(--clay-hairline);
+}
+
+.browserDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--clay-hairline);
+}
+
+.browserUrl {
+    flex: 1;
+    margin-left: 12px;
+    height: 22px;
+    border-radius: var(--clay-radius-pill);
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--clay-muted);
+}
+
+.browserBody {
+    padding: var(--clay-space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-sm);
+    min-height: 240px;
+}
+
+/* ── Step 1 — paste field ── */
+
+.pasteRow {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.pasteField {
+    flex: 1;
+    height: 36px;
+    border-radius: var(--clay-radius-md);
+    border: 1px solid var(--clay-hairline);
+    background: var(--clay-canvas);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    font-family: var(--clay-font-body);
+    font-size: 13px;
+    color: var(--clay-ink);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.pasteCaret {
+    display: inline-block;
+    width: 1.5px;
+    height: 14px;
+    background: var(--clay-ink);
+    margin-left: 2px;
+    vertical-align: middle;
+}
+
+.pasteBtn {
+    height: 36px;
+    padding: 0 14px;
+    background: var(--clay-primary);
+    color: var(--clay-on-primary);
+    border-radius: var(--clay-radius-md);
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── Step 2 — saved card preview ── */
+
+.savedCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--clay-radius-md);
+    overflow: hidden;
+    border: 1px solid var(--clay-hairline);
+    background: var(--clay-canvas);
+}
+
+.savedImg {
+    aspect-ratio: 16 / 9;
+    background-size: cover;
+    background-position: center;
+}
+
+.savedBody {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.savedTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--clay-ink);
+    line-height: 1.3;
+}
+
+.savedHost {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--clay-muted);
+}
+
+.savedDots {
+    display: flex;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.savedDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* ── Step 3 — tag pills ── */
+
+.tagPills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: var(--clay-space-xs);
+}
+
+.tagPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--clay-radius-pill);
+    border: 1px solid var(--clay-hairline);
+    background: var(--clay-canvas);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--clay-ink);
+}
+
+.tagPillActive {
+    background: var(--tag-color);
+    border-color: var(--tag-color);
+    color: white;
+}
+
+.tagPillActive[data-color="lavender"],
+.tagPillActive[data-color="peach"],
+.tagPillActive[data-color="ochre"] {
+    color: var(--clay-ink);
+}
+
+.tagPillDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tag-color);
+}
+
+/* ── fontbook layer — sits as an overlay between browser and claymation ── */
+
+.fontbookOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--clay-space-xl);
+    z-index: 2;
+}
+
+.fontbookShell {
+    width: min(420px, 100%);
+    background: var(--clay-canvas);
+    border-radius: var(--clay-radius-lg);
+    box-shadow:
+        0 20px 50px rgba(10, 10, 10, 0.10),
+        0 0 0 1px var(--clay-hairline);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.fontbookHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--clay-hairline);
+    background: var(--clay-surface-soft);
+}
+
+.fontbookLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--clay-ink);
+    letter-spacing: 0.3px;
+}
+
+.fontbookSub {
+    font-size: 11px;
+    color: var(--clay-muted);
+}
+
+.fontbookGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px;
+}
+
+.fontCard {
+    background: var(--clay-surface-card);
+    border-radius: var(--clay-radius-md);
+    overflow: hidden;
+    border: 1px solid var(--clay-hairline);
+    display: flex;
+    flex-direction: column;
+}
+
+.fontCardAccent {
+    height: 4px;
+    flex-shrink: 0;
+}
+
+.fontCardBody {
+    padding: 10px 12px 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fontCardName {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--clay-ink);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fontCardSample {
+    font-size: 11px;
+    color: var(--clay-muted);
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.fontCardTag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--clay-muted-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+}
+
+/* ── Final claymation reveal ── */
+
+.claymation {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2;
+}
+
+.claymationInner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: var(--clay-space-xl);
+}
+
+.mountains {
+    position: absolute;
+    inset: 0;
+}
+
+.mountain {
+    position: absolute;
+    border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+    filter: drop-shadow(0 8px 24px rgba(10, 10, 10, 0.06));
+}
+
+.m1 {
+    background: var(--clay-brand-peach);
+    width: 60%; height: 70%;
+    bottom: 18%; left: -8%;
+}
+.m2 {
+    background: var(--clay-brand-pink);
+    width: 55%; height: 60%;
+    bottom: 18%; left: 28%;
+}
+.m3 {
+    background: var(--clay-brand-ochre);
+    width: 50%; height: 75%;
+    bottom: 18%; left: 55%;
+}
+
+.sun {
+    position: absolute;
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: var(--clay-brand-lavender);
+    top: 12%; right: 15%;
+    filter: drop-shadow(0 6px 20px rgba(184, 164, 237, 0.5));
+}
+
+.ground {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 18%;
+    background: var(--clay-brand-teal);
+}
+
+.claymationLabel {
+    position: relative;
+    z-index: 3;
+    align-self: flex-start;
+    background: var(--clay-canvas);
+    padding: 8px 14px;
+    border-radius: var(--clay-radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--clay-ink);
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.08);
+}
+
+/* ── Tag colour data-attributes ── */
+
+.tagPill[data-color="pink"]     { --tag-color: var(--clay-brand-pink); }
+.tagPill[data-color="teal"]     { --tag-color: var(--clay-brand-teal); }
+.tagPill[data-color="lavender"] { --tag-color: var(--clay-brand-lavender); }
+.tagPill[data-color="peach"]    { --tag-color: var(--clay-brand-peach); }
+.tagPill[data-color="ochre"]    { --tag-color: var(--clay-brand-ochre); }
+.tagPill[data-color="mint"]     { --tag-color: var(--clay-brand-mint); }

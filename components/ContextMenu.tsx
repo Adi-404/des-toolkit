@@ -14,10 +14,13 @@ interface Topic {
 }
 
 const tools = [
+    { label: 'Moodboard', href: '/moodboard', icon: '✿' },
+    { label: 'Fonts', href: '/fonts', icon: 'Aa' },
     { label: 'Clipboard', href: '/clipboard', icon: '⧉' },
     { label: 'Diff', href: '/diff', icon: '⇄' },
     { label: 'JSON', href: '/json-formatter', icon: '{}' },
-    { label: 'Color', href: '/color-picker', icon: '◉' },
+    { label: 'Contrast', href: '/color/contrast', icon: '◐' },
+    { label: 'Bezier', href: '/css/bezier', icon: '∿' },
     { label: 'Download', href: '/download', icon: '↓' },
     { label: 'JWT', href: '/jwt-decoder', icon: '⚿' },
     { label: 'Markdown', href: '/markdown-preview', icon: '¶' },

@@ -1,108 +1,99 @@
 # des/toolkit
 
 A warm, browser-based workshop of design + frontend tools, with a moodboard
-to keep your inspiration in one place. Built on Next.js with SQLite-backed
-persistence and a coherent design system ("Clay") across every tool.
+to keep your inspiration in one place. Built on Next.js with libSQL persistence
+and a coherent design system ("Clay") across every tool.
 
 ```
 des/toolkit
 ├── 22 tools across 6 labs
-├── Moodboard with OG-fetched preview cards
+├── Moodboard with OG-fetched preview cards + iOS-style tags
 └── Single warm cream canvas, Inter typography
 ```
 
 ## Quick start
 
 ```bash
+cp .env.local.example .env.local
+# Fill in the Clerk keys at minimum; everything else can be left blank for local dev.
 npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. Persistence (clipboard tabs, notes, moodboard,
-settings) lives in `data/des-toolkit.db` — gitignored, created on first run.
+Open <http://localhost:3000>. The dev DB lives at `data/des-toolkit.db`
+(gitignored, libSQL file backend, created on first run).
 
-### Optional: Gemini imagery
+### Required environment
 
-Copy `.env.local.example` to `.env.local` and add a key from
-<https://aistudio.google.com/app/apikey>:
+| Variable | Where to get it | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | [Clerk dashboard → API keys](https://dashboard.clerk.com/last-active?path=api-keys) | Public, safe to ship to the browser |
+| `CLERK_SECRET_KEY` | Same page, "Show secret" | **Server-only** — never paste in chat or commit |
+| `TURSO_DATABASE_URL` | Optional in dev (defaults to a local file) — required in prod | `libsql://…` for prod, `file:…` locally |
+| `TURSO_AUTH_TOKEN` | Required when `TURSO_DATABASE_URL` is a remote `libsql://` URL | |
+| `GEMINI_API_KEY` | [Google AI Studio](https://aistudio.google.com/app/apikey) — only if you want `/gemini` | |
 
-```env
-GEMINI_API_KEY=your-key-here
-```
+Auth scope: only the persistence routes (`/moodboard`, `/clipboard`,
+`/notes-pad`, `/notes/*`) require sign-in. Every other tool stays public.
 
-Restart `npm run dev` and the `/gemini` tool will work. The key never
-leaves the server.
+## Deploying to Vercel
+
+1. **Create the Turso database**
+   ```bash
+   curl -sSfL https://get.tur.so/install.sh | bash   # one-time install
+   turso auth signup
+   turso db create des-toolkit
+   turso db show des-toolkit --url     # → TURSO_DATABASE_URL
+   turso db tokens create des-toolkit  # → TURSO_AUTH_TOKEN
+   ```
+2. **Push the repo to GitHub**, then **import it on Vercel** (Add New → Project).
+3. **Set environment variables** in Vercel project settings:
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
+   - `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+   - Optional: `GEMINI_API_KEY`, the four `NEXT_PUBLIC_CLERK_*_URL` vars from
+     `.env.local.example` (recommended so sign-in stays on your domain).
+4. **Configure Clerk for your prod domain** — in the Clerk dashboard under
+   "Domains", add your Vercel URL (and your custom domain if any).
+5. Push to `main` — Vercel will build and deploy. The libSQL schema applies
+   itself on the first request via a top-of-module migration.
 
 ## What's inside
 
-### Moodboard
+### Inspiration
 
 | Path | What it does |
 |---|---|
-| **/moodboard** | Browse, create, and delete inspiration boards (saturated card grid) |
-| **/moodboard/[id]** | Paste any URL — server fetches the page's OpenGraph metadata and renders a Pinterest-style card. Inline-rename the board, refresh previews, click cards to open at source. Sites that block scrapers (Pinterest, Canva) save as URL-only cards. |
+| **/moodboard** | Bento grid of saved links and uploaded pictures. Paste a URL (we fetch og:image / og:title / og:description), drop an image file (saved as a base64 data URL), or both. Tag with iOS-style colour pills, filter the grid by selected tags, refresh per-card preview, click out to source. |
+| **/fonts** | **fontbook** — search a curated catalog of ~65 Google Fonts and click to save, paste a Google Fonts URL, paste a foundry link as a reference, or upload your own `.woff2` / `.woff` / `.ttf` / `.otf` (registered via `@font-face` against `/api/fonts/[id]`). Every card renders the family live. |
 
-### Color lab
+### Design tools
+
+For the moments when Figma is overkill — quick reference utilities that all end in copyable CSS or JSON.
 
 | Path | What it does |
 |---|---|
-| **/color-picker** | Pick a colour with the native picker, paste an image to sample its average colour, or paste a HEX. Live conversion across HEX · RGB · HSL · HSB; click any of the nine ramp stops to set the active colour. |
 | **/color/contrast** | WCAG 2.1 contrast ratio for any foreground/background pair, with AA/AAA badges for both small and large text. Plus a 4-up colour-blindness preview (deuteranopia, protanopia, tritanopia, achromatopsia) with per-kind contrast recompute. |
-| **/color/palette** | Generate a 9-step ramp + five harmonies (complementary, analogous, triadic, split-complementary, tetradic) from any base colour. Click to copy individual swatches; export the full ramp as CSS variables, Tailwind config, or JSON. |
-| **/color/gradient** | Compose linear / radial / conic gradients with up to six stops, drag the angle, and copy the CSS rule. The "+ Add stop" button picks the widest gap and interpolates a midpoint colour. |
-
-### CSS lab
-
-| Path | What it does |
-|---|---|
-| **/css/shadow** | Stack up to six box-shadow layers; per-layer x/y/blur/spread/colour/alpha/inset; light + dark preview surface; per-layer enable toggle; copyable composed rule. |
-| **/css/radius** | Three modes: uniform / per-corner / asymmetric (squircle). Px or % units. Five shape presets (Rounded, Pill, Squircle, Asymmetric, Tab). Copyable rule. |
 | **/css/bezier** | Drag two SVG control handles to design an easing curve. Live motion preview animates a dot using your curve via Newton-Raphson `tForX`. Six named presets including a spring-back overshoot. |
-| **/diff** | Side-by-side text diff with character-level highlights, line-pair merge buttons (← →), optional sync-scroll. |
-
-### Type lab
-
-| Path | What it does |
-|---|---|
-| **/type/scale** | Modular type ramp from a base size and one of 8 musical-interval ratios (Minor 2nd through Golden ratio). Nine steps from caption to display, line-heights auto-tighten with size. Click any row to copy `font-size: …; line-height: …;` Export as CSS variables or Tailwind `fontSize` config. |
-| **/type/pairing** | Heading + body Google Fonts pair preview on real editorial copy (kicker, h1, lead, body, blockquote, mono). 21 curated fonts across sans/serif/display/mono. 7 named presets. Dynamic Google Fonts `<link>` injection; copy `@import` + CSS variables. |
-| **/type/spacing** | 10-step spacing scale in linear / modular / fibonacci modes. Bars sized proportionally. Click any token to copy. Live breakpoint preview at mobile / sm / md / lg / xl with 1→2→3 column reflow. |
-| **/markdown-preview** | Live two-pane GitHub-flavored markdown editor; persistent input; light `oneLight` syntax highlighting on cream code surfaces. Copy markdown or HTML. |
-
-### Assets lab
-
-| Path | What it does |
-|---|---|
-| **/assets/svg** | Render any SVG over a transparent checker (light + dark canvas). Light optimizer strips XML decl, comments, metadata/title/desc, Adobe/Sketch/Inkscape namespaces and rounds long decimals. Live byte-savings counter. |
-| **/assets/image** | Drop an image to read MIME type, size, dimensions, aspect ratio. Copy the full base64 data URL. Generate a complete favicon raster set at 16/32/48/64/128/192/512 (canvas-rendered with letterboxing). Click a tile to download as PNG; copy `<link rel="icon">` HTML snippet. |
 | **/assets/tokens** | Translate colour tokens between CSS variables, Tailwind config, and W3C `tokens.json`. Auto-detects input format. Loose-JSON parser handles unquoted keys + trailing commas. Status row shows token count + a swatch preview strip. |
-| **/download** | One-keystroke save of whatever's on your clipboard — text or image. ⌘V to read, with PNG/JPG/GIF/WebP support and a fallback for browsers without `clipboard.read()`. |
+| **/assets/svg** | Render any SVG over a transparent checker (light + dark canvas). Light optimizer strips XML decl, comments, metadata/title/desc, Adobe/Sketch/Inkscape namespaces and rounds long decimals. Live byte-savings counter. |
+| **/assets/image** | Drop an image to read MIME type, size, dimensions, aspect ratio. Copy the full base64 data URL. Generate a complete favicon raster set at 16/32/48/64/128/192/512 (canvas-rendered with letterboxing). |
+| **/gemini** | Prompt → image via Google Imagen on the Gemini API. 5 aspect ratios. Server-side key handling — your `GEMINI_API_KEY` never leaves the server. |
 
-### Frontend lab
-
-| Path | What it does |
-|---|---|
-| **/compare** | Two-pane HTML/CSS playground; each pane drives a sandboxed iframe via `srcDoc`. Layout toggle (Split / Stacked); viewport simulation (Fluid / 380 / 640 / 768 / 1024); optional sync-scroll; per-pane Copy / Clear; checker-pattern preview surfaces for transparent designs. |
-| **/clipboard** | Tabbed scratchpad with line numbers and persistent storage. Rename tabs (double-click), close tabs, copy / clear all. Auto-saves to SQLite. |
-| **/json-formatter** | Format / validate / minify / tree-view JSON. Auto-decodes URL-encoded and Base64-wrapped JSON. Tree view with hover-path display, search, expand/collapse all, sort keys, indent toggle (2 / 4 / tab). |
-
-### AI lab
+### Code & utility
 
 | Path | What it does |
 |---|---|
-| **/gemini** | Prompt → image via Google Imagen on the Gemini API. 5 aspect ratios (1:1, 3:4, 4:3, 9:16, 16:9). Server-side key handling — your `GEMINI_API_KEY` never leaves the server. Copy data URL or download PNG. Defensive UX with missing-key / auth-fail / loading banner states. |
-
-### Still in original chrome
-
-These four utilities work but haven't been migrated to the Clay design yet:
-
-| Path | What it does |
-|---|---|
-| **/csv-viewer** | Parse, sort, search and export CSV in the browser |
-| **/jwt-decoder** | Decode and inspect JWT header + payload claims |
-| **/pomodoro** | Focus timer with optional TensorFlow.js posture monitoring on webcam |
-| **/notes-pad** | Personal scratchpad notes |
-| **/notes/[topic]** | Renders external markdown notes from the `dev-diary` repo |
+| **/diff** | Side-by-side text diff with character-level highlights, line-pair merge buttons (← →), optional sync-scroll. |
+| **/json-formatter** | Format / validate / minify / tree-view JSON. Auto-decodes URL-encoded and Base64-wrapped JSON. Tree view with hover-path display, search, expand/collapse all, sort keys, indent toggle. |
+| **/compare** | Two-pane HTML/CSS playground; each pane drives a sandboxed iframe via `srcDoc`. Layout toggle, viewport simulation, optional sync-scroll. |
+| **/markdown-preview** | Live two-pane GitHub-flavored markdown editor; persistent input; light `oneLight` syntax highlighting on cream code surfaces. |
+| **/clipboard** | Tabbed scratchpad with line numbers, persistent across sessions. Rename tabs, close tabs, copy / clear all. |
+| **/download** | One-keystroke save of whatever's on your clipboard — text or image. ⌘V to read; PNG/JPG/GIF/WebP support. |
+| **/csv-viewer** | Parse, sort, search and export CSV in the browser. |
+| **/jwt-decoder** | Decode and inspect JWT header + payload claims. |
+| **/pomodoro** | Focus timer with optional TensorFlow.js posture monitoring on webcam. |
+| **/notes-pad** | Personal scratchpad notes. |
+| **/notes/[topic]** | Renders external markdown notes from the `dev-diary` repo. |
 
 ## Keyboard shortcuts
 
@@ -117,7 +108,12 @@ These four utilities work but haven't been migrated to the Clay design yet:
 - **React 19** with Server Actions
 - **TypeScript**
 - **Tailwind CSS v4** (PostCSS) + CSS Modules
-- **SQLite** via `better-sqlite3` for clipboard tabs, notes, moodboard, settings
+- **Clerk** (`@clerk/nextjs`) for auth — only the persistence routes
+  (`/moodboard`, `/fonts`, `/clipboard`, `/notes-pad`, `/notes/*`) are gated;
+  every other tool stays public.
+- **libSQL** via `@libsql/client` for persistence — local dev uses a `file:`
+  URL (`data/des-toolkit.db`); production points at Turso.
+- **motion** for the home/sign-in animated demo + sign-up marquee
 - **diff-match-patch** for the diff tool
 - **react-markdown** + **remark-gfm** for markdown rendering
 - **react-syntax-highlighter** (Prism) for code blocks
