@@ -70,6 +70,31 @@ export default function Moodboard() {
 
     // Tags to apply to the next saved item
     const [pendingTagIds, setPendingTagIds] = useState<Set<string>>(new Set());
+
+    // ── File drop zone ──
+    const [dropActive, setDropActive] = useState(false);
+    const dragCounterRef = useRef(0);
+
+    function onDragEnter(e: React.DragEvent) {
+        e.preventDefault();
+        if (Array.from(e.dataTransfer.types).includes('Files')) {
+            dragCounterRef.current += 1;
+            setDropActive(true);
+        }
+    }
+    function onDragOver(e: React.DragEvent) { e.preventDefault(); }
+    function onDragLeave(e: React.DragEvent) {
+        e.preventDefault();
+        dragCounterRef.current -= 1;
+        if (dragCounterRef.current === 0) setDropActive(false);
+    }
+    function onDrop(e: React.DragEvent) {
+        e.preventDefault();
+        dragCounterRef.current = 0;
+        setDropActive(false);
+        const file = e.dataTransfer.files[0];
+        if (file?.type.startsWith('image/')) addPicture(file);
+    }
     function togglePendingTag(id: string) {
         setPendingTagIds(cur => {
             const next = new Set(cur);
@@ -247,7 +272,21 @@ export default function Moodboard() {
     // ── Render ──
 
     return (
-        <div className={styles.scroll}>
+        <div
+            className={styles.scroll}
+            onDragEnter={onDragEnter}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+        >
+            {dropActive && (
+                <div className={styles.dropOverlay}>
+                    <div className={styles.dropOverlayInner}>
+                        <span className={styles.dropOverlayIcon}>◰</span>
+                        <span className={styles.dropOverlayText}>Drop image to save</span>
+                    </div>
+                </div>
+            )}
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div>

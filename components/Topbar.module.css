@@ -316,6 +316,25 @@
     -webkit-box-orient: vertical;
 }
 
+/* ── Settings icon button ── */
+.iconBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--clay-radius-md);
+    font-size: 16px;
+    color: var(--clay-muted);
+    text-decoration: none;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.iconBtn:hover {
+    background: var(--clay-surface-card);
+    color: var(--clay-ink);
+}
+
 /* ── Right side ── */
 .right {
     display: flex;

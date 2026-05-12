@@ -1,0 +1,228 @@
+.scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--clay-space-xl) var(--clay-space-xl) var(--clay-space-xxl);
+}
+
+.container {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-xl);
+}
+
+/* ── Header ── */
+.header {
+    padding-bottom: var(--clay-space-sm);
+    border-bottom: 1px solid var(--clay-hairline);
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--clay-muted-soft);
+    margin-bottom: var(--clay-space-xs);
+}
+
+.title {
+    font-family: var(--clay-font-display);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--clay-ink);
+    line-height: 1.1;
+    margin-bottom: 8px;
+}
+
+.lede {
+    font-size: 14px;
+    color: var(--clay-muted);
+    line-height: 1.5;
+}
+
+/* ── Section ── */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--clay-space-sm);
+}
+
+.sectionTitle {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--clay-ink);
+}
+
+.sectionDesc {
+    font-size: 12px;
+    color: var(--clay-muted);
+    margin-top: -6px;
+}
+
+/* ── Card ── */
+.card {
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--clay-space-md);
+    padding: var(--clay-space-md);
+}
+
+.rowText {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.rowLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+.rowDesc {
+    font-size: 12px;
+    color: var(--clay-muted);
+    line-height: 1.4;
+}
+
+.kbd {
+    display: inline-block;
+    padding: 1px 5px;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: var(--clay-font-body);
+}
+
+/* ── Toggle switch ── */
+.toggle {
+    flex-shrink: 0;
+    position: relative;
+    width: 44px;
+    height: 26px;
+    background: var(--clay-hairline);
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background 150ms ease;
+}
+
+.toggleSm {
+    width: 36px;
+    height: 22px;
+    border-radius: 11px;
+}
+
+.toggleOn {
+    background: var(--clay-ink);
+}
+
+.toggleThumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 150ms ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.toggleSm .toggleThumb {
+    width: 16px;
+    height: 16px;
+}
+
+.toggleOn .toggleThumb {
+    transform: translateX(18px);
+}
+
+.toggleSm.toggleOn .toggleThumb {
+    transform: translateX(14px);
+}
+
+/* ── Tool list ── */
+.toolList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toolRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    cursor: grab;
+    transition: background 100ms ease, box-shadow 100ms ease, transform 100ms ease;
+    user-select: none;
+}
+
+.toolRow:active { cursor: grabbing; }
+
+.toolRowOver {
+    background: var(--clay-surface-strong);
+    box-shadow: 0 0 0 2px var(--clay-ink);
+    transform: scale(1.01);
+}
+
+.toolRowDisabled {
+    opacity: 0.45;
+}
+
+.grip {
+    font-size: 16px;
+    color: var(--clay-muted-soft);
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+.toolGlyph {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: 8px;
+    font-weight: 700;
+    color: var(--clay-ink);
+}
+
+.toolLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--clay-ink);
+    flex: 1;
+}
+
+.toolHref {
+    font-size: 11px;
+    color: var(--clay-muted-soft);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@media (max-width: 600px) {
+    .scroll { padding: var(--clay-space-md); }
+    .toolHref { display: none; }
+}

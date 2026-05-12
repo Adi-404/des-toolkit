@@ -3,31 +3,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSettings } from '@/contexts/SettingsContext';
 import styles from './ContextMenu.module.css';
 
-/**
- * Interface representing a note topic.
- */
 interface Topic {
     name: string;
     slug: string;
 }
-
-const tools = [
-    { label: 'Moodboard', href: '/moodboard', icon: '✿' },
-    { label: 'Fonts', href: '/fonts', icon: 'Aa' },
-    { label: 'Clipboard', href: '/clipboard', icon: '⧉' },
-    { label: 'Diff', href: '/diff', icon: '⇄' },
-    { label: 'JSON', href: '/json-formatter', icon: '{}' },
-    { label: 'Contrast', href: '/color/contrast', icon: '◐' },
-    { label: 'Bezier', href: '/css/bezier', icon: '∿' },
-    { label: 'Download', href: '/download', icon: '↓' },
-    { label: 'JWT', href: '/jwt-decoder', icon: '⚿' },
-    { label: 'Markdown', href: '/markdown-preview', icon: '¶' },
-    { label: 'CSV', href: '/csv-viewer', icon: '▦' },
-    { label: 'Notepad', href: '/notes-pad', icon: '≡' },
-    { label: 'Pomodoro', href: '/pomodoro', icon: '◔' },
-];
 
 /**
  * Fetches the topics from local storage.
@@ -48,6 +30,7 @@ function getCachedTopics(): Topic[] {
  */
 export default function ContextMenu() {
     const router = useRouter();
+    const { settings } = useSettings();
     const [visible, setVisible] = useState(false);
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [topics, setTopics] = useState<Topic[]>([]);
@@ -75,6 +58,7 @@ export default function ContextMenu() {
 
     useEffect(() => {
         function handleContextMenu(e: MouseEvent) {
+            if (!settings.contextMenuEnabled) return;
             e.preventDefault();
             setTopics(getCachedTopics());
 
@@ -92,11 +76,11 @@ export default function ContextMenu() {
 
         document.addEventListener('contextmenu', handleContextMenu);
         return () => document.removeEventListener('contextmenu', handleContextMenu);
-    }, []);
+    }, [settings.contextMenuEnabled]);
 
     useEffect(() => {
         const handleKeyDownAlt = (e: KeyboardEvent) => {
-            if (e.key === 'Alt' && !visible) {
+            if (e.key === 'Alt' && !visible && settings.contextMenuEnabled) {
                 e.preventDefault();
                 setTopics(getCachedTopics());
 
@@ -142,11 +126,13 @@ export default function ContextMenu() {
             window.removeEventListener('keyup', handleKeyUpAlt);
             window.removeEventListener('blur', handleBlur);
         };
-    }, [visible, isOpenByAlt, close]);
+    }, [visible, isOpenByAlt, close, settings.contextMenuEnabled]);
+
+    const enabledTools = settings.tools.filter(t => t.enabled);
 
     const allItems = mode === 'main'
         ? [
-            ...tools.map(t => ({ ...t, type: 'tool' })),
+            ...enabledTools.map(t => ({ ...t, type: 'tool' })),
             ...(topics.length > 0 ? [{ label: 'Notes', href: '#', icon: '☰', type: 'notes_menu' }] : [])
         ]
         : [

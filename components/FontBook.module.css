@@ -3,6 +3,58 @@
     overflow-y: auto;
     background: transparent;
     color: var(--clay-ink);
+    position: relative;
+}
+
+/* ── File drop overlay ── */
+.dropOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(255, 250, 240, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.dropOverlayInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 48px 64px;
+    background: var(--clay-surface-card);
+    border: 2px dashed var(--clay-brand-lavender);
+    border-radius: var(--clay-radius-xl);
+    animation: dropPulse 0.8s ease infinite alternate;
+}
+
+.dropOverlayIcon {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--clay-brand-lavender);
+}
+
+.dropOverlayText {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--clay-ink);
+    letter-spacing: -0.3px;
+}
+
+.dropOverlaySub {
+    font-size: 12px;
+    color: var(--clay-muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@keyframes dropPulse {
+    from { border-color: var(--clay-brand-lavender); }
+    to   { border-color: var(--clay-brand-peach); }
 }
 
 .container {

@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
 import Topbar from '@/components/Topbar';
 import ContextMenu from '@/components/ContextMenu';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 
 const inter = Inter({
     subsets: ['latin'],
@@ -22,13 +23,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     const shell = (
         <html lang="en" className={inter.variable}>
             <body>
-                <ContextMenu />
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-                    <Topbar />
-                    <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-                        {children}
-                    </main>
-                </div>
+                <SettingsProvider>
+                    <ContextMenu />
+                    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+                        <Topbar />
+                        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
+                            {children}
+                        </main>
+                    </div>
+                </SettingsProvider>
             </body>
         </html>
     );

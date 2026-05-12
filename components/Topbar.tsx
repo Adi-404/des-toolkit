@@ -274,6 +274,14 @@ export default function Topbar() {
                 </nav>
 
                 <div className={styles.right}>
+                    <Link
+                        href="/settings"
+                        className={styles.iconBtn}
+                        title="Settings"
+                        aria-label="Settings"
+                    >
+                        ⚙
+                    </Link>
                     <button
                         type="button"
                         className={styles.searchBtn}

@@ -84,6 +84,38 @@ export default function FontBook() {
     const [status, setStatus] = useState<{ kind: 'ok' | 'err' | 'info'; text: string } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // ── File drop zone ──
+    const [dropActive, setDropActive] = useState(false);
+    const dragCounterRef = useRef(0);
+    const FONT_EXTS = ['.woff2', '.woff', '.ttf', '.otf'];
+
+    function isFontFile(dt: DataTransfer) {
+        return Array.from(dt.items).some(item =>
+            item.kind === 'file' && FONT_EXTS.some(ext => item.type.includes(ext.slice(1)))
+        ) || Array.from(dt.types).includes('Files');
+    }
+
+    function onDragEnter(e: React.DragEvent) {
+        e.preventDefault();
+        if (Array.from(e.dataTransfer.types).includes('Files')) {
+            dragCounterRef.current += 1;
+            setDropActive(true);
+        }
+    }
+    function onFontDragOver(e: React.DragEvent) { e.preventDefault(); }
+    function onDragLeave(e: React.DragEvent) {
+        e.preventDefault();
+        dragCounterRef.current -= 1;
+        if (dragCounterRef.current === 0) setDropActive(false);
+    }
+    function onDrop(e: React.DragEvent) {
+        e.preventDefault();
+        dragCounterRef.current = 0;
+        setDropActive(false);
+        const file = e.dataTransfer.files[0];
+        if (file) pickFile(file);
+    }
+
     // Google Fonts picker state — search/filter Google's catalog and click
     // any preview to add it to the library in one step.
     const [pickerOpen, setPickerOpen] = useState(false);
@@ -282,7 +314,22 @@ export default function FontBook() {
     // ── Render ──
 
     return (
-        <div className={styles.scroll}>
+        <div
+            className={styles.scroll}
+            onDragEnter={onDragEnter}
+            onDragOver={onFontDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+        >
+            {dropActive && (
+                <div className={styles.dropOverlay}>
+                    <div className={styles.dropOverlayInner}>
+                        <span className={styles.dropOverlayIcon}>Aa</span>
+                        <span className={styles.dropOverlayText}>Drop font file to add</span>
+                        <span className={styles.dropOverlaySub}>.woff2 · .woff · .ttf · .otf</span>
+                    </div>
+                </div>
+            )}
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div>
