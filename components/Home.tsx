@@ -64,8 +64,14 @@ export default function Home() {
             <div className={styles.container}>
                 <section className={styles.hero}>
                     <div>
-                        <span className={styles.heroEyebrow}>Workshop · alpha</span>
+                        <span className={styles.heroEyebrow}>des/toolkit · workshop · alpha</span>
                         <h1 className={styles.heroTitle}>
+                            {/* Visually-hidden brand prefix — keeps the aesthetic
+                                phrase intact while giving search engines and
+                                screen readers the actual page identity ("des
+                                toolkit"). aria-hidden is *not* set: this text
+                                should be read by AT users too. */}
+                            <span className={styles.srOnly}>des toolkit — </span>
                             A warmer place to{' '}
                             <span className={styles.heroAccentWrap}>
                                 <span className={styles.heroAccent}>design</span>
