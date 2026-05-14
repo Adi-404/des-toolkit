@@ -149,6 +149,9 @@ export default function ClipboardEditor() {
                 <div className={styles.toolbarTitle}>
                     <span className={styles.toolbarEyebrow}>Text · clipboard</span>
                     <span className={styles.toolbarLabel}>Clipboard</span>
+                    <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                        the scratchpad
+                    </span>
                 </div>
                 <div className={styles.toolbarActions}>
                     <button

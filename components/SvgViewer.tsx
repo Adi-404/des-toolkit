@@ -66,7 +66,7 @@ export default function SvgViewer() {
                         <h1 className={shell.title}>SVG viewer.</h1>
                         <p className={shell.lede}>
                             Paste, drop, or pick an SVG. See it rendered against a transparent
-                            checker, with light cleanup that strips comments, metadata and editor
+                            checker, with <span className="clay-highlight clay-highlight-teal">light cleanup</span> that strips comments, metadata and editor
                             namespaces while rounding long decimals.
                         </p>
                     </div>

@@ -190,6 +190,21 @@
 .uploadBtn:hover:not(:disabled) { border-color: var(--clay-ink); }
 .uploadBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* Subtle handwritten size cap so users see the limit BEFORE picking a file
+   instead of bouncing off a server error. */
+.uploadHint {
+    font-family: var(--clay-font-script);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--clay-muted-soft);
+    margin-left: 2px;
+    letter-spacing: 0.2px;
+    transform: rotate(-2deg);
+    display: inline-block;
+}
+
+.uploadBtn:hover:not(:disabled) .uploadHint { color: var(--clay-brand-pink); }
+
 .spinner {
     width: 14px;
     height: 14px;

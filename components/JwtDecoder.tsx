@@ -95,6 +95,9 @@ export default function JwtDecoder() {
             {/* Toolbar */}
             <div className={styles.toolbar}>
                 <span className={styles.toolbarLabel}>JWT Decoder</span>
+                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                    peek inside the token
+                </span>
                 <div className={styles.toolbarActions}>
                     {raw && (
                         <>

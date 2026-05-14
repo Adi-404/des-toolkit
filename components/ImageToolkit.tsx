@@ -109,7 +109,7 @@ export default function ImageToolkit() {
                         <h1 className={shell.title}>Image toolkit.</h1>
                         <p className={shell.lede}>
                             Drop an image to read its dimensions, copy it as a base64 data URL,
-                            and generate a complete favicon set rendered straight off canvas.
+                            and generate a complete favicon set <span className="clay-highlight clay-highlight-coral">straight off canvas</span>.
                         </p>
                     </div>
                     {image && (

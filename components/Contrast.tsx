@@ -102,7 +102,7 @@ export default function Contrast() {
                         <div className={shell.eyebrow}>Color · accessibility</div>
                         <h1 className={shell.title}>Contrast.</h1>
                         <p className={shell.lede}>
-                            Check WCAG 2.1 contrast ratios and preview how the pair lands for
+                            Check WCAG 2.1 contrast ratios and preview <span className="clay-highlight clay-highlight-pink">how the pair lands</span> for
                             people with different forms of colour-vision deficiency.
                         </p>
                     </div>

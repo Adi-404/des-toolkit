@@ -221,6 +221,9 @@ export default function CsvViewer() {
             {/* Toolbar */}
             <div className={styles.toolbar}>
                 <span className={styles.toolbarLabel}>CSV Viewer</span>
+                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                    rows &amp; columns, sorted
+                </span>
             </div>
 
             {/* Input controls */}

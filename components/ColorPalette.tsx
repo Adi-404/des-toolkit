@@ -146,7 +146,7 @@ export default function ColorPalette() {
                 <header className={styles.header}>
                     <div className={styles.eyebrow}>Design tools · color</div>
                     <h1 className={styles.title}>Palette extractor</h1>
-                    <p className={styles.lede}>Drop any image to pull out its dominant color palette. All processing happens in your browser.</p>
+                    <p className={styles.lede}>Drop any image to pull out its dominant color palette. <span className="clay-highlight clay-highlight-pink">All in your browser</span>.</p>
                 </header>
 
                 <div className={styles.workspace}>

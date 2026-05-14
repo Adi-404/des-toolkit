@@ -270,6 +270,9 @@ export default function DiffChecker() {
                 <div className={styles.toolbarTitle}>
                     <span className={styles.toolbarEyebrow}>Text · diff</span>
                     <span className={styles.toolbarLabel}>Diff Checker</span>
+                    <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                        spot the difference
+                    </span>
                 </div>
                 <div className={styles.toolbarActions}>
                     <label id="diff-sync-label" className={styles.syncLabel}>

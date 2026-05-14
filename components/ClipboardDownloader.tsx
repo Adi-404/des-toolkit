@@ -146,7 +146,7 @@ export default function ClipboardDownloader() {
                         <div className={shell.eyebrow}>Utility · download</div>
                         <h1 className={shell.title}>Download.</h1>
                         <p className={shell.lede}>
-                            One-keystroke save of whatever&rsquo;s on your clipboard — text or image.
+                            <span className="clay-highlight clay-highlight-pink">One keystroke</span> to save whatever&rsquo;s on your clipboard — text or image.
                             Drop into the page and hit <span className={styles.kbd}>⌘V</span> to file it away.
                         </p>
                     </div>

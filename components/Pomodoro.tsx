@@ -435,6 +435,9 @@ export default function Pomodoro() {
             {/* Toolbar */}
             <div className={styles.toolbar}>
                 <span className={styles.toolbarLabel}>Pomodoro</span>
+                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                    one tomato at a time
+                </span>
                 <div className={styles.toolbarActions}>
                     <button className={styles.gearBtn} onClick={() => setShowSettings(s => !s)} title="Settings">⚙</button>
                 </div>

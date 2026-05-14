@@ -56,6 +56,9 @@ export default function NotesPad() {
         <div className={styles.wrapper}>
             <div className={styles.toolbar}>
                 <span className={styles.toolbarLabel}>Notes Pad</span>
+                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
+                    thoughts in the margins
+                </span>
                 <div className={styles.toolbarActions}>
                     <button className={styles.newBtn} onClick={() => setShowForm(true)} disabled={showForm}>
                         + New Note

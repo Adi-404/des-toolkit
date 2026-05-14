@@ -6,6 +6,7 @@ import {
     getMoodboardAction, refreshItemAction, toggleItemTagAction,
 } from '@/app/actions/moodboard';
 import { TAG_COLORS, type PinItem, type Tag, type TagColor } from '@/lib/moodboard-types';
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, tooLargeMessage } from '@/lib/upload-limits';
 import styles from './Moodboard.module.css';
 
 // Deterministic bento sizing — stable per item id, well-mixed across the feed.
@@ -187,6 +188,10 @@ export default function Moodboard() {
 
     async function addPicture(file: File) {
         if (adding) return;
+        if (file.size > MAX_UPLOAD_BYTES) {
+            setStatus({ kind: 'err', text: tooLargeMessage(file.size) });
+            return;
+        }
         setAdding(true);
         setStatus({ kind: 'info', text: `Uploading ${file.name}…` });
         try {
@@ -293,7 +298,7 @@ export default function Moodboard() {
                         <div className={styles.eyebrow}>Inspiration · moodboard</div>
                         <h1 className={styles.title}>Save what you love.</h1>
                         <p className={styles.lede}>
-                            Paste a link from anywhere — Pinterest, Dribbble, Behance, Canva,
+                            Paste a link from <span className="clay-highlight clay-highlight-pink">anywhere</span> — Pinterest, Dribbble, Behance, Canva,
                             Figma. We fetch the preview; you tag and arrange.
                         </p>
                     </div>
@@ -323,10 +328,11 @@ export default function Moodboard() {
                         className={styles.uploadBtn}
                         onClick={() => uploadInputRef.current?.click()}
                         disabled={adding}
-                        title="Upload a picture from your machine"
-                        aria-label="Upload a picture"
+                        title={`Upload a picture from your machine (max ${MAX_UPLOAD_LABEL})`}
+                        aria-label={`Upload a picture, max ${MAX_UPLOAD_LABEL}`}
                     >
                         ↑ Upload
+                        <span className={styles.uploadHint}>max {MAX_UPLOAD_LABEL}</span>
                     </button>
                     <input
                         ref={uploadInputRef}

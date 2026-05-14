@@ -9,6 +9,7 @@ import {
     type PinItem, type Tag, type TagColor,
 } from '@/lib/dal/moodboard';
 import { fetchOgMetadata } from '@/lib/og';
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, formatMb } from '@/lib/upload-limits';
 
 function uid(): string { return crypto.randomUUID(); }
 function nowIso(): string { return new Date().toISOString(); }
@@ -86,7 +87,6 @@ export async function addLinkAction(url: string, tagIds: string[] = []): Promise
 // the pin's image_url as a data URL so card rendering doesn't need a special
 // case. Capped to keep the SQLite blobs reasonable.
 
-const MAX_PICTURE_BYTES = 1_500_000; // 1.5 MB
 const ACCEPTED_IMAGE_MIME = /^image\/(png|jpe?g|gif|webp|svg\+xml)$/i;
 
 export interface UploadPictureInput {
@@ -113,8 +113,8 @@ export async function addPictureAction(input: UploadPictureInput): Promise<AddLi
         throw new Error('Could not read the uploaded image.');
     }
     if (bytes.length === 0) throw new Error('The uploaded image is empty.');
-    if (bytes.length > MAX_PICTURE_BYTES) {
-        throw new Error(`Image too large (${(bytes.length / 1024 / 1024).toFixed(2)} MB). Max is ${(MAX_PICTURE_BYTES / 1024 / 1024).toFixed(1)} MB.`);
+    if (bytes.length > MAX_UPLOAD_BYTES) {
+        throw new Error(`Image too large (${formatMb(bytes.length)}). Max is ${MAX_UPLOAD_LABEL}.`);
     }
 
     const dataUrl = `data:${input.mimeType};base64,${input.dataBase64}`;

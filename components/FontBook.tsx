@@ -9,6 +9,7 @@ import {
     GOOGLE_FONTS, FONT_CATEGORIES, googleSpecimenUrl, batchedGoogleFontsCss,
     type FontCategory,
 } from '@/lib/google-fonts';
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, tooLargeMessage } from '@/lib/upload-limits';
 import styles from './FontBook.module.css';
 
 const SAMPLE = 'The quick brown fox jumps over the lazy dog. 1234567890';
@@ -252,6 +253,11 @@ export default function FontBook() {
             setPickedFile(null);
             return;
         }
+        if (file.size > MAX_UPLOAD_BYTES) {
+            setStatus({ kind: 'err', text: tooLargeMessage(file.size) });
+            setPickedFile(null);
+            return;
+        }
         setPickedFile(file);
         setFamilyOverride(familyFromFilename(file.name));
         setStatus(null);
@@ -339,7 +345,7 @@ export default function FontBook() {
                             Browse Google Fonts and add favourites with a click, paste any
                             URL, or upload your own <code>.woff2</code>, <code>.woff</code>,
                             <code>.ttf</code>, <code>.otf</code> file. Every card renders the
-                            family live.
+                            family <span className="clay-highlight clay-highlight-pink">live</span>.
                         </p>
                     </div>
                 </header>
@@ -367,8 +373,10 @@ export default function FontBook() {
                             type="button"
                             className={styles.btnSecondary}
                             onClick={() => fileInputRef.current?.click()}
+                            title={`Upload a font file (max ${MAX_UPLOAD_LABEL})`}
                         >
                             ↑ Upload font file
+                            <span className={styles.uploadHint}>max {MAX_UPLOAD_LABEL}</span>
                         </button>
                         <input
                             ref={fileInputRef}

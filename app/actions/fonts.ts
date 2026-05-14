@@ -5,8 +5,7 @@ import {
     listFonts, addFont, deleteFont,
     type FontRecord, type FontFormat,
 } from '@/lib/dal/fonts';
-
-const MAX_BYTES = 1_500_000; // 1.5 MB cap on uploads
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, formatMb } from '@/lib/upload-limits';
 
 const ACCEPTED_FORMATS: FontFormat[] = ['woff2', 'woff', 'ttf', 'otf'];
 
@@ -124,8 +123,8 @@ export async function addFontByFileAction(input: UploadedFontInput): Promise<Fon
         throw new Error('Could not decode the uploaded file.');
     }
     if (bytes.length === 0) throw new Error('The uploaded file is empty.');
-    if (bytes.length > MAX_BYTES) {
-        throw new Error(`Upload is too large (${(bytes.length / 1024 / 1024).toFixed(2)} MB). Max is ${(MAX_BYTES / 1024 / 1024).toFixed(1)} MB.`);
+    if (bytes.length > MAX_UPLOAD_BYTES) {
+        throw new Error(`Upload is too large (${formatMb(bytes.length)}). Max is ${MAX_UPLOAD_LABEL}.`);
     }
 
     const id = uid();

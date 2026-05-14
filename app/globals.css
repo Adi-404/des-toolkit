@@ -253,6 +253,40 @@ body {
     color: var(--clay-muted);
 }
 
+/* Inline emphasis word inside body copy — picks up the surrounding font
+   size, scales slightly larger, leans a touch. Pair with one of the
+   colour modifiers below or override `color:` inline. */
+.clay-highlight {
+    display: inline-block;
+    font-family: var(--clay-font-script);
+    font-size: 1.18em;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--clay-ink);
+    letter-spacing: 0.2px;
+    transform: rotate(-1.5deg);
+    transform-origin: left center;
+    animation: clay-wobble 7s ease-in-out infinite;
+}
+
+.clay-highlight-pink { color: var(--clay-brand-pink); }
+.clay-highlight-teal { color: var(--clay-brand-teal); }
+.clay-highlight-coral { color: var(--clay-brand-coral); }
+
+@media (prefers-reduced-motion: reduce) {
+    .clay-highlight { animation: none; }
+}
+
+/* Small handwritten side-note / annotation — used inline next to a tag
+   or label to add an unobtrusive "by the way" line. Doesn't scale up
+   like .clay-highlight; just shifts font + colour. */
+.clay-note {
+    font-family: var(--clay-font-script);
+    font-size: 1em;
+    color: var(--clay-muted);
+    letter-spacing: 0.2px;
+}
+
 /* Subtle hand-drawn sway. Use on small accents only — would feel
    nauseating at body-text scale. */
 .clay-script-wobble {
