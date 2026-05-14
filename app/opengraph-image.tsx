@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { SITE_URL } from '@/lib/site-url';
 
 /**
  * Dynamic OpenGraph card for the home page.
@@ -42,12 +43,10 @@ export default async function OpenGraphImage() {
         loadGoogleFont('Caveat', 700),
     ]);
 
-    // The visible URL on the OG card derives from the live env var so the
-    // image follows the deployment without code edits. Falls back to a
-    // sensible label if SITE_URL is unset or malformed.
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+    // The visible URL on the OG card derives from the resolved SITE_URL so
+    // the image follows the deployment without code edits.
     const displayUrl = (() => {
-        try { return new URL(siteUrl).hostname.replace(/^www\./, ''); }
+        try { return new URL(SITE_URL).hostname.replace(/^www\./, ''); }
         catch { return 'des-toolkit'; }
     })();
 

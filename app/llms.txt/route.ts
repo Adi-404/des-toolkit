@@ -5,7 +5,7 @@
  * where the canonical pages live, without parsing the whole DOM.
  */
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+import { SITE_URL } from '@/lib/site-url';
 
 const BODY = `# des/toolkit
 

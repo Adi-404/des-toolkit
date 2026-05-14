@@ -6,6 +6,7 @@ import Topbar from '@/components/Topbar';
 import ContextMenu from '@/components/ContextMenu';
 import GlobalShortcuts from '@/components/GlobalShortcuts';
 import { SettingsProvider } from '@/contexts/SettingsContext';
+import { SITE_URL } from '@/lib/site-url';
 
 const inter = Inter({
     subsets: ['latin'],
@@ -13,10 +14,6 @@ const inter = Inter({
     display: 'swap',
     variable: '--clay-font-inter',
 });
-
-// Most production deployments will set this to the public URL; locally it
-// falls through to localhost so OG/Twitter previews still resolve.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
@@ -61,59 +58,10 @@ export const metadata: Metadata = {
     category: 'productivity',
 };
 
-const STRUCTURED_DATA = {
-    '@context': 'https://schema.org',
-    '@graph': [
-        {
-            '@type': 'WebSite',
-            '@id': `${SITE_URL}/#website`,
-            url: SITE_URL,
-            name: 'des/toolkit',
-            description:
-                'A warm browser-based workshop for designers and frontend developers — moodboard, fontbook, and small dev utilities in one place.',
-            inLanguage: 'en-US',
-            // Tells Google / search-aware LLMs that the site has an internal
-            // search affordance (Cmd+K command palette).
-            potentialAction: {
-                '@type': 'SearchAction',
-                target: {
-                    '@type': 'EntryPoint',
-                    urlTemplate: `${SITE_URL}/?q={search_term_string}`,
-                },
-                'query-input': 'required name=search_term_string',
-            },
-        },
-        {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}/#org`,
-            name: 'des/toolkit',
-            url: SITE_URL,
-            founder: { '@type': 'Person', name: 'Adi-404', url: 'https://github.com/Adi-404' },
-            sameAs: ['https://github.com/Adi-404/des-toolkit', 'https://github.com/Adi-404'],
-        },
-        {
-            '@type': 'SoftwareApplication',
-            '@id': `${SITE_URL}/#app`,
-            name: 'des/toolkit',
-            applicationCategory: 'DesignApplication',
-            operatingSystem: 'Web',
-            url: SITE_URL,
-            description:
-                'Moodboard for saving design inspiration, fontbook for type collection, and a kit of frontend tools — contrast, JSON, diff, bezier easing, CSV, JWT, markdown, palette extractor.',
-            offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        },
-    ],
-};
-
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     const shell = (
         <html lang="en" className={inter.variable}>
             <body>
-                <script
-                    type="application/ld+json"
-                    // JSON.stringify on a constant — safe to inject directly.
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
-                />
                 <SettingsProvider>
                     <ContextMenu />
                     <GlobalShortcuts />
