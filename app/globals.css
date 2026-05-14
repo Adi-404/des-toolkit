@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -51,6 +51,7 @@
 
   --clay-font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --clay-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --clay-font-script: 'Caveat', 'Bradley Hand', 'Comic Sans MS', cursive;
 
   /* ── Legacy dark tokens (kept so existing tool components render unchanged) ── */
   --bg-primary: #1e1e1e;
@@ -207,6 +208,81 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .clay-gradient-border-animated::after { animation: none; }
+}
+
+/* ── Floating g-mode indicator ───────────────────────────────────────────
+   Pops in the bottom-right while the user is in "g…" navigation mode.    */
+.clay-g-indicator {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 250;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--clay-ink);
+    color: var(--clay-on-primary);
+    font-family: var(--clay-font-script);
+    font-size: 22px;
+    border-radius: var(--clay-radius-md);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    animation: clay-g-pop 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+    user-select: none;
+}
+
+.clay-g-indicator::after {
+    content: '…';
+    margin-left: 4px;
+    opacity: 0.6;
+}
+
+@keyframes clay-g-pop {
+    from { opacity: 0; transform: translateY(6px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* ── Crayon doodle utilities ─────────────────────────────────────────────
+   Re-usable handwritten/sketch flourishes that stay on-theme.            */
+.clay-script {
+    font-family: var(--clay-font-script);
+    letter-spacing: 0.2px;
+    color: var(--clay-muted);
+}
+
+/* Subtle hand-drawn sway. Use on small accents only — would feel
+   nauseating at body-text scale. */
+.clay-script-wobble {
+    display: inline-block;
+    transform-origin: left center;
+    animation: clay-wobble 5s ease-in-out infinite;
+}
+
+@keyframes clay-wobble {
+    0%, 100% { transform: rotate(-1.5deg); }
+    50%      { transform: rotate( 1.2deg); }
+}
+
+/* "Draw-in" stroke for SVG doodles. Pair with stroke-dasharray on the
+   element so the line appears to be sketched. */
+@keyframes clay-doodle-draw {
+    from { stroke-dashoffset: var(--clay-doodle-length, 200); }
+    to   { stroke-dashoffset: 0; }
+}
+
+.clay-doodle-stroke {
+    stroke-dasharray: var(--clay-doodle-length, 200);
+    stroke-dashoffset: var(--clay-doodle-length, 200);
+    animation: clay-doodle-draw 1.6s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clay-script-wobble { animation: none; }
+    .clay-doodle-stroke { animation: none; stroke-dashoffset: 0; }
+    .clay-g-indicator   { animation: none; }
 }
 
 /* Solid-fill variant — for primary CTAs that want the gradient to BE the

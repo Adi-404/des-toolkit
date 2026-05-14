@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
 import Topbar from '@/components/Topbar';
 import ContextMenu from '@/components/ContextMenu';
+import GlobalShortcuts from '@/components/GlobalShortcuts';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 
 const inter = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <body>
                 <SettingsProvider>
                     <ContextMenu />
+                    <GlobalShortcuts />
                     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
                         <Topbar />
                         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>

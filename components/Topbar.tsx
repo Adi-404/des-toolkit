@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import styles from './Topbar.module.css';
 import CommandPalette from './CommandPalette';
+import { useSettings } from '@/contexts/SettingsContext';
+import { usePlatform } from '@/lib/use-platform';
 
 // NEXT_PUBLIC_* values are inlined at build time, so this is a static check
 // equivalent to "did the developer wire up Clerk for this build?".
@@ -119,9 +121,14 @@ const HOVER_CLOSE_DELAY = 180;
 
 export default function Topbar() {
     const pathname = usePathname();
+    const { settings } = useSettings();
+    const { modLabel } = usePlatform();
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [openGroupId, setOpenGroupId] = useState<string | null>(null);
     const navRef = useRef<HTMLElement>(null);
+
+    const paletteKey = settings.shortcuts.paletteKey;
+    const paletteHotkeyLabel = `${modLabel}${paletteKey.toUpperCase()}`;
 
     const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -153,7 +160,7 @@ export default function Topbar() {
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
             const mod = e.metaKey || e.ctrlKey;
-            if (mod && e.key.toLowerCase() === 'k') {
+            if (mod && e.key.toLowerCase() === paletteKey) {
                 e.preventDefault();
                 setPaletteOpen((o) => !o);
             }
@@ -174,7 +181,7 @@ export default function Topbar() {
             window.removeEventListener('keydown', onKey);
             window.removeEventListener('mousedown', onClick);
         };
-    }, []);
+    }, [paletteKey]);
 
     function isItemActive(item: MenuItem): boolean {
         return item.matchPrefixes.some((p) =>
@@ -289,7 +296,7 @@ export default function Topbar() {
                         aria-label="Open command palette"
                     >
                         <span className={styles.searchIcon}>⌕ Search tools…</span>
-                        <span className={styles.searchKbd}>⌘K</span>
+                        <span className={styles.searchKbd}>{paletteHotkeyLabel}</span>
                     </button>
 
                     {CLERK_ENABLED ? (

@@ -1,0 +1,115 @@
+.scribble {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    color: var(--clay-muted);
+    font-family: var(--clay-font-script);
+    font-size: 19px;
+    line-height: 1.1;
+    letter-spacing: 0.2px;
+    user-select: none;
+    animation: clay-scribble-in 800ms ease-out both;
+}
+
+@keyframes clay-scribble-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.inline {
+    margin-top: var(--clay-space-md);
+}
+
+.footer {
+    margin-left: auto;
+    font-size: 18px;
+    color: var(--clay-muted);
+}
+
+.lead {
+    color: var(--clay-muted-soft);
+    font-style: italic;
+    display: inline-block;
+    transform-origin: left center;
+    animation: clay-wobble 6s ease-in-out infinite;
+}
+
+.line {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    /* Each cycle remounts this with a new key, so the keyframe replays. */
+    animation: clay-hint-swap 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes clay-hint-swap {
+    from { opacity: 0; transform: translateY(3px); filter: blur(2px); }
+    to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
+}
+
+.kbdGroup {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.kbd {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 6px;
+    font-family: var(--clay-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--clay-ink);
+    background: var(--clay-surface-card);
+    border: 1px solid var(--clay-hairline);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    /* Lift the kbd a touch so it sits with the script baseline. */
+    transform: translateY(-1px);
+}
+
+.plus {
+    color: var(--clay-muted-soft);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    margin: 0 -2px;
+}
+
+.word {
+    color: var(--clay-muted);
+}
+
+/* ── Cycle indicator dots ── one filled, the rest hollow */
+.dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    transform: translateY(-2px);
+}
+
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--clay-hairline);
+    transition: background 320ms ease, transform 320ms ease;
+}
+
+.dotActive {
+    background: var(--clay-brand-pink);
+    transform: scale(1.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scribble, .lead, .line { animation: none; }
+}
+
+@media (max-width: 640px) {
+    .scribble { font-size: 17px; }
+    .footer { margin-left: 0; }
+}

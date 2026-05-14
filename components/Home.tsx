@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import MoodboardDemo from './MoodboardDemo';
+import ShortcutScribble from './ShortcutScribble';
 import styles from './Home.module.css';
 
 interface ToolCard {
@@ -64,11 +65,27 @@ export default function Home() {
                     <div>
                         <span className={styles.heroEyebrow}>Workshop · alpha</span>
                         <h1 className={styles.heroTitle}>
-                            A warmer place to <span className={styles.heroAccent}>design</span> in.
+                            A warmer place to{' '}
+                            <span className={styles.heroAccentWrap}>
+                                <span className={styles.heroAccent}>design</span>
+                                <svg
+                                    className={styles.heroAccentDoodle}
+                                    viewBox="0 0 200 18"
+                                    preserveAspectRatio="none"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        className="clay-doodle-stroke"
+                                        style={{ ['--clay-doodle-length' as string]: '260' }}
+                                        d="M2 12 C 40 4, 80 18, 120 8 S 180 16, 198 10"
+                                    />
+                                </svg>
+                            </span>{' '}
+                            in.
                         </h1>
                         <p className={styles.heroSub}>
-                            A moodboard for the references that inspire you, a fontbook for the
-                            type you collect, and a small kit of dev tools you reach for between
+                            A moodboard for the references that <span className={`${styles.highlight} ${styles.highlightPink}`}>inspire you</span>,
+                            a fontbook for the type you collect, and a small kit of dev tools you reach for between
                             the big ones.
                         </p>
                         <div className={styles.heroActions}>
@@ -80,6 +97,7 @@ export default function Home() {
                             </Link>
                             <Link href="/fonts" className={styles.btnSecondary}>Browse fonts →</Link>
                         </div>
+                        <ShortcutScribble variant="inline" />
                     </div>
 
                     <MoodboardDemo />
@@ -89,11 +107,14 @@ export default function Home() {
                 <section>
                     <header className={styles.sectionHead}>
                         <div>
-                            <div className={styles.sectionEyebrow}>Inspiration</div>
+                            <div className={styles.sectionEyebrow}>
+                                Inspiration
+                                <span className={styles.sectionNote}>the keepers</span>
+                            </div>
                             <h2 className={styles.sectionTitle}>Save what you love.</h2>
                         </div>
                         <p className={styles.sectionLede}>
-                            Two libraries that build over time. Drop a link, drop an image,
+                            Two libraries that <span className={styles.highlight}>build over time</span>. Drop a link, drop an image,
                             drop a font file — we keep them organised, tagged, and instantly
                             visible.
                         </p>
@@ -155,12 +176,15 @@ export default function Home() {
                 <section style={{ marginTop: 'var(--clay-space-section)' }}>
                     <header className={styles.sectionHead}>
                         <div>
-                            <div className={styles.sectionEyebrow}>Design tools</div>
+                            <div className={styles.sectionEyebrow}>
+                                Design tools
+                                <span className={styles.sectionNote}>quick fixes</span>
+                            </div>
                             <h2 className={styles.sectionTitle}>For when Figma is overkill.</h2>
                         </div>
                         <p className={styles.sectionLede}>
                             Quick reference utilities — contrast checks, easing curves, token
-                            translations, asset prep — that all end in copyable CSS or JSON.
+                            translations, asset prep — that all end in <span className={`${styles.highlight} ${styles.highlightTeal}`}>copyable CSS or JSON</span>.
                         </p>
                     </header>
                     <div className={styles.grid}>
@@ -172,12 +196,15 @@ export default function Home() {
                 <section style={{ marginTop: 'var(--clay-space-section)' }}>
                     <header className={styles.sectionHead}>
                         <div>
-                            <div className={styles.sectionEyebrow}>Code & utility</div>
+                            <div className={styles.sectionEyebrow}>
+                                Code & utility
+                                <span className={styles.sectionNote}>between commits</span>
+                            </div>
                             <h2 className={styles.sectionTitle}>The small things, fast.</h2>
                         </div>
                         <p className={styles.sectionLede}>
                             JSON, diffs, markdown, clipboard, JWT, CSV, focus timer, notes —
-                            the moments between commits. All client-side.
+                            the moments between commits. <span className={`${styles.highlight} ${styles.highlightPink}`}>All client-side</span>.
                         </p>
                     </header>
                     <div className={styles.grid}>
@@ -186,8 +213,10 @@ export default function Home() {
                 </section>
 
                 <footer className={styles.footer}>
-                    <span>des/toolkit · alpha</span>
-                    <span>Press ⌘K to search tools</span>
+                    <span>des/toolkit · <span className={styles.footerStamp}>alpha</span></span>
+                    <ShortcutScribble variant="footer">
+                        <span>shortcuts —</span>
+                    </ShortcutScribble>
                 </footer>
             </div>
         </div>

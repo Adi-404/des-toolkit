@@ -1,13 +1,41 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useEffect, useRef, useState } from 'react';
+import { DEFAULT_SHORTCUTS, useSettings, type WheelModifier } from '@/contexts/SettingsContext';
+import { usePlatform } from '@/lib/use-platform';
 import styles from './SettingsPage.module.css';
+
+const WHEEL_MODIFIER_OPTIONS: { value: WheelModifier; label: string }[] = [
+    { value: 'Alt',     label: 'Alt' },
+    { value: 'Control', label: 'Ctrl' },
+    { value: 'Shift',   label: 'Shift' },
+    { value: 'Meta',    label: '⌘ / Win' },
+];
 
 export default function SettingsPage() {
     const { settings, update } = useSettings();
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
     const dragIndexRef = useRef<number | null>(null);
+
+    const [recordingPalette, setRecordingPalette] = useState(false);
+    const { modLabel } = usePlatform();
+
+    useEffect(() => {
+        if (!recordingPalette) return;
+        function onKey(e: KeyboardEvent) {
+            e.preventDefault();
+            if (e.key === 'Escape') { setRecordingPalette(false); return; }
+            // Want a single letter/digit that's not itself a modifier.
+            if (e.key.length === 1 && /[a-zA-Z0-9]/.test(e.key)) {
+                update({
+                    shortcuts: { ...settings.shortcuts, paletteKey: e.key.toLowerCase() },
+                });
+                setRecordingPalette(false);
+            }
+        }
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [recordingPalette, settings.shortcuts, update]);
 
     function onDragStart(index: number) {
         dragIndexRef.current = index;
@@ -40,8 +68,11 @@ export default function SettingsPage() {
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div className={styles.eyebrow}>des/toolkit · settings</div>
-                    <h1 className={styles.title}>Preferences</h1>
-                    <p className={styles.lede}>Saved in your browser. Changes apply immediately.</p>
+                    <h1 className={styles.title}>
+                        Preferences
+                        <span className={styles.titleNote}>make it yours</span>
+                    </h1>
+                    <p className={styles.lede}>Synced to your account when signed in. Changes apply immediately.</p>
                 </header>
 
                 {/* ── Right-click menu toggle ── */}
@@ -52,7 +83,7 @@ export default function SettingsPage() {
                             <div className={styles.rowText}>
                                 <div className={styles.rowLabel}>Enable radial menu</div>
                                 <div className={styles.rowDesc}>
-                                    Shows the tool wheel on right-click or pressing <kbd className={styles.kbd}>Alt</kbd>
+                                    Shows the tool wheel on right-click or pressing <kbd className={styles.kbd}>{WHEEL_MODIFIER_OPTIONS.find(o => o.value === settings.shortcuts.wheelModifier)?.label ?? 'Alt'}</kbd>
                                 </div>
                             </div>
                             <button
@@ -65,6 +96,75 @@ export default function SettingsPage() {
                                 <span className={styles.toggleThumb} />
                             </button>
                         </div>
+                    </div>
+                </section>
+
+                {/* ── Keyboard shortcuts ── */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>Keyboard shortcuts</h2>
+                    <p className={styles.sectionDesc}>
+                        Pick the keys you reach for. <span className={styles.script}>change anytime</span>
+                        {' '}<span className={styles.scriptHint}>· press <kbd className={styles.kbd}>?</kbd> anywhere for the full list</span>
+                    </p>
+                    <div className={styles.card}>
+                        <div className={styles.row}>
+                            <div className={styles.rowText}>
+                                <div className={styles.rowLabel}>Command palette</div>
+                                <div className={styles.rowDesc}>
+                                    Held with <kbd className={styles.kbd}>{modLabel}</kbd> to open the search bar
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                className={`${styles.recorder} ${recordingPalette ? styles.recorderActive : ''}`}
+                                onClick={() => setRecordingPalette(r => !r)}
+                                aria-label="Record command palette shortcut"
+                            >
+                                {recordingPalette
+                                    ? <span className={styles.recorderHint}>press any key…</span>
+                                    : <span><kbd className={styles.kbd}>{modLabel}</kbd> + <kbd className={styles.kbd}>{settings.shortcuts.paletteKey.toUpperCase()}</kbd></span>}
+                            </button>
+                        </div>
+                        <div className={styles.rowDivider} />
+                        <div className={styles.row}>
+                            <div className={styles.rowText}>
+                                <div className={styles.rowLabel}>Radial wheel</div>
+                                <div className={styles.rowDesc}>
+                                    Hold this key to summon the wheel at your cursor
+                                </div>
+                            </div>
+                            <div className={styles.segmented} role="radiogroup" aria-label="Radial wheel modifier">
+                                {WHEEL_MODIFIER_OPTIONS.map(opt => {
+                                    const active = settings.shortcuts.wheelModifier === opt.value;
+                                    return (
+                                        <button
+                                            key={opt.value}
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={active}
+                                            className={`${styles.segment} ${active ? styles.segmentActive : ''}`}
+                                            onClick={() => update({
+                                                shortcuts: { ...settings.shortcuts, wheelModifier: opt.value },
+                                            })}
+                                        >
+                                            {opt.label}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        {(settings.shortcuts.paletteKey !== DEFAULT_SHORTCUTS.paletteKey ||
+                          settings.shortcuts.wheelModifier !== DEFAULT_SHORTCUTS.wheelModifier) && (
+                            <div className={styles.rowFoot}>
+                                <button
+                                    type="button"
+                                    className={styles.resetLink}
+                                    onClick={() => update({ shortcuts: { ...DEFAULT_SHORTCUTS } })}
+                                >
+                                    Reset to defaults
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </section>
 

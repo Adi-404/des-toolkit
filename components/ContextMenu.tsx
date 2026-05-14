@@ -78,9 +78,11 @@ export default function ContextMenu() {
         return () => document.removeEventListener('contextmenu', handleContextMenu);
     }, [settings.contextMenuEnabled]);
 
+    const wheelModifier = settings.shortcuts.wheelModifier;
+
     useEffect(() => {
-        const handleKeyDownAlt = (e: KeyboardEvent) => {
-            if (e.key === 'Alt' && !visible && settings.contextMenuEnabled) {
+        const handleKeyDownHold = (e: KeyboardEvent) => {
+            if (e.key === wheelModifier && !visible && settings.contextMenuEnabled) {
                 e.preventDefault();
                 setTopics(getCachedTopics());
 
@@ -102,8 +104,8 @@ export default function ContextMenu() {
             }
         };
 
-        const handleKeyUpAlt = (e: KeyboardEvent) => {
-            if (e.key === 'Alt') {
+        const handleKeyUpHold = (e: KeyboardEvent) => {
+            if (e.key === wheelModifier) {
                 e.preventDefault();
                 if (isOpenByAlt) {
                     close();
@@ -117,16 +119,16 @@ export default function ContextMenu() {
             }
         };
 
-        window.addEventListener('keydown', handleKeyDownAlt);
-        window.addEventListener('keyup', handleKeyUpAlt);
+        window.addEventListener('keydown', handleKeyDownHold);
+        window.addEventListener('keyup', handleKeyUpHold);
         window.addEventListener('blur', handleBlur);
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDownAlt);
-            window.removeEventListener('keyup', handleKeyUpAlt);
+            window.removeEventListener('keydown', handleKeyDownHold);
+            window.removeEventListener('keyup', handleKeyUpHold);
             window.removeEventListener('blur', handleBlur);
         };
-    }, [visible, isOpenByAlt, close, settings.contextMenuEnabled]);
+    }, [visible, isOpenByAlt, close, settings.contextMenuEnabled, wheelModifier]);
 
     const enabledTools = settings.tools.filter(t => t.enabled);
 

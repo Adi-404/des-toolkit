@@ -54,6 +54,29 @@
 
 .heroAccent {
     color: var(--clay-brand-pink);
+    font-family: var(--clay-font-script);
+    /* Caveat's x-height is shorter than Inter's, so scale up to match the
+       visual mass of the surrounding display type. */
+    font-size: 1.22em;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1;
+    /* Sit on the same baseline as the Inter glyphs around it. */
+    vertical-align: baseline;
+    display: inline-block;
+    transform: rotate(-2deg) translateY(0.04em);
+    transform-origin: center bottom;
+    /* Gentle settle-in: drops into place from a slightly rotated start. */
+    animation: clay-hero-accent-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes clay-hero-accent-in {
+    from { opacity: 0; transform: rotate(-8deg) translateY(0.18em); }
+    to   { opacity: 1; transform: rotate(-2deg) translateY(0.04em); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heroAccent { animation: none; }
 }
 
 .heroSub {
@@ -62,6 +85,38 @@
     color: var(--clay-body);
     max-width: 540px;
     margin-bottom: var(--clay-space-xl);
+}
+
+/* ── Crayon highlight ── used inline in body copy to lift one important
+   phrase without losing the surrounding rhythm. Inks slightly darker than
+   the body so it reads as emphasis. */
+.highlight {
+    display: inline-block;
+    font-family: var(--clay-font-script);
+    font-size: 1.18em;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--clay-ink);
+    letter-spacing: 0.2px;
+    transform: rotate(-1.5deg);
+    transform-origin: left center;
+    animation: clay-wobble 7s ease-in-out infinite;
+}
+
+.highlightPink { color: var(--clay-brand-pink); }
+.highlightTeal { color: var(--clay-brand-teal); }
+
+@media (prefers-reduced-motion: reduce) {
+    .highlight { animation: none; }
+}
+
+/* "alpha" badge in the footer — keep it small + handwritten so it reads as a
+   personal annotation, not a hard label. */
+.footerStamp {
+    font-family: var(--clay-font-script);
+    color: var(--clay-brand-pink);
+    font-size: 20px;
+    margin-left: 2px;
 }
 
 .heroActions {
@@ -216,6 +271,7 @@
     line-height: 1.1;
     letter-spacing: -1px;
     color: var(--clay-ink);
+    position: relative;
 }
 
 .sectionLede {
@@ -223,6 +279,50 @@
     font-size: 16px;
     max-width: 420px;
     line-height: 1.55;
+}
+
+/* Tiny crayon companion to the section eyebrow — handwritten note in the
+   margin. Stays muted so the Inter eyebrow keeps the visual lead. */
+.sectionNote {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: var(--clay-font-script);
+    font-size: 18px;
+    color: var(--clay-muted-soft);
+    letter-spacing: 0.2px;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+    animation: clay-wobble 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sectionNote { animation: none; }
+}
+
+/* Hand-drawn underline that sketches itself on view. The SVG path is
+   absolutely positioned just under the accent word and animates via the
+   global .clay-doodle-stroke utility. */
+.heroAccentWrap {
+    position: relative;
+    display: inline-block;
+}
+
+.heroAccentDoodle {
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    bottom: -14px;
+    width: 108%;
+    height: 18px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.heroAccentDoodle path {
+    fill: none;
+    stroke: var(--clay-brand-pink);
+    stroke-width: 3;
+    stroke-linecap: round;
 }
 
 /* ── Tool grid ── */

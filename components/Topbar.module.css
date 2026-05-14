@@ -58,17 +58,15 @@
 .brandBadge {
     display: inline-flex;
     align-items: center;
-    margin-left: 7px;
-    padding: 2px 7px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--clay-muted);
-    background: var(--clay-surface-card);
-    border: 1px solid var(--clay-hairline);
-    border-radius: var(--clay-radius-pill);
-    translate: 0 -1px;
+    margin-left: 8px;
+    font-family: var(--clay-font-script);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: var(--clay-brand-pink);
+    translate: 0 1px;
+    transform: rotate(-3deg);
+    transform-origin: center bottom;
 }
 
 /* ── Divider between brand and nav ── */
