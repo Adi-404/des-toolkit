@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import shell from './ToolPage.module.css';
 import styles from './ClipboardEditor.module.css';
 import {
     loadClipboardAction, upsertTabAction, saveTabContentAction,
@@ -144,34 +145,29 @@ export default function ClipboardEditor() {
     if (!loaded || tabs.length === 0) return null;
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.toolbar}>
-                <div className={styles.toolbarTitle}>
-                    <span className={styles.toolbarEyebrow}>Text · clipboard</span>
-                    <span className={styles.toolbarLabelRow}>
-                        <span className={styles.toolbarLabel}>Clipboard</span>
-                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
-                            the scratchpad
-                        </span>
-                    </span>
-                </div>
-                <div className={styles.toolbarActions}>
-                    <button
-                        className={styles.actionBtn}
-                        onClick={handleCopy}
-                        disabled={!activeContent}
-                    >
-                        {copied ? '✓ Copied' : '⧉ Copy all'}
-                    </button>
-                    <button
-                        className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
-                        onClick={handleClear}
-                        disabled={!activeContent}
-                    >
-                        ✕ Clear
-                    </button>
-                </div>
-            </div>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Text · clipboard</div>
+                        <h1 className={shell.title}>
+                            <span className="clay-title-script">Clipboard</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            A <span className="clay-highlight clay-highlight-pink">tabbed scratchpad</span> with line numbers,
+                            saved to your account so it follows you between devices.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        <button className={shell.btnSecondary} onClick={handleCopy} disabled={!activeContent}>
+                            {copied ? '✓ Copied' : '⧉ Copy all'}
+                        </button>
+                        <button className={shell.btnSecondary} onClick={handleClear} disabled={!activeContent}>
+                            ✕ Clear
+                        </button>
+                    </div>
+                </header>
 
             <div className={styles.tabBar}>
                 {tabs.map(tab => (
@@ -234,6 +230,7 @@ export default function ClipboardEditor() {
                 <span className={styles.statusItem}>{chars.toLocaleString()} chars</span>
                 <span className={styles.statusDivider}>|</span>
                 <span className={styles.statusItem}>{lines.toLocaleString()} lines</span>
+            </div>
             </div>
         </div>
     );

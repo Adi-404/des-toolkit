@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { diff_match_patch, DIFF_DELETE, DIFF_INSERT, DIFF_EQUAL } from 'diff-match-patch';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
-import ToolHeader from './ToolHeader';
+import shell from './ToolPage.module.css';
 import styles from './DiffChecker.module.css';
 
 interface LineMark {
@@ -266,30 +266,35 @@ export default function DiffChecker() {
     }, [diff.rightMarks]);
 
     return (
-        <div className={styles.wrapper}>
-            <ToolHeader
-                eyebrow="Text · diff"
-                title="Diff Checker"
-                titleAccent="Checker"
-                note="spot the difference"
-            >
-                <label id="diff-sync-label" className={styles.syncLabel}>
-                    <input
-                        id="diff-sync-scroll"
-                        type="checkbox"
-                        className={styles.syncCheckbox}
-                        checked={syncScrollEnabled}
-                        onChange={(e) => setSyncScrollEnabled(e.target.checked)}
-                    />
-                    Scroll together
-                </label>
-                <button id="diff-swap" className={styles.actionBtn} onClick={handleSwap}>
-                    ⇄ Swap
-                </button>
-                <button id="diff-clear" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={handleClear}>
-                    ✕ Clear both
-                </button>
-            </ToolHeader>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Text · diff</div>
+                        <h1 className={shell.title}>
+                            Diff <span className="clay-title-script">Checker</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            Side-by-side text diff with <span className="clay-highlight clay-highlight-pink">sync-scroll</span> and
+                            one-click merge buttons. Drop two blocks in, watch added and removed lines light up.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        <label id="diff-sync-label" className={styles.syncLabel}>
+                            <input
+                                id="diff-sync-scroll"
+                                type="checkbox"
+                                className={styles.syncCheckbox}
+                                checked={syncScrollEnabled}
+                                onChange={(e) => setSyncScrollEnabled(e.target.checked)}
+                            />
+                            Scroll together
+                        </label>
+                        <button id="diff-swap" className={shell.btnSecondary} onClick={handleSwap}>⇄ Swap</button>
+                        <button id="diff-clear" className={shell.btnSecondary} onClick={handleClear}>✕ Clear both</button>
+                    </div>
+                </header>
 
             <div className={styles.editors}>
                 <div className={styles.panel}>
@@ -407,13 +412,14 @@ export default function DiffChecker() {
                 </div>
             </div>
 
-            <div className={styles.statusBar}>
-                <span className={styles.statusItem}>Original · {leftLineCount} lines</span>
-                <span className={styles.statusDivider}>·</span>
-                <span className={styles.statusItem}>Modified · {rightLineCount} lines</span>
-                <span className={styles.statusDivider}>·</span>
-                <span className={`${styles.statusStat} ${styles.statusAdded}`}>+{stats.added}</span>
-                <span className={`${styles.statusStat} ${styles.statusRemoved}`}>−{stats.removed}</span>
+                <div className={styles.statusBar}>
+                    <span className={styles.statusItem}>Original · {leftLineCount} lines</span>
+                    <span className={styles.statusDivider}>·</span>
+                    <span className={styles.statusItem}>Modified · {rightLineCount} lines</span>
+                    <span className={styles.statusDivider}>·</span>
+                    <span className={`${styles.statusStat} ${styles.statusAdded}`}>+{stats.added}</span>
+                    <span className={`${styles.statusStat} ${styles.statusRemoved}`}>−{stats.removed}</span>
+                </div>
             </div>
         </div>
     );

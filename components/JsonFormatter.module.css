@@ -7,18 +7,20 @@
     color: var(--clay-ink);
 }
 
-/* ── Toolbar (header) ── */
+/* ── Secondary toolbar — sits below the marketing-style shell.header
+   and holds the mode/option toggles. Matches the pattern Paste & compare
+   uses for layout/viewport controls. ── */
 
 .toolbar {
-    height: 64px;
-    min-height: 64px;
-    background: var(--clay-canvas);
-    border-bottom: 1px solid var(--clay-hairline);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--clay-space-xl);
-    gap: var(--clay-space-md);
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    margin-bottom: var(--clay-space-md);
+    background: var(--clay-surface-soft);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
 }
 
 .toolbarLabel {
@@ -184,12 +186,18 @@
     border-color: var(--clay-ink);
 }
 
-/* ── Editors row ── */
+/* ── Editors row ──
+   Wrapped in shell.container which is page-scrollable now, so editors
+   take an explicit tall height instead of flex:1 of viewport. */
 
 .editors {
-    flex: 1;
     display: flex;
+    height: calc(100vh - 420px);
+    min-height: 460px;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
     overflow: hidden;
+    background: var(--clay-canvas);
 }
 
 .panel {

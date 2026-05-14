@@ -89,15 +89,18 @@
 
 /* ── Tab bar ── */
 
+/* Tab bar sits directly under the marketing-style header. Boxed top so it
+   visually pairs with the editor area below (which closes the bottom). */
 .tabBar {
     display: flex;
     align-items: stretch;
     background: var(--clay-surface-soft);
-    border-bottom: 1px solid var(--clay-hairline);
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
     padding: 0 var(--clay-space-md);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg) var(--clay-radius-lg) 0 0;
 }
 
 .tabBar::-webkit-scrollbar { display: none; }
@@ -181,10 +184,16 @@
 /* ── Editor ── */
 
 .editorContainer {
-    flex: 1;
+    /* Inside shell.container which is page-scrollable, so the editor takes
+       an explicit tall height instead of flex:1 of viewport. */
+    height: calc(100vh - 460px);
+    min-height: 420px;
     display: flex;
     overflow: hidden;
     background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-top: none;
+    border-radius: 0 0 var(--clay-radius-lg) var(--clay-radius-lg);
 }
 
 .gutter {
