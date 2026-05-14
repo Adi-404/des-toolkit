@@ -43,6 +43,16 @@
     color: var(--clay-ink);
 }
 
+/* Row that puts the label + the handwritten "clay-note" side-by-side so
+   the toolbar stays a two-line stack (eyebrow on top, label-row below)
+   — the previous third stacked line overflowed the 64px toolbar. */
+.toolbarLabelRow {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .toolbarActions {
     display: flex;
     gap: var(--clay-space-xs);

@@ -148,9 +148,11 @@ export default function ClipboardEditor() {
             <div className={styles.toolbar}>
                 <div className={styles.toolbarTitle}>
                     <span className={styles.toolbarEyebrow}>Text · clipboard</span>
-                    <span className={styles.toolbarLabel}>Clipboard</span>
-                    <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                        the scratchpad
+                    <span className={styles.toolbarLabelRow}>
+                        <span className={styles.toolbarLabel}>Clipboard</span>
+                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
+                            the scratchpad
+                        </span>
                     </span>
                 </div>
                 <div className={styles.toolbarActions}>

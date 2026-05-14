@@ -43,6 +43,14 @@
     color: var(--clay-ink);
 }
 
+/* Inline label + handwritten note so the toolbar stays a two-line stack. */
+.toolbarLabelRow {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .toolbarActions {
     display: flex;
     gap: var(--clay-space-xs);

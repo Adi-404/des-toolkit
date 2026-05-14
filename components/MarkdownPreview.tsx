@@ -128,9 +128,11 @@ export default function MarkdownPreview() {
             <div className={styles.toolbar}>
                 <div className={styles.toolbarLabel}>
                     <span className={styles.toolbarEyebrow}>Text · markdown</span>
-                    <span className={styles.toolbarTitle}>Markdown Preview</span>
-                    <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                        write &amp; see
+                    <span className={styles.toolbarTitleRow}>
+                        <span className={styles.toolbarTitle}>Markdown Preview</span>
+                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
+                            write &amp; see
+                        </span>
                     </span>
                 </div>
                 <div className={styles.toolbarActions}>

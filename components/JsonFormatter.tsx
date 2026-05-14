@@ -253,9 +253,11 @@ export default function JsonFormatter() {
             <div className={styles.toolbar}>
                 <div className={styles.toolbarLabel}>
                     <span className={styles.toolbarEyebrow}>Data · JSON</span>
-                    <span className={styles.toolbarTitle}>JSON Formatter</span>
-                    <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                        keep it tidy
+                    <span className={styles.toolbarTitleRow}>
+                        <span className={styles.toolbarTitle}>JSON Formatter</span>
+                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
+                            keep it tidy
+                        </span>
                     </span>
                 </div>
                 <div className={styles.toolbarActions}>
