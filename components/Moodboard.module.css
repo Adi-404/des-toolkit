@@ -98,6 +98,77 @@
     margin-top: var(--clay-space-xs);
 }
 
+/* ── Density picker ── sits in the header, opposite the title block.
+   Lets the user dial bento tile size up or down without leaving the page. */
+.densityWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.densityLabel {
+    font-family: var(--clay-font-script);
+    font-size: 16px;
+    color: var(--clay-muted-soft);
+    letter-spacing: 0.2px;
+    transform: rotate(-2deg);
+    transform-origin: right center;
+}
+
+.densitySegmented {
+    display: inline-flex;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
+    padding: 3px;
+    gap: 2px;
+}
+
+.densitySegment {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    color: var(--clay-muted);
+    transition: background 100ms ease, color 100ms ease;
+}
+
+.densitySegment:hover { color: var(--clay-ink); }
+
+.densitySegmentActive {
+    background: var(--clay-ink);
+    color: var(--clay-on-primary);
+}
+
+.densitySegmentActive:hover { color: var(--clay-on-primary); }
+
+.densitySegmentLabel {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.densityGlyph {
+    width: 20px;
+    height: 12px;
+    fill: currentColor;
+}
+
+@media (max-width: 720px) {
+    /* On narrow screens, hide the segment labels and keep just the glyphs
+       so the picker fits next to the title. */
+    .densitySegmentLabel { display: none; }
+    .densitySegment { padding: 6px 8px; }
+}
+
 /* ── Add-link form ── */
 
 .addBar {
@@ -426,8 +497,11 @@
 
 .bento {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    grid-auto-rows: 220px;
+    /* Tile size is driven by --bento-tile-min (set inline by the component from
+       the user's density preset). Fallback keeps things sane if the var is
+       missing for any reason. */
+    grid-template-columns: repeat(auto-fill, minmax(var(--bento-tile-min, 160px), 1fr));
+    grid-auto-rows: var(--bento-tile-min, 160px);
     grid-auto-flow: dense;
     gap: var(--clay-space-md);
 }

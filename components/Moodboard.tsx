@@ -7,6 +7,7 @@ import {
 } from '@/app/actions/moodboard';
 import { TAG_COLORS, type PinItem, type Tag, type TagColor } from '@/lib/moodboard-types';
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, tooLargeMessage } from '@/lib/upload-limits';
+import { useSettings, MOODBOARD_DENSITY_PX, type MoodboardDensity } from '@/contexts/SettingsContext';
 import styles from './Moodboard.module.css';
 
 // Deterministic bento sizing — stable per item id, well-mixed across the feed.
@@ -54,6 +55,10 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 export default function Moodboard() {
+    const { settings, update } = useSettings();
+    const density = settings.moodboardDensity;
+    const tilePx = MOODBOARD_DENSITY_PX[density];
+
     const [items, setItems] = useState<PinItem[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -302,6 +307,10 @@ export default function Moodboard() {
                             Figma. We fetch the preview; you tag and arrange.
                         </p>
                     </div>
+                    <DensityPicker
+                        value={density}
+                        onChange={(d) => update({ moodboardDensity: d })}
+                    />
                 </header>
 
                 <form className={styles.addBar} onSubmit={add}>
@@ -414,7 +423,10 @@ export default function Moodboard() {
                         </span>
                     </div>
                 ) : (
-                    <div className={styles.bento}>
+                    <div
+                        className={styles.bento}
+                        style={{ ['--bento-tile-min' as string]: `${tilePx}px` }}
+                    >
                         {filteredItems.map((item, idx) => (
                             <Tile
                                 key={item.id}
@@ -438,6 +450,71 @@ export default function Moodboard() {
 }
 
 // ── Sub-components ──
+
+interface DensityPickerProps {
+    value: MoodboardDensity;
+    onChange: (next: MoodboardDensity) => void;
+}
+
+const DENSITY_OPTIONS: { value: MoodboardDensity; label: string; tiles: number }[] = [
+    { value: 'tight',       label: 'Tight',       tiles: 8 },
+    { value: 'compact',     label: 'Compact',     tiles: 6 },
+    { value: 'comfortable', label: 'Comfortable', tiles: 4 },
+    { value: 'spacious',    label: 'Spacious',    tiles: 3 },
+];
+
+function DensityPicker({ value, onChange }: DensityPickerProps) {
+    return (
+        <div className={styles.densityWrap}>
+            <span className={styles.densityLabel}>tiles per row</span>
+            <div className={styles.densitySegmented} role="radiogroup" aria-label="Moodboard tile density">
+                {DENSITY_OPTIONS.map((opt) => {
+                    const active = value === opt.value;
+                    return (
+                        <button
+                            key={opt.value}
+                            type="button"
+                            role="radio"
+                            aria-checked={active}
+                            className={`${styles.densitySegment} ${active ? styles.densitySegmentActive : ''}`}
+                            onClick={() => onChange(opt.value)}
+                            title={`${opt.label} — about ${opt.tiles} tiles per row`}
+                        >
+                            <DensityGlyph tiles={opt.tiles} />
+                            <span className={styles.densitySegmentLabel}>{opt.label}</span>
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+/**
+ * Tiny inline SVG mosaic — visually telegraphs each density preset by
+ * drawing that many tiles in a small bento-ish arrangement.
+ */
+function DensityGlyph({ tiles }: { tiles: number }) {
+    // Build N small rects in a single row, scaled to fit a fixed 20×12 viewport.
+    const w = 20;
+    const h = 12;
+    const gap = 1;
+    const tileW = (w - gap * (tiles - 1)) / tiles;
+    return (
+        <svg viewBox={`0 0 ${w} ${h}`} className={styles.densityGlyph} aria-hidden="true">
+            {Array.from({ length: tiles }).map((_, i) => (
+                <rect
+                    key={i}
+                    x={i * (tileW + gap)}
+                    y={0}
+                    width={tileW}
+                    height={h}
+                    rx={1}
+                />
+            ))}
+        </svg>
+    );
+}
 
 interface TagBarProps {
     tags: Tag[];

@@ -20,10 +20,27 @@ export interface ShortcutSettings {
     wheelModifier: WheelModifier;
 }
 
+export type MoodboardDensity = 'tight' | 'compact' | 'comfortable' | 'spacious';
+
+/**
+ * Minimum tile size (in px) per density preset — the bento grid uses these
+ * for both `minmax(X, 1fr)` columns and `grid-auto-rows`, so tiles stay
+ * square at every density and the auto-fill packs more per row at smaller
+ * sizes. Special tiles (wide / tall / feature) still span 2 cells in each
+ * direction, so the bento variety survives every density.
+ */
+export const MOODBOARD_DENSITY_PX: Record<MoodboardDensity, number> = {
+    tight: 120,
+    compact: 160,
+    comfortable: 220,
+    spacious: 280,
+};
+
 export interface AppSettings {
     contextMenuEnabled: boolean;
     tools: ToolConfig[];
     shortcuts: ShortcutSettings;
+    moodboardDensity: MoodboardDensity;
 }
 
 interface SettingsCtx {
@@ -57,7 +74,11 @@ export const DEFAULT_SHORTCUTS: ShortcutSettings = {
     wheelModifier: 'Alt',
 };
 
+/** Old default was 220px tiles; users found that too big, so start denser. */
+export const DEFAULT_MOODBOARD_DENSITY: MoodboardDensity = 'compact';
+
 const VALID_WHEEL_MODIFIERS: readonly WheelModifier[] = ['Alt', 'Control', 'Shift', 'Meta'];
+const VALID_DENSITIES: readonly MoodboardDensity[] = ['tight', 'compact', 'comfortable', 'spacious'];
 
 function sanitizeShortcuts(raw: Partial<ShortcutSettings> | undefined): ShortcutSettings {
     const paletteKeyRaw = (raw?.paletteKey ?? DEFAULT_SHORTCUTS.paletteKey).toString().toLowerCase();
@@ -71,11 +92,16 @@ function sanitizeShortcuts(raw: Partial<ShortcutSettings> | undefined): Shortcut
     return { paletteKey, wheelModifier };
 }
 
+function sanitizeDensity(raw: MoodboardDensity | undefined): MoodboardDensity {
+    return VALID_DENSITIES.includes(raw as MoodboardDensity) ? (raw as MoodboardDensity) : DEFAULT_MOODBOARD_DENSITY;
+}
+
 function defaults(): AppSettings {
     return {
         contextMenuEnabled: true,
         tools: ALL_TOOLS.map(t => ({ ...t, enabled: true })),
         shortcuts: { ...DEFAULT_SHORTCUTS },
+        moodboardDensity: DEFAULT_MOODBOARD_DENSITY,
     };
 }
 
@@ -98,6 +124,7 @@ function parse(raw: string): AppSettings {
                 ...newTools,
             ],
             shortcuts: sanitizeShortcuts(saved.shortcuts),
+            moodboardDensity: sanitizeDensity(saved.moodboardDensity),
         };
     } catch {
         return defaults();
