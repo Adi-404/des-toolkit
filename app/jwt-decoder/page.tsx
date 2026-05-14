@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import JwtDecoder from '@/components/JwtDecoder';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — JWT Decoder',
+    title: 'JWT Decoder',
     description: 'Decode and inspect JWT tokens instantly in the browser.',
 };
 

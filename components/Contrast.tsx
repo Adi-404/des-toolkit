@@ -100,7 +100,10 @@ export default function Contrast() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Color · accessibility</div>
-                        <h1 className={shell.title}>Contrast.</h1>
+                        <h1 className={shell.title}>
+                            <span className="clay-title-script">Contrast</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
                         <p className={shell.lede}>
                             Check WCAG 2.1 contrast ratios and preview <span className="clay-highlight clay-highlight-pink">how the pair lands</span> for
                             people with different forms of colour-vision deficiency.

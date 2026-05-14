@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import JsonFormatter from '@/components/JsonFormatter';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — JSON Formatter',
+    title: 'JSON Formatter',
     description: 'Format, validate, and minify JSON with real-time feedback.',
 };
 

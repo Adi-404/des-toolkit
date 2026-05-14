@@ -103,7 +103,7 @@ export default function PasteCompare() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Frontend · paste & compare</div>
-                        <h1 className={shell.title}>Paste & compare.</h1>
+                        <h1 className={shell.title}>Paste &amp; <span className="clay-title-script clay-title-script-coral">compare</span>.</h1>
                         <p className={shell.lede}>
                             Drop two HTML/CSS snippets into the panes and render each in its own
                             sandboxed iframe — perfect for <span className="clay-highlight clay-highlight-coral">variant reviews</span> and design QA.

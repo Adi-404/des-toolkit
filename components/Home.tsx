@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import MoodboardDemo from './MoodboardDemo';
 import ShortcutScribble from './ShortcutScribble';
+import MarketingFooter from './MarketingFooter';
 import styles from './Home.module.css';
 
 interface ToolCard {
@@ -212,12 +213,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <footer className={styles.footer}>
-                    <span>des/toolkit · <span className={styles.footerStamp}>alpha</span></span>
-                    <ShortcutScribble variant="footer">
-                        <span>shortcuts —</span>
-                    </ShortcutScribble>
-                </footer>
+                <MarketingFooter />
             </div>
         </div>
     );

@@ -315,7 +315,7 @@ export default function Moodboard() {
                 <header className={styles.header}>
                     <div>
                         <div className={styles.eyebrow}>Inspiration · moodboard</div>
-                        <h1 className={styles.title}>Save what you love.</h1>
+                        <h1 className={styles.title}>Save what you <span className="clay-title-script">love</span>.</h1>
                         <p className={styles.lede}>
                             Paste a link from <span className="clay-highlight clay-highlight-pink">anywhere</span> — Pinterest, Dribbble, Behance, Canva,
                             Figma. We fetch the preview; you tag and arrange.

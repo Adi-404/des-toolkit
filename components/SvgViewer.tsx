@@ -63,7 +63,7 @@ export default function SvgViewer() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Assets · SVG</div>
-                        <h1 className={shell.title}>SVG viewer.</h1>
+                        <h1 className={shell.title}>SVG <span className="clay-title-script clay-title-script-teal">viewer</span>.</h1>
                         <p className={shell.lede}>
                             Paste, drop, or pick an SVG. See it rendered against a transparent
                             checker, with <span className="clay-highlight clay-highlight-teal">light cleanup</span> that strips comments, metadata and editor

@@ -239,6 +239,32 @@ export default function Topbar() {
                         const active = isItemActive(item);
                         const open = openGroupId === item.id;
                         const hasDropdown = !!item.sections;
+                        const sharedClassName = `${styles.menuItem} ${active ? styles.menuItemActive : ''} ${open ? styles.menuItemOpen : ''}`;
+                        const sharedStyle = active && item.dotColor
+                            ? ({ '--item-dot-color': item.dotColor } as React.CSSProperties)
+                            : undefined;
+                        const sharedChildren = (
+                            <>
+                                {item.glyph && (
+                                    <span
+                                        className={styles.navGlyph}
+                                        style={{ background: item.glyphColor ?? 'var(--clay-surface-strong)' }}
+                                        aria-hidden="true"
+                                    >
+                                        {item.glyph}
+                                    </span>
+                                )}
+                                <span>{item.label}</span>
+                                {hasDropdown && (
+                                    <span
+                                        className={`${styles.menuChevron} ${open ? styles.menuChevronOpen : ''}`}
+                                        aria-hidden="true"
+                                    >
+                                        ▾
+                                    </span>
+                                )}
+                            </>
+                        );
                         return (
                             <div
                                 key={item.id}
@@ -246,26 +272,33 @@ export default function Topbar() {
                                 onMouseEnter={() => hasDropdown && scheduleOpen(item.id)}
                                 onMouseLeave={() => hasDropdown && scheduleClose()}
                             >
-                                <Link
-                                    href={item.href}
-                                    className={`${styles.menuItem} ${active ? styles.menuItemActive : ''} ${open ? styles.menuItemOpen : ''}`}
-                                    style={active && item.dotColor ? { '--item-dot-color': item.dotColor } as React.CSSProperties : undefined}
-                                    onClick={() => setOpenGroupId(null)}
-                                >
-                                    {item.glyph && (
-                                        <span
-                                            className={styles.navGlyph}
-                                            style={{ background: item.glyphColor ?? 'var(--clay-surface-strong)' }}
-                                            aria-hidden="true"
-                                        >
-                                            {item.glyph}
-                                        </span>
-                                    )}
-                                    <span>{item.label}</span>
-                                    {hasDropdown && (
-                                        <span className={styles.menuChevron} aria-hidden="true">▾</span>
-                                    )}
-                                </Link>
+                                {hasDropdown ? (
+                                    // Items with a section dropdown should NEVER navigate on click —
+                                    // clicking should expose the choices instead. A `<button>` is the
+                                    // right primitive for "toggle a menu open".
+                                    <button
+                                        type="button"
+                                        className={sharedClassName}
+                                        style={sharedStyle}
+                                        aria-expanded={open}
+                                        aria-haspopup="menu"
+                                        onClick={() => {
+                                            clearTimers();
+                                            setOpenGroupId(open ? null : item.id);
+                                        }}
+                                    >
+                                        {sharedChildren}
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href={item.href}
+                                        className={sharedClassName}
+                                        style={sharedStyle}
+                                        onClick={() => setOpenGroupId(null)}
+                                    >
+                                        {sharedChildren}
+                                    </Link>
+                                )}
 
                                 {hasDropdown && open && createPortal(
                                     <div

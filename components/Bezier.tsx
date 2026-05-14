@@ -171,7 +171,7 @@ export default function Bezier() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>CSS · easing</div>
-                        <h1 className={shell.title}>Cubic-bezier studio.</h1>
+                        <h1 className={shell.title}>Cubic-bezier <span className="clay-title-script clay-title-script-coral">studio</span>.</h1>
                         <p className={shell.lede}>
                             Drag the two control handles to design an easing curve, watch a sample
                             element animate to it <span className="clay-highlight clay-highlight-coral">in real time</span>, and copy the CSS.

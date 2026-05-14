@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import MarkdownPreview from '@/components/MarkdownPreview';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — Markdown Preview',
+    title: 'Markdown Preview',
     description: 'Live two-pane markdown editor with GitHub-flavored rendering.',
 };
 

@@ -3,7 +3,7 @@ import { SignUp } from '@clerk/nextjs';
 import MoodboardMarquee from '@/components/MoodboardMarquee';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — Sign up',
+    title: 'Sign up',
     description: 'Create an account to save and tag your inspiration.',
 };
 

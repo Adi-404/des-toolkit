@@ -106,7 +106,7 @@ export default function ImageToolkit() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Assets · image</div>
-                        <h1 className={shell.title}>Image toolkit.</h1>
+                        <h1 className={shell.title}>Image <span className="clay-title-script clay-title-script-coral">toolkit</span>.</h1>
                         <p className={shell.lede}>
                             Drop an image to read its dimensions, copy it as a base64 data URL,
                             and generate a complete favicon set <span className="clay-highlight clay-highlight-coral">straight off canvas</span>.

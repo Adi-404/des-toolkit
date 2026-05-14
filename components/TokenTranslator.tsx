@@ -103,7 +103,7 @@ export default function TokenTranslator() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Assets · tokens</div>
-                        <h1 className={shell.title}>Token translator.</h1>
+                        <h1 className={shell.title}>Token <span className="clay-title-script clay-title-script-teal">translator</span>.</h1>
                         <p className={shell.lede}>
                             Paste colour tokens in any format — CSS variables, Tailwind config,
                             or W3C tokens.json — and get the other two <span className="clay-highlight clay-highlight-teal">on the spot</span>.

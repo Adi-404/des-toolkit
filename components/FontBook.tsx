@@ -351,7 +351,7 @@ export default function FontBook() {
                 <header className={styles.header}>
                     <div>
                         <div className={styles.eyebrow}>fontbook</div>
-                        <h1 className={styles.title}>Your type library.</h1>
+                        <h1 className={styles.title}>Your <span className="clay-title-script">type</span> library.</h1>
                         <p className={styles.lede}>
                             Browse Google Fonts and add favourites with a click, paste any
                             URL, or upload your own <code>.woff2</code>, <code>.woff</code>,

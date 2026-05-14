@@ -144,7 +144,10 @@ export default function ClipboardDownloader() {
                 <header className={shell.header}>
                     <div>
                         <div className={shell.eyebrow}>Utility · download</div>
-                        <h1 className={shell.title}>Download.</h1>
+                        <h1 className={shell.title}>
+                            <span className="clay-title-script clay-title-script-teal">Download</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
                         <p className={shell.lede}>
                             <span className="clay-highlight clay-highlight-pink">One keystroke</span> to save whatever&rsquo;s on your clipboard — text or image.
                             Drop into the page and hit <span className={styles.kbd}>⌘V</span> to file it away.

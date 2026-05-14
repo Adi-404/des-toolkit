@@ -107,6 +107,11 @@
     border-radius: var(--clay-radius-pill);
     transition: background 120ms ease, color 120ms ease;
     white-space: nowrap;
+    /* Reset browser button styles so the dropdown-opening <button> looks
+       identical to the <Link> items for nav targets without a dropdown. */
+    background: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 /* Flowing gradient ring — fades in on hover, same animation as buttons/cards */
@@ -181,7 +186,10 @@
 .menuItemOpen .menuChevron,
 .menuItem:hover .menuChevron {
     color: var(--clay-ink);
-    transform: translateY(1px);
+}
+
+.menuChevronOpen {
+    transform: rotate(180deg);
 }
 
 /* ── Small glyph icon next to nav item label ── */

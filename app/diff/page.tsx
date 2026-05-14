@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import DiffChecker from '@/components/DiffChecker';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — Diff Checker',
+    title: 'Diff Checker',
     description: 'Compare two blocks of text side by side and highlight the differences.',
 };
 

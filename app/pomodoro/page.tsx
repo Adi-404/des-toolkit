@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Pomodoro from '@/components/Pomodoro';
 
 export const metadata: Metadata = {
-    title: 'des/toolkit — Pomodoro',
+    title: 'Pomodoro',
     description: 'Focus timer with optional AI-powered posture monitoring via webcam.',
 };
 
