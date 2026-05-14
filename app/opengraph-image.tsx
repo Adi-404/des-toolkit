@@ -42,6 +42,15 @@ export default async function OpenGraphImage() {
         loadGoogleFont('Caveat', 700),
     ]);
 
+    // The visible URL on the OG card derives from the live env var so the
+    // image follows the deployment without code edits. Falls back to a
+    // sensible label if SITE_URL is unset or malformed.
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+    const displayUrl = (() => {
+        try { return new URL(siteUrl).hostname.replace(/^www\./, ''); }
+        catch { return 'des-toolkit'; }
+    })();
+
     // Clay palette inlined — globals.css custom properties aren't available
     // inside Satori, which only sees the JSX tree.
     const C = {
@@ -208,7 +217,7 @@ export default async function OpenGraphImage() {
                             transformOrigin: 'right center',
                         }}
                     >
-                        des-toolkit.app
+                        {displayUrl}
                     </div>
                 </div>
 
