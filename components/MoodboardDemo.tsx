@@ -25,12 +25,6 @@ const CYCLE_MS = 28000;
 // Resolve a /public asset URL safely regardless of filename quirks.
 const pub = (name: string) => '/' + encodeURIComponent(name);
 
-// Deterministic seeded photos via Lorem Picsum — every seed returns the
-// same image forever, no auth, no rate limit, no copyright risk. Used as
-// the moodboard-feel filler around the user's actual saved screenshot.
-const picsum = (seed: string, w = 480, h = 360) =>
-    `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
-
 interface DemoTag { name: string; color: string; }
 const TAGS: DemoTag[] = [
     { name: 'Inspiration', color: 'pink' },
@@ -61,21 +55,22 @@ interface BentoTile {
     alt: string;
 }
 
-// 10 tiles laid out in a 4-col bento — first the user's actual saved
-// screenshot, then nine seeded Picsum photos for a moodboard-y mix of
-// sizes. Two extra rows fall below the initial viewport so the scroll-up
-// motion has somewhere to go.
+// 11 tiles laid out in a 4-col bento — first the user's actual saved
+// screenshot (matching the saved card the user just placed), then the
+// 10 reference images they dropped into /public. Filenames go through
+// encodeURIComponent so #, spaces, parens and emoji all resolve.
 const BENTO: BentoTile[] = [
-    { src: SAVED_IMG,                  size: 'feature', alt: SAVED_TITLE },
-    { src: picsum('warm-paper'),       size: 'normal',  alt: 'paper texture' },
-    { src: picsum('layout-grid'),      size: 'normal',  alt: 'layout grid' },
-    { src: picsum('editorial-spread'), size: 'wide',    alt: 'editorial spread' },
-    { src: picsum('letterpress'),      size: 'normal',  alt: 'letterpress type' },
-    { src: picsum('soft-light'),       size: 'wide',    alt: 'soft light reference' },
-    { src: picsum('palette-cream'),    size: 'normal',  alt: 'cream palette' },
-    { src: picsum('modular-system'),   size: 'wide',    alt: 'modular system' },
-    { src: picsum('vertical-arch'),    size: 'tall',    alt: 'vertical architecture' },
-    { src: picsum('field-notes'),      size: 'normal',  alt: 'field notes' },
+    { src: SAVED_IMG,                                                                    size: 'feature', alt: SAVED_TITLE },
+    { src: pub('#icebear.jpeg'),                                                          size: 'normal',  alt: 'icebear sticker pack' },
+    { src: pub('🌷🌷🌷🌷.jpeg'),                                                            size: 'normal',  alt: 'tulips' },
+    { src: pub('_ (1).jpeg'),                                                             size: 'wide',    alt: 'reference 1' },
+    { src: pub('Neymar jr wallpaper.jpeg'),                                               size: 'normal',  alt: 'Neymar Jr.' },
+    { src: pub('1st Example of Good Web Design.jpeg'),                                    size: 'wide',    alt: 'good web design' },
+    { src: pub('_.jpeg'),                                                                 size: 'normal',  alt: 'reference base' },
+    { src: pub('Bold Personality Landing Page_ Website Design & Canva Templates.jpeg'),  size: 'wide',    alt: 'bold personality landing page' },
+    { src: pub('_ (3).jpeg'),                                                             size: 'tall',    alt: 'reference 3' },
+    { src: pub('_ (2).jpeg'),                                                             size: 'normal',  alt: 'reference 2' },
+    { src: pub('_ (4).jpeg'),                                                             size: 'normal',  alt: 'reference 4' },
 ];
 
 export default function MoodboardDemo() {
