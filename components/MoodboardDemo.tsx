@@ -5,17 +5,25 @@ import { motion } from 'motion/react';
 import styles from './MoodboardDemo.module.css';
 
 /**
- * One continuous 18-second flow:
- *   ① browser fades in, URL types itself, a saved card appears, tags cascade
- *   ② browser cross-fades into a fontbook preview — 4 font cards bloom in
- *   ③ fontbook cross-fades into the claymation hero, which holds ~5s
- *   ④ everything resets and replays
+ * One continuous flow (~28s) showing the actual product loop, end-to-end:
+ *
+ *   ① Browser fades in, URL types itself, "+ Save" pulses, the icebear card
+ *      blooms into the moodboard, tags cascade.
+ *   ② Browser crossfades into the full bento — all 10 saved images bloom in
+ *      mixed sizes, then the grid scrolls upward to telegraph "lots saved".
+ *   ③ Bento crossfades into a fontbook preview — 4 font cards bloom.
+ *   ④ Fontbook crossfades into the claymation hero and holds.
+ *   ⑤ Reset and replay.
+ *
+ * The 10 .jpeg files live in /public. Their filenames contain spaces, #,
+ * parens and emoji, so each URL is run through encodeURIComponent first.
  */
 
 const URL_TEXT = 'pinterest.com/pin/3729612269442333';
-// 23s total: phases 1+2 keep their absolute timings; claymation holds ~10s
-// before looping (fully settled at ~12.6s, loop at 23s → ~10.4s hold).
-const CYCLE_MS = 23000;
+const CYCLE_MS = 28000;
+
+// Resolve a /public asset URL safely regardless of filename quirks.
+const pub = (name: string) => '/' + encodeURIComponent(name);
 
 interface DemoTag { name: string; color: string; }
 const TAGS: DemoTag[] = [
@@ -26,10 +34,38 @@ const TAGS: DemoTag[] = [
 ];
 
 const FONT_DEMOS = [
-    { family: 'Playfair Display', sample: 'Headlines that breathe', tag: 'Serif',   accent: '#ff4d8b' },
-    { family: 'Space Grotesk',    sample: 'Geometric. Modern. Clean.', tag: 'Sans',  accent: '#b8a4ed' },
-    { family: 'Fraunces',         sample: 'Optical size & weight',   tag: 'Display', accent: '#ffb084' },
-    { family: 'IBM Plex Mono',    sample: '01 code terminal clear',  tag: 'Mono',    accent: '#a4d4c5' },
+    { family: 'Playfair Display', sample: 'Headlines that breathe',     tag: 'Serif',   accent: '#ff4d8b' },
+    { family: 'Space Grotesk',    sample: 'Geometric. Modern. Clean.',  tag: 'Sans',    accent: '#b8a4ed' },
+    { family: 'Fraunces',         sample: 'Optical size & weight',      tag: 'Display', accent: '#ffb084' },
+    { family: 'IBM Plex Mono',    sample: '01 code terminal clear',     tag: 'Mono',    accent: '#a4d4c5' },
+];
+
+// The icebear card pulled out — used both inside the browser save-flow AND
+// as the anchor tile in the bento. Same URL keeps the visual continuity
+// when the browser crossfades into the bento phase.
+const ICEBEAR_URL = pub('#icebear.jpeg');
+
+type TileSize = 'normal' | 'wide' | 'tall' | 'feature';
+interface BentoTile {
+    src: string;
+    size: TileSize;
+    alt: string;
+}
+
+// 10 tiles laid out in a 4-col bento — first the icebear (matching the
+// saved card the user just placed), then a mix of sizes that fills three
+// initial rows. Two more rows below the fold drive the scroll-up motion.
+const BENTO: BentoTile[] = [
+    { src: ICEBEAR_URL,                                                 size: 'feature', alt: 'icebear sticker pack' },
+    { src: pub('🌷🌷🌷🌷.jpeg'),                                          size: 'normal',  alt: 'tulips' },
+    { src: pub('Neymar jr wallpaper.jpeg'),                              size: 'normal',  alt: 'Neymar Jr.' },
+    { src: pub('_ (1).jpeg'),                                            size: 'wide',    alt: 'reference 1' },
+    { src: pub('Bold Personality Landing Page_ Website Design & Canva Templates.jpeg'), size: 'normal', alt: 'bold personality landing page' },
+    { src: pub('1st Example of Good Web Design.jpeg'),                   size: 'wide',    alt: 'good web design' },
+    { src: pub('_.jpeg'),                                                size: 'normal',  alt: 'reference base' },
+    { src: pub('_ (2).jpeg'),                                            size: 'wide',    alt: 'reference 2' },
+    { src: pub('_ (3).jpeg'),                                            size: 'tall',    alt: 'reference 3' },
+    { src: pub('_ (4).jpeg'),                                            size: 'normal',  alt: 'reference 4' },
 ];
 
 export default function MoodboardDemo() {
@@ -39,7 +75,6 @@ export default function MoodboardDemo() {
         return () => clearInterval(id);
     }, []);
 
-    // Load Google Fonts for the fontbook demo phase
     useEffect(() => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -56,14 +91,9 @@ export default function MoodboardDemo() {
     );
 }
 
-// ── A single cycle of the demo. Lives in its own component so its useState
-//    resets cleanly when the parent remounts via tick.
-
 function Frame() {
     const [typed, setTyped] = useState(0);
 
-    // Typewriter — drives the URL field. Runs once per cycle and stops at
-    // the URL's full length so the field stays steady through phases ②/③.
     useEffect(() => {
         const start = Date.now();
         const TYPE_START = 500;
@@ -84,15 +114,15 @@ function Frame() {
 
     return (
         <div className={styles.frame}>
-            {/* ① Browser layer — fades in, holds, fades out around 8.5s */}
+            {/* ① Browser layer — fades in, holds, fades out around 7.5s */}
             <motion.div
                 className={styles.layer}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 1, 1, 0] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // browser: 0–1s fade in, hold to 7s, fade out by 8.5s  [/23]
-                    times: [0, 0.0435, 0.3043, 0.3696],
+                    // 0–1s in, hold to 7s, out by 7.5s   [/28]
+                    times: [0, 0.0357, 0.25, 0.2679],
                     ease: 'easeInOut',
                 }}
             >
@@ -110,87 +140,153 @@ function Frame() {
                     </div>
 
                     <div className={styles.browserBody}>
-                    <div className={styles.pasteRow}>
-                        <div className={styles.pasteField}>
-                            <span>{URL_TEXT.slice(0, typed)}</span>
-                            {typed < URL_TEXT.length && <span className={styles.pasteCaret} />}
-                        </div>
-                        <motion.span
-                            className={styles.pasteBtn}
-                            animate={{ scale: [1, 1, 1.06, 1] }}
-                            transition={{ duration: 0.6, delay: 3.4, ease: [0.2, 0.7, 0.2, 1] }}
-                        >
-                            + Save
-                        </motion.span>
-                    </div>
-
-                    {/* Saved card slides in around 4s */}
-                    <motion.div
-                        className={styles.savedCard}
-                        initial={{ opacity: 0, y: 16, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.6, delay: 3.9, ease: [0.2, 0.7, 0.2, 1] }}
-                    >
-                        <div
-                            className={styles.savedImg}
-                            style={{ background: 'linear-gradient(135deg, #ff4d8b, #b8a4ed 60%, #ffb084)' }}
-                        />
-                        <div className={styles.savedBody}>
-                            <span className={styles.savedTitle}>Editorial layouts that breathe</span>
-                            <span className={styles.savedHost}>pinterest.com</span>
-                            <motion.div
-                                className={styles.savedDots}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4, delay: 6.0 }}
+                        <div className={styles.pasteRow}>
+                            <div className={styles.pasteField}>
+                                <span>{URL_TEXT.slice(0, typed)}</span>
+                                {typed < URL_TEXT.length && <span className={styles.pasteCaret} />}
+                            </div>
+                            <motion.span
+                                className={styles.pasteBtn}
+                                animate={{ scale: [1, 1, 1.06, 1] }}
+                                transition={{ duration: 0.6, delay: 3.4, ease: [0.2, 0.7, 0.2, 1] }}
                             >
-                                <span className={styles.savedDot} style={{ background: 'var(--clay-brand-pink)' }} />
-                                <span className={styles.savedDot} style={{ background: 'var(--clay-brand-lavender)' }} />
-                            </motion.div>
+                                + Save
+                            </motion.span>
                         </div>
-                    </motion.div>
 
-                    {/* Tags cascade in around 5.5s */}
-                    <motion.div
-                        className={styles.tagPills}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 5.4 }}
-                    >
-                        {TAGS.map((tag, i) => {
-                            const isActive = i === 0 || i === 1;
-                            return (
-                                <motion.span
-                                    key={tag.name}
-                                    data-color={tag.color}
-                                    className={`${styles.tagPill} ${isActive ? styles.tagPillActive : ''}`}
-                                    initial={{ opacity: 0, scale: 0.7 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{
-                                        duration: 0.32,
-                                        delay: 5.5 + i * 0.13,
-                                        ease: [0.2, 0.7, 0.2, 1],
-                                    }}
+                        {/* Saved card — the icebear from /public is now the
+                            real "image which is saved". */}
+                        <motion.div
+                            className={styles.savedCard}
+                            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ duration: 0.6, delay: 3.9, ease: [0.2, 0.7, 0.2, 1] }}
+                        >
+                            <div
+                                className={styles.savedImg}
+                                style={{ backgroundImage: `url("${ICEBEAR_URL}")` }}
+                                role="img"
+                                aria-label="icebear"
+                            />
+                            <div className={styles.savedBody}>
+                                <span className={styles.savedTitle}>icebear — saved to moodboard</span>
+                                <span className={styles.savedHost}>pinterest.com</span>
+                                <motion.div
+                                    className={styles.savedDots}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.4, delay: 6.0 }}
                                 >
-                                    {!isActive && <span className={styles.tagPillDot} />}
-                                    {tag.name}
-                                </motion.span>
-                            );
-                        })}
-                    </motion.div>
+                                    <span className={styles.savedDot} style={{ background: 'var(--clay-brand-pink)' }} />
+                                    <span className={styles.savedDot} style={{ background: 'var(--clay-brand-lavender)' }} />
+                                </motion.div>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            className={styles.tagPills}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 5.4 }}
+                        >
+                            {TAGS.map((tag, i) => {
+                                const isActive = i === 0 || i === 1;
+                                return (
+                                    <motion.span
+                                        key={tag.name}
+                                        data-color={tag.color}
+                                        className={`${styles.tagPill} ${isActive ? styles.tagPillActive : ''}`}
+                                        initial={{ opacity: 0, scale: 0.7 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{
+                                            duration: 0.32,
+                                            delay: 5.5 + i * 0.13,
+                                            ease: [0.2, 0.7, 0.2, 1],
+                                        }}
+                                    >
+                                        {!isActive && <span className={styles.tagPillDot} />}
+                                        {tag.name}
+                                    </motion.span>
+                                );
+                            })}
+                        </motion.div>
                     </div>
                 </motion.div>
             </motion.div>
 
-            {/* ② fontbook layer — blooms in around 7s, fades out around 11s */}
+            {/* ② Bento layer — fades in around 7s, scrolls 7.5s–13s, out by 13.5s */}
+            <motion.div
+                className={styles.bentoLayer}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0, 1, 1, 0] }}
+                transition={{
+                    duration: CYCLE_MS / 1000,
+                    // 0–7s invisible, fade in by 7.5s, hold to 13s, out by 13.5s [/28]
+                    times: [0, 0.25, 0.2679, 0.4643, 0.4821],
+                    ease: 'easeInOut',
+                }}
+            >
+                <div className={styles.bentoShell}>
+                    <div className={styles.bentoHead}>
+                        <span className={styles.bentoLabel}>moodboard</span>
+                        <span className={styles.bentoCount}>
+                            <span className={styles.bentoCountDot} /> 10 saved
+                        </span>
+                    </div>
+                    <div className={styles.bentoViewport}>
+                        {/* The grid translates upward gently over ~5s to suggest
+                            scrolling through a much fuller board. Negative Y
+                            ≈ -120px lifts the lower rows into view. */}
+                        <motion.div
+                            className={styles.bentoGrid}
+                            initial={{ y: 0 }}
+                            animate={{ y: [0, 0, -130] }}
+                            transition={{
+                                duration: 6.5,
+                                delay: 8.0,
+                                // hold at 0 for 1.5s while cards bloom in, then
+                                // pan up to -130 over the remaining time.
+                                times: [0, 0.231, 1],
+                                ease: [0.4, 0.0, 0.2, 1],
+                            }}
+                        >
+                            {BENTO.map((tile, i) => (
+                                <motion.div
+                                    key={i}
+                                    className={`${styles.bentoTile} ${styles[`size-${tile.size}`]}`}
+                                    initial={{ opacity: 0, scale: 0.92, y: 12 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    transition={{
+                                        duration: 0.4,
+                                        // First card (icebear) lands almost
+                                        // immediately on phase entry to match
+                                        // the saved card the user just saw.
+                                        delay: 7.6 + i * 0.08,
+                                        ease: [0.2, 0.7, 0.2, 1],
+                                    }}
+                                >
+                                    <div
+                                        className={styles.bentoImg}
+                                        style={{ backgroundImage: `url("${tile.src}")` }}
+                                        role="img"
+                                        aria-label={tile.alt}
+                                    />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* ③ Fontbook layer */}
             <motion.div
                 className={styles.fontbookOverlay}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 0, 1, 1, 0] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // fontbook: 0–7s invisible, fade in by 8s, hold to 10s, out by 10.5s  [/23]
-                    times: [0, 0.3043, 0.3478, 0.4348, 0.4565],
+                    // fade in 13.5s, hold to 16s, out by 16.5s   [/28]
+                    times: [0, 0.4821, 0.5, 0.5714, 0.5893],
                     ease: 'easeInOut',
                 }}
             >
@@ -208,7 +304,7 @@ function Frame() {
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 transition={{
                                     duration: 0.45,
-                                    delay: 7.3 + i * 0.13,
+                                    delay: 13.9 + i * 0.13,
                                     ease: [0.2, 0.7, 0.2, 1],
                                 }}
                             >
@@ -234,16 +330,15 @@ function Frame() {
                 </div>
             </motion.div>
 
-            {/* ③ Claymation layer — fades in around 10.5s and holds */}
+            {/* ④ Claymation layer */}
             <motion.div
                 className={styles.claymation}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 0, 1] }}
                 transition={{
                     duration: CYCLE_MS / 1000,
-                    // claymation: invisible 0–10s, fully opaque by 11s, holds
-                    // until the 23s loop (~10.4s visible).  [/23]
-                    times: [0, 0.4348, 0.4783],
+                    // invisible 0–16s, fully opaque by 17s, holds to loop  [/28]
+                    times: [0, 0.5714, 0.6071],
                     ease: 'easeInOut',
                 }}
             >
@@ -253,39 +348,39 @@ function Frame() {
                             className={styles.sun}
                             initial={{ y: 60, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.9, delay: 11.0, ease: [0.2, 0.7, 0.2, 1] }}
+                            transition={{ duration: 0.9, delay: 17.0, ease: [0.2, 0.7, 0.2, 1] }}
                         />
                         <motion.div
                             className={`${styles.mountain} ${styles.m1}`}
                             initial={{ y: 80, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.7, delay: 11.2, ease: [0.2, 0.7, 0.2, 1] }}
+                            transition={{ duration: 0.7, delay: 17.2, ease: [0.2, 0.7, 0.2, 1] }}
                         />
                         <motion.div
                             className={`${styles.mountain} ${styles.m2}`}
                             initial={{ y: 80, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.7, delay: 11.35, ease: [0.2, 0.7, 0.2, 1] }}
+                            transition={{ duration: 0.7, delay: 17.35, ease: [0.2, 0.7, 0.2, 1] }}
                         />
                         <motion.div
                             className={`${styles.mountain} ${styles.m3}`}
                             initial={{ y: 80, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.7, delay: 11.5, ease: [0.2, 0.7, 0.2, 1] }}
+                            transition={{ duration: 0.7, delay: 17.5, ease: [0.2, 0.7, 0.2, 1] }}
                         />
                         <motion.div
                             className={styles.ground}
                             initial={{ scaleY: 0 }}
                             animate={{ scaleY: 1 }}
                             style={{ transformOrigin: 'bottom' }}
-                            transition={{ duration: 0.6, delay: 11.7, ease: [0.2, 0.7, 0.2, 1] }}
+                            transition={{ duration: 0.6, delay: 17.7, ease: [0.2, 0.7, 0.2, 1] }}
                         />
                     </div>
                     <motion.span
                         className={styles.claymationLabel}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 12.1 }}
+                        transition={{ duration: 0.5, delay: 18.1 }}
                     >
                         des/toolkit · save what you love
                     </motion.span>
