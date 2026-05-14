@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import JsonTreeView from './JsonTreeView';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
+import ToolHeader from './ToolHeader';
 import styles from './JsonFormatter.module.css';
 
 type ViewMode = 'tree' | 'text';
@@ -250,97 +251,91 @@ export default function JsonFormatter() {
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.toolbar}>
-                <div className={styles.toolbarLabel}>
-                    <span className={styles.toolbarEyebrow}>Data · JSON</span>
-                    <span className={styles.toolbarTitleRow}>
-                        <span className={styles.toolbarTitle}>JSON Formatter</span>
-                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
-                            keep it tidy
-                        </span>
-                    </span>
-                </div>
-                <div className={styles.toolbarActions}>
-                    <button
-                        className={`${styles.actionBtn} ${viewMode === 'tree' ? styles.actionBtnActive : ''}`}
-                        onClick={() => setViewMode('tree')}
-                    >
-                        Tree
-                    </button>
-                    <button
-                        className={`${styles.actionBtn} ${viewMode === 'text' ? styles.actionBtnActive : ''}`}
-                        onClick={() => setViewMode('text')}
-                    >
-                        Text
-                    </button>
-                    <div className={styles.toolbarSep} />
-                    {viewMode === 'tree' && (
-                        <>
-                            <button className={styles.actionBtn} onClick={handleExpandAll} disabled={!parsed}>
-                                ⊞ Expand
-                            </button>
-                            <button className={styles.actionBtn} onClick={handleCollapseAll} disabled={!parsed}>
-                                ⊟ Collapse
-                            </button>
-                            <button
-                                className={`${styles.actionBtn} ${sortKeys ? styles.actionBtnActive : ''}`}
-                                onClick={() => setSortKeys(s => !s)}
-                                disabled={!parsed}
-                            >
-                                A↑Z Sort
-                            </button>
-                            <div className={styles.toolbarSep} />
-                        </>
-                    )}
-                    {viewMode === 'text' && (
-                        <>
-                            <button
-                                className={`${styles.actionBtn} ${minify ? styles.actionBtnActive : ''}`}
-                                onClick={() => setMinify(m => !m)}
-                                disabled={!parsed}
-                            >
-                                ↔ Minify
-                            </button>
-                            <select
-                                className={styles.actionSelect}
-                                value={String(indentSize)}
-                                onChange={e => {
-                                    const v = e.target.value;
-                                    setIndentSize(v === 'tab' ? 'tab' : Number(v) as IndentSize);
-                                }}
-                                disabled={!parsed || minify}
-                            >
-                                <option value="2">2 spaces</option>
-                                <option value="4">4 spaces</option>
-                                <option value="tab">Tab</option>
-                            </select>
-                            <div className={styles.toolbarSep} />
-                        </>
-                    )}
-                    <button
-                        className={`${styles.actionBtn} ${showSearch ? styles.actionBtnActive : ''}`}
-                        onClick={() => { setShowSearch(s => !s); if (showSearch) setSearchQuery(''); }}
-                        disabled={viewMode !== 'tree' || !parsed}
-                        title="Ctrl+F"
-                    >
-                        ⌕ Search
-                    </button>
-                    <div className={styles.toolbarSep} />
-                    <button className={styles.actionBtn} onClick={handleDownload} disabled={!parsed}>
-                        ↓ Save
-                    </button>
-                    <button className={styles.actionBtn} onClick={handleCopy} disabled={!parsed}>
-                        {copied ? '✓ Copied' : '⧉ Copy'}
-                    </button>
-                    <button
-                        className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
-                        onClick={handleClear}
-                        disabled={!input}
-                    >
-                        ✕ Clear
-                    </button>
-                </div>
-            </div>
+            <ToolHeader
+                eyebrow="Data · JSON"
+                title="JSON Formatter"
+                titleAccent="Formatter"
+                note="keep it tidy"
+            >
+                <button
+                    className={`${styles.actionBtn} ${viewMode === 'tree' ? styles.actionBtnActive : ''}`}
+                    onClick={() => setViewMode('tree')}
+                >
+                    Tree
+                </button>
+                <button
+                    className={`${styles.actionBtn} ${viewMode === 'text' ? styles.actionBtnActive : ''}`}
+                    onClick={() => setViewMode('text')}
+                >
+                    Text
+                </button>
+                <div className={styles.toolbarSep} />
+                {viewMode === 'tree' && (
+                    <>
+                        <button className={styles.actionBtn} onClick={handleExpandAll} disabled={!parsed}>
+                            ⊞ Expand
+                        </button>
+                        <button className={styles.actionBtn} onClick={handleCollapseAll} disabled={!parsed}>
+                            ⊟ Collapse
+                        </button>
+                        <button
+                            className={`${styles.actionBtn} ${sortKeys ? styles.actionBtnActive : ''}`}
+                            onClick={() => setSortKeys(s => !s)}
+                            disabled={!parsed}
+                        >
+                            A↑Z Sort
+                        </button>
+                        <div className={styles.toolbarSep} />
+                    </>
+                )}
+                {viewMode === 'text' && (
+                    <>
+                        <button
+                            className={`${styles.actionBtn} ${minify ? styles.actionBtnActive : ''}`}
+                            onClick={() => setMinify(m => !m)}
+                            disabled={!parsed}
+                        >
+                            ↔ Minify
+                        </button>
+                        <select
+                            className={styles.actionSelect}
+                            value={String(indentSize)}
+                            onChange={e => {
+                                const v = e.target.value;
+                                setIndentSize(v === 'tab' ? 'tab' : Number(v) as IndentSize);
+                            }}
+                            disabled={!parsed || minify}
+                        >
+                            <option value="2">2 spaces</option>
+                            <option value="4">4 spaces</option>
+                            <option value="tab">Tab</option>
+                        </select>
+                        <div className={styles.toolbarSep} />
+                    </>
+                )}
+                <button
+                    className={`${styles.actionBtn} ${showSearch ? styles.actionBtnActive : ''}`}
+                    onClick={() => { setShowSearch(s => !s); if (showSearch) setSearchQuery(''); }}
+                    disabled={viewMode !== 'tree' || !parsed}
+                    title="Ctrl+F"
+                >
+                    ⌕ Search
+                </button>
+                <div className={styles.toolbarSep} />
+                <button className={styles.actionBtn} onClick={handleDownload} disabled={!parsed}>
+                    ↓ Save
+                </button>
+                <button className={styles.actionBtn} onClick={handleCopy} disabled={!parsed}>
+                    {copied ? '✓ Copied' : '⧉ Copy'}
+                </button>
+                <button
+                    className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
+                    onClick={handleClear}
+                    disabled={!input}
+                >
+                    ✕ Clear
+                </button>
+            </ToolHeader>
 
             {showSearch && viewMode === 'tree' && (
                 <div className={styles.searchBar}>

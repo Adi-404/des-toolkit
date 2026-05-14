@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { diff_match_patch, DIFF_DELETE, DIFF_INSERT, DIFF_EQUAL } from 'diff-match-patch';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
+import ToolHeader from './ToolHeader';
 import styles from './DiffChecker.module.css';
 
 interface LineMark {
@@ -266,35 +267,29 @@ export default function DiffChecker() {
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.toolbar}>
-                <div className={styles.toolbarTitle}>
-                    <span className={styles.toolbarEyebrow}>Text · diff</span>
-                    <span className={styles.toolbarLabelRow}>
-                        <span className={styles.toolbarLabel}>Diff Checker</span>
-                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
-                            spot the difference
-                        </span>
-                    </span>
-                </div>
-                <div className={styles.toolbarActions}>
-                    <label id="diff-sync-label" className={styles.syncLabel}>
-                        <input
-                            id="diff-sync-scroll"
-                            type="checkbox"
-                            className={styles.syncCheckbox}
-                            checked={syncScrollEnabled}
-                            onChange={(e) => setSyncScrollEnabled(e.target.checked)}
-                        />
-                        Scroll together
-                    </label>
-                    <button id="diff-swap" className={styles.actionBtn} onClick={handleSwap}>
-                        ⇄ Swap
-                    </button>
-                    <button id="diff-clear" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={handleClear}>
-                        ✕ Clear both
-                    </button>
-                </div>
-            </div>
+            <ToolHeader
+                eyebrow="Text · diff"
+                title="Diff Checker"
+                titleAccent="Checker"
+                note="spot the difference"
+            >
+                <label id="diff-sync-label" className={styles.syncLabel}>
+                    <input
+                        id="diff-sync-scroll"
+                        type="checkbox"
+                        className={styles.syncCheckbox}
+                        checked={syncScrollEnabled}
+                        onChange={(e) => setSyncScrollEnabled(e.target.checked)}
+                    />
+                    Scroll together
+                </label>
+                <button id="diff-swap" className={styles.actionBtn} onClick={handleSwap}>
+                    ⇄ Swap
+                </button>
+                <button id="diff-clear" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={handleClear}>
+                    ✕ Clear both
+                </button>
+            </ToolHeader>
 
             <div className={styles.editors}>
                 <div className={styles.panel}>

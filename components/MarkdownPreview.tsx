@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import oneLight from 'react-syntax-highlighter/dist/cjs/styles/prism/one-light';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
+import ToolHeader from './ToolHeader';
 import styles from './MarkdownPreview.module.css';
 
 
@@ -124,24 +125,17 @@ export default function MarkdownPreview() {
 
     return (
         <div className={styles.wrapper}>
-            {/* Toolbar */}
-            <div className={styles.toolbar}>
-                <div className={styles.toolbarLabel}>
-                    <span className={styles.toolbarEyebrow}>Text · markdown</span>
-                    <span className={styles.toolbarTitleRow}>
-                        <span className={styles.toolbarTitle}>Markdown Preview</span>
-                        <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17 }}>
-                            write &amp; see
-                        </span>
-                    </span>
-                </div>
-                <div className={styles.toolbarActions}>
-                    <button className={styles.actionBtn} onClick={handleClear}>✕ Clear</button>
-                    <button className={styles.actionBtn} onClick={handleCopyMd}>
-                        {copiedMd ? '✓ Copied' : '⧉ Copy Markdown'}
-                    </button>
-                </div>
-            </div>
+            <ToolHeader
+                eyebrow="Text · markdown"
+                title="Markdown Preview"
+                titleAccent="Preview"
+                note="write & see"
+            >
+                <button className={styles.actionBtn} onClick={handleClear}>✕ Clear</button>
+                <button className={styles.actionBtn} onClick={handleCopyMd}>
+                    {copiedMd ? '✓ Copied' : '⧉ Copy Markdown'}
+                </button>
+            </ToolHeader>
 
             <div className={styles.editors}>
                 <div className={`${styles.panel} ${fullscreen ? styles.panelHidden : ''}`}>
