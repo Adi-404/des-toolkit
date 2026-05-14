@@ -255,7 +255,8 @@ body {
 
 /* Inline emphasis word inside body copy — picks up the surrounding font
    size, scales slightly larger, leans a touch. Pair with one of the
-   colour modifiers below or override `color:` inline. */
+   colour modifiers below or override `color:` inline. Tagged here so a
+   stale Turbopack chunk re-emits when this file's mtime changes. */
 .clay-highlight {
     display: inline-block;
     font-family: var(--clay-font-script);
