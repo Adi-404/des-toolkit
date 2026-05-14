@@ -27,7 +27,7 @@ interface Hint {
 }
 
 /** How long each hint stays visible before rotating to the next one. */
-const CYCLE_MS = 3800;
+const CYCLE_MS = 2000;
 
 export default function ShortcutScribble({ variant = 'inline', children }: Props) {
     const { settings } = useSettings();
@@ -65,14 +65,6 @@ export default function ShortcutScribble({ variant = 'inline', children }: Props
                     </span>
                 ))}
                 <span className={styles.word}>{active.label}</span>
-            </span>
-            <span className={styles.dots} aria-hidden="true">
-                {hints.map((_, i) => (
-                    <span
-                        key={i}
-                        className={`${styles.dot} ${i === index ? styles.dotActive : ''}`}
-                    />
-                ))}
             </span>
         </span>
     );

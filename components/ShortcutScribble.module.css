@@ -83,28 +83,6 @@
     color: var(--clay-muted);
 }
 
-/* ── Cycle indicator dots ── one filled, the rest hollow */
-.dots {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-left: 8px;
-    transform: translateY(-2px);
-}
-
-.dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--clay-hairline);
-    transition: background 320ms ease, transform 320ms ease;
-}
-
-.dotActive {
-    background: var(--clay-brand-pink);
-    transform: scale(1.4);
-}
-
 @media (prefers-reduced-motion: reduce) {
     .scribble, .lead, .line { animation: none; }
 }
