@@ -276,8 +276,8 @@ export default function DiffChecker() {
                             <span style={{ color: 'var(--clay-ink)' }}>.</span>
                         </h1>
                         <p className={shell.lede}>
-                            Side-by-side text diff with <span className="clay-highlight clay-highlight-pink">sync-scroll</span> and
-                            one-click merge buttons. Drop two blocks in, watch added and removed lines light up.
+                            Drop two blocks of text into the panes and watch added and removed lines light up — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> code review</span> and content comparisons.
                         </p>
                     </div>
                     <div className={shell.headerActions}>

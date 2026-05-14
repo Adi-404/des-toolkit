@@ -155,8 +155,8 @@ export default function ClipboardEditor() {
                             <span style={{ color: 'var(--clay-ink)' }}>.</span>
                         </h1>
                         <p className={shell.lede}>
-                            A <span className="clay-highlight clay-highlight-pink">tabbed scratchpad</span> with line numbers,
-                            saved to your account so it follows you between devices.
+                            A tabbed scratchpad with line numbers that persists between sessions — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> snippet stashing</span> across projects.
                         </p>
                     </div>
                     <div className={shell.headerActions}>

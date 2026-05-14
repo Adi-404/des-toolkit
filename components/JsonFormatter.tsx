@@ -260,8 +260,8 @@ export default function JsonFormatter() {
                             <span style={{ color: 'var(--clay-ink)' }}>.</span>
                         </h1>
                         <p className={shell.lede}>
-                            Format, validate, tree-view, sort and minify JSON — <span className="clay-highlight clay-highlight-pink">in real time</span>.
-                            Tree mode for structure; text mode for compact output. Drop a file or paste in.
+                            Paste or drop a payload and watch it format, validate and tree out in real time — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> quick inspection</span> and clean output.
                         </p>
                     </div>
                     <div className={shell.headerActions}>
