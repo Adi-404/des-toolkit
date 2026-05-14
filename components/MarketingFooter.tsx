@@ -9,15 +9,15 @@ import styles from './MarketingFooter.module.css';
  * Marketing footer for the home/landing surface. Three columns:
  *   Brand   — name, tagline, alpha stamp
  *   Product — top-level routes the user can pick up from
- *   Made by — social links + the "buy me a coffee" Easter egg
+ *   Made by — GitHub identity + the "buy me a coffee" Easter egg
  *
  * The Easter egg never actually opens a tipping page; on click it swaps the
- * label to "just kidding — say hi on GitHub instead" and the same button
- * becomes a link to the maintainer's GitHub profile.
+ * label to "just kidding — say hi on LinkedIn" and the same button becomes
+ * a link to the maintainer's LinkedIn profile.
  */
 
 const GITHUB_PROFILE = 'https://github.com/Adi-404';
-const GITHUB_REPO    = 'https://github.com/Adi-404/des-toolkit';
+const LINKEDIN_URL   = 'https://www.linkedin.com/in/adityanmahapatra/';
 
 export default function MarketingFooter() {
     return (
@@ -51,17 +51,12 @@ export default function MarketingFooter() {
                     <h4 className={styles.colTitle}>Made by</h4>
                     <ul className={styles.colList}>
                         <li>
-                            <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className={styles.colLink}>
-                                <GitHubGlyph /> Repo
-                            </a>
-                        </li>
-                        <li>
                             <a href={GITHUB_PROFILE} target="_blank" rel="noopener noreferrer" className={styles.colLink}>
-                                <ProfileGlyph /> @Adi-404
+                                <GitHubGlyph /> @Adi-404
                             </a>
                         </li>
                         <li>
-                            <CoffeeEasterEgg githubUrl={GITHUB_PROFILE} />
+                            <CoffeeEasterEgg linkedInUrl={LINKEDIN_URL} />
                         </li>
                     </ul>
                 </div>
@@ -83,11 +78,11 @@ export default function MarketingFooter() {
 /**
  * The Easter egg button. Two states:
  *   default →  "☕ Buy me a coffee"
- *   pranked →  "just kidding — say hi on GitHub" (clicking opens the profile)
+ *   pranked →  "just kidding — say hi on LinkedIn" (clicking opens the profile)
  * Clicking once flips the state; the pranked-state button is itself a real
  * anchor so the second click navigates.
  */
-function CoffeeEasterEgg({ githubUrl }: { githubUrl: string }) {
+function CoffeeEasterEgg({ linkedInUrl }: { linkedInUrl: string }) {
     const [pranked, setPranked] = useState(false);
 
     if (!pranked) {
@@ -105,7 +100,7 @@ function CoffeeEasterEgg({ githubUrl }: { githubUrl: string }) {
 
     return (
         <a
-            href={githubUrl}
+            href={linkedInUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={`${styles.colLink} ${styles.coffeeBtn} ${styles.coffeePranked}`}
@@ -116,9 +111,10 @@ function CoffeeEasterEgg({ githubUrl }: { githubUrl: string }) {
                 setTimeout(() => setPranked(false), 800);
             }}
         >
+            <LinkedInGlyph />
             <span className={styles.coffeeJk}>just kidding</span>{' '}
             <span className={styles.coffeeJkArrow}>→</span>{' '}
-            <span className={styles.coffeeJkLink}>say hi on GitHub</span>
+            <span className={styles.coffeeJkLink}>say hi on LinkedIn</span>
         </a>
     );
 }
@@ -134,11 +130,14 @@ function GitHubGlyph() {
     );
 }
 
-function ProfileGlyph() {
+function LinkedInGlyph() {
     return (
         <svg className={styles.glyph} viewBox="0 0 16 16" aria-hidden="true">
-            <circle cx="8" cy="6" r="3" fill="none" stroke="currentColor" strokeWidth="1.4" />
-            <path d="M2.5 14c.8-2.8 3-4 5.5-4s4.7 1.2 5.5 4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+            <rect x="0" y="0" width="16" height="16" rx="2" fill="currentColor" />
+            <path
+                d="M4.5 6.5h-2v6h2v-6zM3.5 5.5a1.15 1.15 0 1 0 0-2.3 1.15 1.15 0 0 0 0 2.3zM13.5 12.5h-2V9.4c0-.74-.01-1.7-1.03-1.7-1.04 0-1.2.81-1.2 1.65v3.15h-2v-6h1.92v.82h.03c.27-.5.92-1.03 1.9-1.03 2.03 0 2.4 1.34 2.4 3.08v3.13z"
+                fill="var(--clay-canvas)"
+            />
         </svg>
     );
 }
