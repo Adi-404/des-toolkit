@@ -164,3 +164,32 @@
     color: var(--clay-muted);
     margin-bottom: var(--clay-space-xs);
 }
+
+/* ── Responsive ──
+   The shared shell used by Contrast, Bezier, Token translator, SVG viewer,
+   Image kit, Paste & compare and Download. These previously had no mobile
+   breakpoints — title overflowed at 320–480px and the header-actions row
+   wrapped onto the page edge. Trim everything proportionally. */
+
+@media (max-width: 768px) {
+    .container { padding: var(--clay-space-lg) var(--clay-space-md) var(--clay-space-xl); }
+    .header { gap: var(--clay-space-sm); margin-bottom: var(--clay-space-lg); }
+    .title {
+        font-size: clamp(28px, 7.5vw, 40px);
+        letter-spacing: -0.6px;
+        line-height: 1.05;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    .lede { font-size: 15px; }
+    .headerActions { flex-wrap: wrap; gap: var(--clay-space-xs); }
+    .card { padding: var(--clay-space-lg); }
+    .cardCream { padding: var(--clay-space-lg); }
+    .sectionTitle { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: var(--clay-space-md); }
+    .title { font-size: clamp(24px, 8vw, 32px); }
+    .btnPrimary, .btnSecondary { height: 36px; padding: 0 14px; font-size: 12px; }
+}

@@ -7,7 +7,9 @@
 .container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: var(--clay-space-xxl) var(--clay-space-xl) var(--clay-space-section);
+    /* Trimmed top padding — the topbar already eats ~58px and the hero used
+       to sit ~150px down. Now ~24px of breathing room above the eyebrow. */
+    padding: var(--clay-space-lg) var(--clay-space-xl) var(--clay-space-section);
     /* Fade the cream background into the stripe at the bottom of the page */
     background: linear-gradient(
         to bottom,
@@ -23,33 +25,94 @@
     display: grid;
     grid-template-columns: 7fr 5fr;
     gap: var(--clay-space-xl);
-    padding: var(--clay-space-xxl) 0 var(--clay-space-section);
+    /* No extra top padding — container already provides it. Bottom padding
+       trimmed since the next section has its own top margin. */
+    padding: var(--clay-space-md) 0 var(--clay-space-xxl);
     align-items: center;
 }
 
+/* Replaces the flat cream pill — now a relatable, designed badge:
+   a pulsing pink dot, the brand wordmark in Inter, a slim divider, and
+   "workshop · alpha" in Caveat. Wrapped in the project's signature
+   gradient-border ring so it ties into the rest of the page. */
 .heroEyebrow {
+    --borderWidth: 1px;
     display: inline-flex;
     align-items: center;
-    gap: var(--clay-space-xs);
-    background: var(--clay-surface-card);
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    background: var(--clay-canvas);
     color: var(--clay-ink);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 6px 14px;
     border-radius: var(--clay-radius-pill);
-    margin-bottom: var(--clay-space-lg);
+    margin-bottom: var(--clay-space-md);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    line-height: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pulsing alpha dot — gives the eyebrow a "live" feel instead of a static pill. */
+.heroEyebrowDot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--clay-brand-pink);
+    box-shadow: 0 0 0 3px rgba(255, 77, 139, 0.18);
+    animation: hero-eyebrow-pulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes hero-eyebrow-pulse {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 0 3px rgba(255, 77, 139, 0.18); }
+    50%      { transform: scale(1.18); box-shadow: 0 0 0 5px rgba(255, 77, 139, 0.10); }
+}
+
+.heroEyebrowBrand {
+    font-weight: 700;
+    letter-spacing: -0.1px;
+    color: var(--clay-ink);
+}
+
+.heroEyebrowSlash {
+    color: var(--clay-brand-pink);
+    margin: 0 1px;
+}
+
+.heroEyebrowDivider {
+    width: 1px;
+    height: 12px;
+    background: var(--clay-hairline);
+    margin: 0 2px;
+}
+
+.heroEyebrowScript {
+    font-family: var(--clay-font-script);
+    font-size: 16px;
+    line-height: 1;
+    color: var(--clay-muted);
+    letter-spacing: 0.2px;
+    transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heroEyebrowDot { animation: none; }
 }
 
 .heroTitle {
     font-family: var(--clay-font-display);
-    font-size: clamp(40px, 6vw, 72px);
+    font-size: clamp(36px, 6vw, 72px);
     font-weight: 500;
-    line-height: 1;
-    letter-spacing: -2.5px;
+    line-height: 1.02;
+    /* Letter-spacing scales with size — -2.5px at 72px looks great but at 36px
+       it tangles letters together. clamp(...) keeps the tracking proportional. */
+    letter-spacing: clamp(-1px, -0.04em, -0.5px);
     color: var(--clay-ink);
     margin-bottom: var(--clay-space-lg);
+    /* Long words (e.g. "moodboard") shouldn't blow past the viewport. */
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 
 .heroAccent {
@@ -546,6 +609,7 @@
 
     .hero {
         grid-template-columns: 1fr;
+        padding-top: var(--clay-space-sm);
     }
 
     .heroArt {
@@ -559,20 +623,91 @@
 }
 
 @media (max-width: 640px) {
+    .container {
+        padding: var(--clay-space-md) var(--clay-space-md) var(--clay-space-xxl);
+    }
+
+    .hero {
+        gap: var(--clay-space-lg);
+        padding: 0 0 var(--clay-space-xl);
+    }
+
+    .heroTitle {
+        font-size: clamp(32px, 9vw, 44px);
+        margin-bottom: var(--clay-space-md);
+    }
+
+    .heroSub {
+        font-size: 16px;
+        margin-bottom: var(--clay-space-lg);
+    }
+
+    .heroActions {
+        /* Buttons stack rather than wrap awkwardly side-by-side. */
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--clay-space-xs);
+    }
+
+    .heroActions > a {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .heroEyebrowScript {
+        /* "workshop · alpha" was hugging the edge — drop the script size
+           a touch and let it sit under the brand on the tightest viewports. */
+        font-size: 15px;
+    }
+
     .grid {
         grid-template-columns: 1fr;
+        gap: var(--clay-space-md);
     }
 
     .soonGrid {
         grid-template-columns: 1fr;
     }
 
-    .container {
-        padding: var(--clay-space-lg) var(--clay-space-md) var(--clay-space-xxl);
+    .sectionHead {
+        margin-bottom: var(--clay-space-lg);
     }
 
     .sectionTitle, .soonHead {
-        font-size: 28px;
+        font-size: clamp(26px, 7vw, 32px);
         letter-spacing: -0.5px;
     }
+
+    .card {
+        padding: var(--clay-space-lg);
+        min-height: 200px;
+    }
+
+    .cardTitle {
+        font-size: 22px;
+    }
+
+    .cardDesc {
+        /* 32ch was too generous on narrow screens — let descriptions wrap
+           naturally inside the card's actual width. */
+        max-width: 100%;
+        font-size: 13px;
+    }
+
+    .cardFoot {
+        margin-top: var(--clay-space-md);
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--clay-space-xs);
+    }
+}
+
+@media (max-width: 380px) {
+    /* Very narrow phones — eyebrow gets tight on a single line. Let the
+       script and the divider drop out so the brand stays readable. */
+    .heroEyebrowDivider,
+    .heroEyebrowScript { display: none; }
 }

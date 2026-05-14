@@ -64,7 +64,14 @@ export default function Home() {
             <div className={styles.container}>
                 <section className={styles.hero}>
                     <div>
-                        <span className={styles.heroEyebrow}>des/toolkit · workshop · alpha</span>
+                        <span className={`${styles.heroEyebrow} clay-gradient-border clay-gradient-border-animated`}>
+                            <span className={styles.heroEyebrowDot} aria-hidden="true" />
+                            <span className={styles.heroEyebrowBrand}>
+                                des<span className={styles.heroEyebrowSlash}>/</span>toolkit
+                            </span>
+                            <span className={styles.heroEyebrowDivider} aria-hidden="true" />
+                            <span className={styles.heroEyebrowScript}>workshop · alpha</span>
+                        </span>
                         <h1 className={styles.heroTitle}>
                             {/* Visually-hidden brand prefix — keeps the aesthetic
                                 phrase intact while giving search engines and

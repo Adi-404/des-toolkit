@@ -605,3 +605,32 @@
     max-width: 460px;
     line-height: 1.55;
 }
+
+/* ── Responsive ──
+   FontBook had no mobile breakpoints — the `minmax(360px, 1fr)` grid
+   forced horizontal overflow on phones whose viewports are 360-430px,
+   and the URL input had a 240px min-width that broke the addRow flex
+   wrap behaviour. */
+
+@media (max-width: 768px) {
+    .container { padding: var(--clay-space-lg) var(--clay-space-md); }
+    .title { font-size: clamp(28px, 8vw, 40px); letter-spacing: -0.5px; }
+    .lede { font-size: 15px; }
+    .header { gap: var(--clay-space-sm); margin-bottom: var(--clay-space-lg); }
+    .addBar { padding: var(--clay-space-sm); }
+    .urlInput { min-width: 0; flex-basis: 100%; }
+    /* Library grid: single column on phones, two on small tablets. */
+    .grid { grid-template-columns: 1fr; gap: var(--clay-space-sm); }
+    .pickerGrid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+
+@media (min-width: 540px) and (max-width: 768px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .container { padding: var(--clay-space-md); }
+    .card { padding: var(--clay-space-md); }
+    .btnPrimary, .btnSecondary { width: 100%; justify-content: center; }
+    .divider { display: none; }
+}

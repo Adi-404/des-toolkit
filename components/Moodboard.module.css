@@ -539,6 +539,23 @@
     }
 }
 
+@media (max-width: 768px) {
+    .container { padding: var(--clay-space-lg) var(--clay-space-md); }
+    .title {
+        font-size: clamp(28px, 8vw, 40px);
+        letter-spacing: -0.5px;
+        line-height: 1.05;
+        overflow-wrap: break-word;
+    }
+    .lede { font-size: 15px; }
+    .header { gap: var(--clay-space-sm); margin-bottom: var(--clay-space-lg); }
+    .addBar { padding: var(--clay-space-sm); }
+    /* Keep the density picker visible (the segments hide their labels at
+       720px already), but let it sit below the title block on phones
+       rather than fight for horizontal space. */
+    .densityWrap { align-items: flex-start; }
+}
+
 .tileImage {
     flex: 1;
     min-height: 0;
