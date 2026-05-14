@@ -69,30 +69,41 @@
 }
 
 .heroEyebrowBrand {
-    font-weight: 700;
-    letter-spacing: -0.1px;
+    /* Switching to JetBrains Mono gives the brand a "code editor" feel
+       — the right register for a developer toolkit, and visually distinct
+       from the surrounding Inter UI so the eyebrow stops feeling generic. */
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
     color: var(--clay-ink);
 }
 
 .heroEyebrowSlash {
     color: var(--clay-brand-pink);
     margin: 0 1px;
+    font-weight: 700;
 }
 
 .heroEyebrowDivider {
     width: 1px;
-    height: 12px;
+    height: 14px;
     background: var(--clay-hairline);
-    margin: 0 2px;
+    margin: 0 4px;
 }
 
 .heroEyebrowScript {
     font-family: var(--clay-font-script);
-    font-size: 16px;
+    font-size: 19px;
+    font-weight: 500;
     line-height: 1;
     color: var(--clay-muted);
     letter-spacing: 0.2px;
-    transform: translateY(-1px);
+    /* Tilted suffix reads like a hand-written annotation against the
+       monospace brand — visually contrasting registers carry the eyebrow. */
+    transform: rotate(-2deg) translateY(-2px);
+    transform-origin: left center;
+    display: inline-block;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -410,6 +421,15 @@
     gap: var(--clay-space-lg);
 }
 
+/* Two-column variant used for the headline Moodboard + Fonts row.
+   Lives in CSS so the media queries can actually override it on phones —
+   the previous inline `style={{ gridTemplateColumns: '1fr 1fr' }}` always
+   beat the @media rule, leaving the two cards squished side-by-side on
+   narrow viewports. */
+.gridTwo {
+    grid-template-columns: 1fr 1fr;
+}
+
 .card {
     border-radius: var(--clay-radius-xl);
     padding: var(--clay-space-xl);
@@ -607,6 +627,11 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Headline cards stay 2-up on tablet because they're feature-sized. */
+    .gridTwo {
+        grid-template-columns: 1fr 1fr;
+    }
+
     .hero {
         grid-template-columns: 1fr;
         padding-top: var(--clay-space-sm);
@@ -661,6 +686,14 @@
     }
 
     .grid {
+        grid-template-columns: 1fr;
+        gap: var(--clay-space-md);
+    }
+
+    /* Headline cards collapse to a single column under 640px so each card
+       has the full viewport width — the previous 2-up layout left them
+       feeling clustered against each other. */
+    .gridTwo {
         grid-template-columns: 1fr;
         gap: var(--clay-space-md);
     }

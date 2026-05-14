@@ -133,3 +133,10 @@
 }
 
 .viewLink:hover { color: var(--clay-brand-pink); }
+
+@media (max-width: 480px) {
+    .panel { padding: var(--clay-space-sm); }
+    .header { margin-bottom: var(--clay-space-xs); }
+    .form { flex-direction: column; gap: 4px; }
+    .saveBtn { width: 100%; }
+}

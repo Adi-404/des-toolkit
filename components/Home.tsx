@@ -133,7 +133,7 @@ export default function Home() {
                             visible.
                         </p>
                     </header>
-                    <div className={styles.grid} style={{ gridTemplateColumns: '1fr 1fr' }}>
+                    <div className={`${styles.grid} ${styles.gridTwo}`}>
                         <Link
                             href="/moodboard"
                             className={`${styles.card} ${styles.pink} clay-gradient-border clay-gradient-border-animated`}

@@ -430,14 +430,23 @@
     color: var(--clay-ink);
 }
 
+/* Tablet (≈ iPad portrait) — full nav still fits but the right-side cluster
+   was overflowing because the search button kept its 180px min-width while
+   the menu items, CTA and avatar competed for the same horizontal space.
+   Drop the "Search tools…" label here so the icon button stays compact. */
+@media (max-width: 1024px) {
+    .searchBtn { min-width: 0; padding: 0 12px; }
+    .searchBtn .searchIcon { font-size: 0; }
+    .searchBtn .searchIcon::before { content: '⌕'; font-size: 16px; line-height: 1; }
+}
+
 @media (max-width: 820px) {
     .nav { padding: 0 var(--clay-space-md); gap: var(--clay-space-sm); }
     .menu { display: none; }
     .divider { display: none; }
-    .searchBtn { min-width: 0; }
     .searchKbd { display: none; }
-    /* Sign-up CTA text is long — hide its label and rely on icon-only
-       presentation on phones to keep the right-side cluster within bounds. */
+    /* CTA tightens once the menu is gone so the right cluster fits an
+       iPad portrait without bleeding off-edge. */
     .cta { padding: 0 12px; font-size: 12px; }
 }
 
@@ -445,10 +454,6 @@
     .nav { padding: 0 var(--clay-space-sm); }
     .brand { font-size: 17px; }
     .brandBadge { font-size: 14px; margin-left: 4px; }
-    /* Drop the search "Search tools…" label on very narrow phones so just
-       the icon remains; full palette still opens with ⌘K (and now the
-       icon button taps to it). */
-    .searchIcon { font-size: 0; }
-    .searchIcon::before { content: '⌕'; font-size: 14px; }
     .signInBtn { padding: 0 10px; font-size: 12px; }
+    .cta { padding: 0 10px; font-size: 11px; }
 }

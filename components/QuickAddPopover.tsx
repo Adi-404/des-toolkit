@@ -67,13 +67,22 @@ export default function QuickAddPopover({ open, anchorRect, onClose }: Props) {
     if (!open) return null;
     if (typeof document === 'undefined') return null;
 
-    // Position: right-align to the anchor and drop below it. Clamp horizontally
-    // so the panel doesn't slip off the viewport edge on narrow screens.
-    let left = 16;
+    // Pick an actual width based on viewport — the previous fixed 340 was
+    // perfect on desktop but got clipped against the right edge on iPad
+    // portrait (and looked oversized on small phones). Cap to 340, shrink
+    // proportionally on narrow viewports.
+    const vw = window.innerWidth;
+    const SIDE_PAD = 12;
+    const width = Math.min(POPOVER_WIDTH, vw - SIDE_PAD * 2);
+
+    // Right-align to the anchor and drop below it. Clamp horizontally so
+    // the panel never slips off either viewport edge. On very narrow
+    // viewports the popover ends up nearly full-width with a 12px gutter.
+    let left = SIDE_PAD;
     let top = 64;
     if (anchorRect) {
-        const desiredLeft = anchorRect.right - POPOVER_WIDTH;
-        left = Math.max(12, Math.min(desiredLeft, window.innerWidth - POPOVER_WIDTH - 12));
+        const desiredLeft = anchorRect.right - width;
+        left = Math.max(SIDE_PAD, Math.min(desiredLeft, vw - width - SIDE_PAD));
         top = anchorRect.bottom + 8;
     }
 
@@ -82,7 +91,7 @@ export default function QuickAddPopover({ open, anchorRect, onClose }: Props) {
             <div className={styles.backdrop} onClick={onClose} aria-hidden="true" />
             <div
                 className={styles.panel}
-                style={{ left, top, width: POPOVER_WIDTH }}
+                style={{ left, top, width }}
                 role="dialog"
                 aria-label="Quick add to moodboard"
                 onClick={(e) => e.stopPropagation()}
