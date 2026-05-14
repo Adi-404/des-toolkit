@@ -19,11 +19,17 @@ import styles from './MoodboardDemo.module.css';
  * parens and emoji, so each URL is run through encodeURIComponent first.
  */
 
-const URL_TEXT = 'pinterest.com/pin/3729612269442333';
+const URL_TEXT = 'string-tune.fiddle.digital';
 const CYCLE_MS = 28000;
 
 // Resolve a /public asset URL safely regardless of filename quirks.
 const pub = (name: string) => '/' + encodeURIComponent(name);
+
+// Deterministic seeded photos via Lorem Picsum — every seed returns the
+// same image forever, no auth, no rate limit, no copyright risk. Used as
+// the moodboard-feel filler around the user's actual saved screenshot.
+const picsum = (seed: string, w = 480, h = 360) =>
+    `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
 
 interface DemoTag { name: string; color: string; }
 const TAGS: DemoTag[] = [
@@ -40,10 +46,13 @@ const FONT_DEMOS = [
     { family: 'IBM Plex Mono',    sample: '01 code terminal clear',     tag: 'Mono',    accent: '#a4d4c5' },
 ];
 
-// The icebear card pulled out — used both inside the browser save-flow AND
+// The user's saved screenshot — used both inside the browser save-flow AND
 // as the anchor tile in the bento. Same URL keeps the visual continuity
-// when the browser crossfades into the bento phase.
-const ICEBEAR_URL = pub('#icebear.jpeg');
+// when the browser crossfades into the bento phase. Links to the live page
+// it was captured from.
+const SAVED_IMG = '/string-tune-screenshot.png';
+const SAVED_TITLE = 'string-tune · interactive fiddle';
+const SAVED_HOST = 'string-tune.fiddle.digital';
 
 type TileSize = 'normal' | 'wide' | 'tall' | 'feature';
 interface BentoTile {
@@ -52,20 +61,21 @@ interface BentoTile {
     alt: string;
 }
 
-// 10 tiles laid out in a 4-col bento — first the icebear (matching the
-// saved card the user just placed), then a mix of sizes that fills three
-// initial rows. Two more rows below the fold drive the scroll-up motion.
+// 10 tiles laid out in a 4-col bento — first the user's actual saved
+// screenshot, then nine seeded Picsum photos for a moodboard-y mix of
+// sizes. Two extra rows fall below the initial viewport so the scroll-up
+// motion has somewhere to go.
 const BENTO: BentoTile[] = [
-    { src: ICEBEAR_URL,                                                 size: 'feature', alt: 'icebear sticker pack' },
-    { src: pub('🌷🌷🌷🌷.jpeg'),                                          size: 'normal',  alt: 'tulips' },
-    { src: pub('Neymar jr wallpaper.jpeg'),                              size: 'normal',  alt: 'Neymar Jr.' },
-    { src: pub('_ (1).jpeg'),                                            size: 'wide',    alt: 'reference 1' },
-    { src: pub('Bold Personality Landing Page_ Website Design & Canva Templates.jpeg'), size: 'normal', alt: 'bold personality landing page' },
-    { src: pub('1st Example of Good Web Design.jpeg'),                   size: 'wide',    alt: 'good web design' },
-    { src: pub('_.jpeg'),                                                size: 'normal',  alt: 'reference base' },
-    { src: pub('_ (2).jpeg'),                                            size: 'wide',    alt: 'reference 2' },
-    { src: pub('_ (3).jpeg'),                                            size: 'tall',    alt: 'reference 3' },
-    { src: pub('_ (4).jpeg'),                                            size: 'normal',  alt: 'reference 4' },
+    { src: SAVED_IMG,                  size: 'feature', alt: SAVED_TITLE },
+    { src: picsum('warm-paper'),       size: 'normal',  alt: 'paper texture' },
+    { src: picsum('layout-grid'),      size: 'normal',  alt: 'layout grid' },
+    { src: picsum('editorial-spread'), size: 'wide',    alt: 'editorial spread' },
+    { src: picsum('letterpress'),      size: 'normal',  alt: 'letterpress type' },
+    { src: picsum('soft-light'),       size: 'wide',    alt: 'soft light reference' },
+    { src: picsum('palette-cream'),    size: 'normal',  alt: 'cream palette' },
+    { src: picsum('modular-system'),   size: 'wide',    alt: 'modular system' },
+    { src: picsum('vertical-arch'),    size: 'tall',    alt: 'vertical architecture' },
+    { src: picsum('field-notes'),      size: 'normal',  alt: 'field notes' },
 ];
 
 export default function MoodboardDemo() {
@@ -164,13 +174,13 @@ function Frame() {
                         >
                             <div
                                 className={styles.savedImg}
-                                style={{ backgroundImage: `url("${ICEBEAR_URL}")` }}
+                                style={{ backgroundImage: `url("${SAVED_IMG}")` }}
                                 role="img"
-                                aria-label="icebear"
+                                aria-label={SAVED_TITLE}
                             />
                             <div className={styles.savedBody}>
-                                <span className={styles.savedTitle}>icebear — saved to moodboard</span>
-                                <span className={styles.savedHost}>pinterest.com</span>
+                                <span className={styles.savedTitle}>{SAVED_TITLE}</span>
+                                <span className={styles.savedHost}>{SAVED_HOST}</span>
                                 <motion.div
                                     className={styles.savedDots}
                                     initial={{ opacity: 0 }}

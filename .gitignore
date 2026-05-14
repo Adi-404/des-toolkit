@@ -48,3 +48,18 @@ next-env.d.ts
 .claude
 claude.md
 bun.lock
+
+# Local moodboard reference images — kept on disk for tinkering with the
+# home demo, but not committed because most have unclear redistribution
+# rights (Pinterest screenshots, Canva templates, athlete wallpaper, etc.).
+# The MoodboardDemo now uses Picsum URLs for the bento filler.
+/public/#icebear.jpeg
+/public/1st Example of Good Web Design.jpeg
+/public/Bold Personality Landing Page_ Website Design & Canva Templates.jpeg
+/public/Neymar jr wallpaper.jpeg
+/public/_ (1).jpeg
+/public/_ (2).jpeg
+/public/_ (3).jpeg
+/public/_ (4).jpeg
+/public/_.jpeg
+/public/🌷🌷🌷🌷.jpeg
