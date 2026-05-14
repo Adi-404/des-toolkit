@@ -8,6 +8,7 @@ import {
 import { TAG_COLORS, type PinItem, type Tag, type TagColor } from '@/lib/moodboard-types';
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, tooLargeMessage } from '@/lib/upload-limits';
 import { useSettings, MOODBOARD_DENSITY_PX, type MoodboardDensity } from '@/contexts/SettingsContext';
+import { FOCUS_MOODBOARD_ADD } from '@/lib/topbar-events';
 import styles from './Moodboard.module.css';
 
 // Deterministic bento sizing — stable per item id, well-mixed across the feed.
@@ -68,6 +69,19 @@ export default function Moodboard() {
     const [url, setUrl] = useState('');
     const [adding, setAdding] = useState(false);
     const uploadInputRef = useRef<HTMLInputElement>(null);
+    const urlInputRef = useRef<HTMLInputElement>(null);
+
+    // Topbar CTA dispatches FOCUS_MOODBOARD_ADD when the user is already here;
+    // bring the URL field into view and focus it so the press feels like a
+    // direct shortcut to "add another link".
+    useEffect(() => {
+        function focusInput() {
+            urlInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            urlInputRef.current?.focus({ preventScroll: true });
+        }
+        window.addEventListener(FOCUS_MOODBOARD_ADD, focusInput);
+        return () => window.removeEventListener(FOCUS_MOODBOARD_ADD, focusInput);
+    }, []);
     const [status, setStatus] = useState<{ kind: 'ok' | 'err' | 'info'; text: string } | null>(null);
 
     const [showTagCreator, setShowTagCreator] = useState(false);
@@ -315,6 +329,7 @@ export default function Moodboard() {
 
                 <form className={styles.addBar} onSubmit={add}>
                     <input
+                        ref={urlInputRef}
                         type="url"
                         inputMode="url"
                         className={styles.addInput}

@@ -10,6 +10,7 @@ import {
     type FontCategory,
 } from '@/lib/google-fonts';
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL, tooLargeMessage } from '@/lib/upload-limits';
+import { FOCUS_FONTBOOK_ADD } from '@/lib/topbar-events';
 import styles from './FontBook.module.css';
 
 const SAMPLE = 'The quick brown fox jumps over the lazy dog. 1234567890';
@@ -84,6 +85,16 @@ export default function FontBook() {
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState<{ kind: 'ok' | 'err' | 'info'; text: string } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const urlInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        function focusInput() {
+            urlInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            urlInputRef.current?.focus({ preventScroll: true });
+        }
+        window.addEventListener(FOCUS_FONTBOOK_ADD, focusInput);
+        return () => window.removeEventListener(FOCUS_FONTBOOK_ADD, focusInput);
+    }, []);
 
     // ── File drop zone ──
     const [dropActive, setDropActive] = useState(false);
@@ -353,6 +364,7 @@ export default function FontBook() {
                 <div className={styles.addBar}>
                     <form className={styles.addRow} onSubmit={submitUrl}>
                         <input
+                            ref={urlInputRef}
                             type="url"
                             inputMode="url"
                             className={styles.urlInput}

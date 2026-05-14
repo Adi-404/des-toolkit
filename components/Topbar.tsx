@@ -7,8 +7,10 @@ import { usePathname } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import styles from './Topbar.module.css';
 import CommandPalette from './CommandPalette';
+import QuickAddPopover from './QuickAddPopover';
 import { useSettings } from '@/contexts/SettingsContext';
 import { usePlatform } from '@/lib/use-platform';
+import { FOCUS_MOODBOARD_ADD, FOCUS_FONTBOOK_ADD } from '@/lib/topbar-events';
 
 // NEXT_PUBLIC_* values are inlined at build time, so this is a static check
 // equivalent to "did the developer wire up Clerk for this build?".
@@ -125,10 +127,41 @@ export default function Topbar() {
     const { modLabel } = usePlatform();
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [openGroupId, setOpenGroupId] = useState<string | null>(null);
+    const [quickAddOpen, setQuickAddOpen] = useState(false);
+    const [quickAddAnchor, setQuickAddAnchor] = useState<DOMRect | null>(null);
+    const ctaRef = useRef<HTMLButtonElement>(null);
     const navRef = useRef<HTMLElement>(null);
 
     const paletteKey = settings.shortcuts.paletteKey;
     const paletteHotkeyLabel = `${modLabel}${paletteKey.toUpperCase()}`;
+
+    // Decide which mode the right-side CTA is in based on the current route.
+    // - On the moodboard or fontbook, the CTA focuses that page's URL input
+    //   (no point navigating somewhere you're already at).
+    // - Everywhere else, it opens a quick-add popover that drops a link
+    //   straight into the moodboard without leaving the current page.
+    const ctaMode: 'focus-moodboard' | 'focus-fonts' | 'quick-add' =
+        pathname.startsWith('/moodboard') ? 'focus-moodboard'
+        : pathname.startsWith('/fonts')   ? 'focus-fonts'
+        : 'quick-add';
+
+    const ctaLabel =
+        ctaMode === 'focus-moodboard' ? '+ Add link'
+        : ctaMode === 'focus-fonts'   ? '+ Add font'
+        : '+ Quick add';
+
+    function handleCtaClick() {
+        if (ctaMode === 'focus-moodboard') {
+            window.dispatchEvent(new Event(FOCUS_MOODBOARD_ADD));
+            return;
+        }
+        if (ctaMode === 'focus-fonts') {
+            window.dispatchEvent(new Event(FOCUS_FONTBOOK_ADD));
+            return;
+        }
+        setQuickAddAnchor(ctaRef.current?.getBoundingClientRect() ?? null);
+        setQuickAddOpen(true);
+    }
 
     const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -308,9 +341,19 @@ export default function Topbar() {
                                 </Link>
                             </SignedOut>
                             <SignedIn>
-                                <Link href="/moodboard" className={`${styles.cta} clay-gradient-border clay-gradient-border-animated`}>
-                                    Open moodboard
-                                </Link>
+                                <button
+                                    ref={ctaRef}
+                                    type="button"
+                                    onClick={handleCtaClick}
+                                    className={`${styles.cta} clay-gradient-border clay-gradient-border-animated`}
+                                    title={
+                                        ctaMode === 'focus-moodboard' ? 'Jump to the URL input on this page'
+                                        : ctaMode === 'focus-fonts'   ? 'Jump to the URL input on this page'
+                                        : 'Save a link to your moodboard from any page'
+                                    }
+                                >
+                                    {ctaLabel}
+                                </button>
                                 <UserButton
                                     appearance={{ elements: { avatarBox: { width: 36, height: 36 } } }}
                                     afterSignOutUrl="/"
@@ -326,6 +369,11 @@ export default function Topbar() {
             </header>
 
             {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
+            <QuickAddPopover
+                open={quickAddOpen}
+                anchorRect={quickAddAnchor}
+                onClose={() => setQuickAddOpen(false)}
+            />
         </>
     );
 }

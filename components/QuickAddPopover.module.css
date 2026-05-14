@@ -1,0 +1,135 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 180;
+    background: transparent;
+}
+
+.panel {
+    position: fixed;
+    z-index: 200;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: var(--clay-space-md);
+    animation: quick-add-rise 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes quick-add-rise {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* ── Header ── */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: var(--clay-space-sm);
+}
+
+.eyebrow {
+    font-family: var(--clay-font-script);
+    font-size: 16px;
+    color: var(--clay-brand-pink);
+    letter-spacing: 0.2px;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+    display: inline-block;
+    width: fit-content;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--clay-ink);
+}
+
+/* ── Form ── */
+.form {
+    display: flex;
+    gap: 6px;
+}
+
+.input {
+    flex: 1;
+    height: 36px;
+    padding: 0 12px;
+    background: var(--clay-surface-soft);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    color: var(--clay-ink);
+    font-size: 13px;
+    font-family: var(--clay-font-body);
+    outline: none;
+    transition: border-color 120ms ease, background 120ms ease;
+}
+
+.input:focus {
+    border-color: var(--clay-ink);
+    background: var(--clay-canvas);
+}
+
+.input:disabled { opacity: 0.6; }
+
+.saveBtn {
+    height: 36px;
+    padding: 0 14px;
+    background: var(--clay-ink);
+    color: var(--clay-on-primary);
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--clay-radius-sm);
+    cursor: pointer;
+    transition: background 120ms ease, opacity 120ms ease;
+}
+
+.saveBtn:hover:not(:disabled) { background: var(--clay-primary-active); }
+.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Status ── */
+.statusOk {
+    margin-top: var(--clay-space-sm);
+    font-size: 13px;
+    color: var(--clay-success);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.statusTitle {
+    color: var(--clay-ink);
+    font-weight: 500;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.statusErr {
+    margin-top: var(--clay-space-sm);
+    font-size: 12px;
+    color: var(--clay-error);
+}
+
+/* ── View-moodboard footer link ── */
+.viewLink {
+    display: block;
+    margin-top: var(--clay-space-md);
+    padding-top: var(--clay-space-sm);
+    border-top: 1px dashed var(--clay-hairline);
+    background: none;
+    border: none;
+    border-top: 1px dashed var(--clay-hairline);
+    width: 100%;
+    text-align: left;
+    color: var(--clay-muted);
+    font-family: var(--clay-font-script);
+    font-size: 16px;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+}
+
+.viewLink:hover { color: var(--clay-brand-pink); }
