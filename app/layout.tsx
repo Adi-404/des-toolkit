@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import Topbar from '@/components/Topbar';
 import ContextMenu from '@/components/ContextMenu';
 import GlobalShortcuts from '@/components/GlobalShortcuts';
@@ -147,6 +148,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                         </main>
                     </div>
                 </SettingsProvider>
+                <Analytics />
             </body>
         </html>
     );
