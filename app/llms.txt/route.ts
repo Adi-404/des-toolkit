@@ -10,6 +10,8 @@ import { SITE_URL } from '@/lib/site-url';
 const BODY = `# des/toolkit
 
 > A warm, browser-based workshop for designers and frontend developers.
+> Also known as: des toolkit, destoolkit, destoolkit.com.
+>
 > Save inspiration on a moodboard, build a personal type library in the
 > fontbook, and reach for small dev utilities — all in one tab. Built with
 > Next.js, runs entirely in the browser for tool work; per-user data is

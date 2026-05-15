@@ -33,16 +33,25 @@ export const metadata: Metadata = {
         'contrast checking, JSON formatting, diffs, easing curves, and more — without leaving the tab.',
     applicationName: 'des toolkit',
     keywords: [
-        'des toolkit', 'des/toolkit', 'destoolkit',
-        'moodboard', 'design tools', 'frontend tools', 'developer tools',
-        'font book', 'color contrast', 'json formatter', 'diff checker',
-        'bezier editor', 'markdown preview', 'jwt decoder', 'csv viewer',
-        'design system', 'design tokens', 'palette extractor',
+        // Brand variants — Google tokenizes the slashed and spaced forms
+        // differently, so list every shape someone might type.
+        'des toolkit', 'des/toolkit', 'destoolkit', 'destoolkit.com',
+        // Surfaces
+        'moodboard', 'fontbook', 'design tools', 'frontend tools', 'developer tools',
+        'design system tools', 'design utilities',
+        // Tools-by-name
+        'color contrast checker', 'json formatter', 'diff checker',
+        'cubic bezier editor', 'markdown preview', 'jwt decoder', 'csv viewer',
+        'palette extractor', 'token translator', 'svg viewer',
+        // Use-cases
+        'design tokens', 'wcag contrast', 'easing curves', 'css tools',
+        'design inspiration', 'type collection', 'paste and compare',
     ],
     authors: [{ name: 'Adi-404', url: 'https://github.com/Adi-404' }],
     creator: 'Adi-404',
     publisher: 'des/toolkit',
     icons: { icon: '/favicon.ico' },
+    manifest: '/manifest.webmanifest',
     openGraph: {
         type: 'website',
         url: SITE_URL,
@@ -89,7 +98,7 @@ const STRUCTURED_DATA = {
             '@id': `${SITE_URL}/#website`,
             url: SITE_URL,
             name: 'des/toolkit',
-            alternateName: ['des toolkit', 'destoolkit'],
+            alternateName: ['des toolkit', 'destoolkit', 'destoolkit.com'],
             description:
                 'A warm browser-based workshop for designers and frontend developers — moodboard, fontbook, and small dev utilities in one place.',
             inLanguage: 'en-US',
@@ -103,11 +112,16 @@ const STRUCTURED_DATA = {
             '@type': 'Organization',
             '@id': `${SITE_URL}/#org`,
             name: 'des/toolkit',
-            alternateName: ['des toolkit', 'destoolkit'],
+            alternateName: ['des toolkit', 'destoolkit', 'destoolkit.com'],
             url: SITE_URL,
             logo: `${SITE_URL}/opengraph-image`,
             founder: { '@type': 'Person', name: 'Adi-404', url: 'https://github.com/Adi-404' },
+            // sameAs is Google Knowledge Graph's canonical "this brand is
+            // real" signal. The custom-domain home page belongs here too so
+            // the entity gets clearly tied to the new URL after the move
+            // from the *.vercel.app preview origin.
             sameAs: [
+                'https://www.destoolkit.com',
                 'https://github.com/Adi-404/des-toolkit',
                 'https://github.com/Adi-404',
                 'https://www.linkedin.com/in/adityanmahapatra/',
