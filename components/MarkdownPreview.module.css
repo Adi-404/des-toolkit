@@ -78,11 +78,18 @@
 
 .actionBtn:hover { border-color: var(--clay-ink); }
 
-/* ── Editors row ── */
+/* ── Editors row ──
+   Lives inside shell.container (page-scrollable) instead of a height:100%
+   wrapper now, so the panes take an explicit tall height. Two panes still
+   sync-scroll internally; the page scrolls below the editor. */
 .editors {
     display: flex;
-    flex: 1;
+    height: calc(100vh - 380px);
+    min-height: 480px;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
     overflow: hidden;
+    background: var(--clay-canvas);
 }
 
 .panel {

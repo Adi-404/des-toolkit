@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import oneLight from 'react-syntax-highlighter/dist/cjs/styles/prism/one-light';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
-import ToolHeader from './ToolHeader';
+import shell from './ToolPage.module.css';
 import styles from './MarkdownPreview.module.css';
 
 
@@ -124,18 +124,27 @@ export default function MarkdownPreview() {
     const readTime = Math.ceil(words / 200);
 
     return (
-        <div className={styles.wrapper}>
-            <ToolHeader
-                eyebrow="Text · markdown"
-                title="Markdown Preview"
-                titleAccent="Preview"
-                note="write & see"
-            >
-                <button className={styles.actionBtn} onClick={handleClear}>✕ Clear</button>
-                <button className={styles.actionBtn} onClick={handleCopyMd}>
-                    {copiedMd ? '✓ Copied' : '⧉ Copy Markdown'}
-                </button>
-            </ToolHeader>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Text · markdown</div>
+                        <h1 className={shell.title}>
+                            Markdown <span className="clay-title-script">Preview</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            Type or paste GitHub-flavoured markdown and watch the render keep pace — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> README drafts</span> and changelog polish.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        <button className={shell.btnSecondary} onClick={handleClear}>✕ Clear</button>
+                        <button className={shell.btnSecondary} onClick={handleCopyMd}>
+                            {copiedMd ? '✓ Copied' : '⧉ Copy Markdown'}
+                        </button>
+                    </div>
+                </header>
 
             <div className={styles.editors}>
                 <div className={`${styles.panel} ${fullscreen ? styles.panelHidden : ''}`}>
@@ -227,6 +236,7 @@ export default function MarkdownPreview() {
                 <span className={styles.statusItem}>{lines} lines</span>
                 <span className={styles.statusDivider}>|</span>
                 <span className={styles.statusItem}>{readTime} min read</span>
+            </div>
             </div>
         </div>
     );
