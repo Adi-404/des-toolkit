@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
+import shell from './ToolPage.module.css';
 import styles from './JwtDecoder.module.css';
 
 const CLAIM_LABELS: Record<string, string> = {
@@ -91,26 +92,31 @@ export default function JwtDecoder() {
     const claims = payload?.obj ? Object.entries(payload.obj).filter(([k]) => CLAIM_LABELS[k]) : [];
 
     return (
-        <div className={styles.wrapper}>
-            {/* Toolbar */}
-            <div className={styles.toolbar}>
-                <span className={styles.toolbarLabel}>JWT Decoder</span>
-                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                    peek inside the token
-                </span>
-                <div className={styles.toolbarActions}>
-                    {raw && (
-                        <>
-                            <button className={styles.actionBtn} onClick={() => handleCopy('token', raw)}>
-                                {copied === 'token' ? '✓ Copied' : '⧉ Copy Token'}
-                            </button>
-                            <button className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={() => setToken('')}>
-                                ✕ Clear
-                            </button>
-                        </>
-                    )}
-                </div>
-            </div>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Utility · JWT</div>
+                        <h1 className={shell.title}>
+                            JWT <span className="clay-title-script">Decoder</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            Paste a token and watch the header, payload and signature split out instantly — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> auth debugging</span> and claim inspection.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        {raw && (
+                            <>
+                                <button className={shell.btnSecondary} onClick={() => handleCopy('token', raw)}>
+                                    {copied === 'token' ? '✓ Copied' : '⧉ Copy Token'}
+                                </button>
+                                <button className={shell.btnSecondary} onClick={() => setToken('')}>✕ Clear</button>
+                            </>
+                        )}
+                    </div>
+                </header>
 
             {/* Input */}
             <div className={styles.inputArea}>
@@ -199,7 +205,8 @@ export default function JwtDecoder() {
                 </div>
             </div>
 
-            <div className={`${styles.statusBar} ${statusCls}`}>{statusText}</div>
+                <div className={`${styles.statusBar} ${statusCls}`}>{statusText}</div>
+            </div>
         </div>
     );
 }

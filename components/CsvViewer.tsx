@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { getSettingAction, setSettingAction } from '@/app/actions/settings';
+import shell from './ToolPage.module.css';
 import styles from './CsvViewer.module.css';
 
 // ── CSV parser (handles quoted fields, commas/newlines in quotes, escaped quotes) ──
@@ -217,33 +218,41 @@ export default function CsvViewer() {
     const isEmpty = !input.trim();
 
     return (
-        <div className={styles.wrapper}>
-            {/* Toolbar */}
-            <div className={styles.toolbar}>
-                <span className={styles.toolbarLabel}>CSV Viewer</span>
-                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                    rows &amp; columns, sorted
-                </span>
-            </div>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Utility · CSV</div>
+                        <h1 className={shell.title}>
+                            CSV <span className="clay-title-script">Viewer</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            Paste or drop a CSV and explore it as a sortable, searchable table — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> quick spreadsheet peeks</span> and data sanity checks.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        <button className={shell.btnSecondary} onClick={() => fileRef.current?.click()}>↑ Upload CSV</button>
+                        <input ref={fileRef} type="file" accept=".csv" onChange={handleUpload} style={{ display: 'none' }} />
+                        <button className={shell.btnSecondary} onClick={handleCopyCsv} disabled={isEmpty}>
+                            {copiedCsv ? '✓ Copied' : '⧉ Copy CSV'}
+                        </button>
+                        <button className={shell.btnSecondary} onClick={handleClear} disabled={isEmpty}>✕ Clear</button>
+                    </div>
+                </header>
 
-            {/* Input controls */}
-            <div className={styles.inputControls}>
-                <button className={styles.actionBtn} onClick={() => fileRef.current?.click()}>↑ Upload CSV</button>
-                <input ref={fileRef} type="file" accept=".csv" onChange={handleUpload} style={{ display: 'none' }} />
-                <select
-                    className={styles.delimSelect}
-                    value={delimChoice}
-                    onChange={e => setDelimChoice(e.target.value)}
-                >
-                    {DELIM_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
-                <button className={styles.actionBtn} onClick={handleCopyCsv} disabled={isEmpty}>
-                    {copiedCsv ? '✓ Copied' : '⧉ Copy CSV'}
-                </button>
-                <button className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={handleClear} disabled={isEmpty}>
-                    ✕ Clear
-                </button>
-            </div>
+                {/* Secondary toolbar — delimiter + status row */}
+                <div className={styles.toolbar}>
+                    <label className={styles.delimLabel}>Delimiter</label>
+                    <select
+                        className={styles.delimSelect}
+                        value={delimChoice}
+                        onChange={e => setDelimChoice(e.target.value)}
+                    >
+                        {DELIM_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                    </select>
+                </div>
 
             {/* Textarea */}
             <div className={styles.inputArea}>
@@ -352,6 +361,7 @@ export default function CsvViewer() {
                 ) : (
                     <span className={styles.statusItem}>—</span>
                 )}
+            </div>
             </div>
         </div>
     );

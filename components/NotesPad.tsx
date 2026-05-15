@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import shell from './ToolPage.module.css';
 import styles from './NotesPad.module.css';
 import { getNotesAction, createNoteAction, deleteNoteAction } from '@/app/actions/notes';
 import type { Note } from '@/lib/dal/notes';
@@ -53,20 +54,28 @@ export default function NotesPad() {
     const pageNotes = notes.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.toolbar}>
-                <span className={styles.toolbarLabel}>Notes Pad</span>
-                <span className="clay-note" style={{ color: 'var(--clay-muted-soft)', fontSize: 17, marginLeft: 8 }}>
-                    thoughts in the margins
-                </span>
-                <div className={styles.toolbarActions}>
-                    <button className={styles.newBtn} onClick={() => setShowForm(true)} disabled={showForm}>
-                        + New Note
-                    </button>
-                </div>
-            </div>
+        <div className={shell.scroll}>
+            <div className={shell.container}>
+                <header className={shell.header}>
+                    <div>
+                        <div className={shell.eyebrow}>Utility · notes</div>
+                        <h1 className={shell.title}>
+                            Notes <span className="clay-title-script">Pad</span>
+                            <span style={{ color: 'var(--clay-ink)' }}>.</span>
+                        </h1>
+                        <p className={shell.lede}>
+                            A private scratchpad that lives with your account — perfect for
+                            <span className="clay-highlight clay-highlight-pink"> thoughts in the margins</span> and quick reminders between tabs.
+                        </p>
+                    </div>
+                    <div className={shell.headerActions}>
+                        <button className={shell.btnPrimary} onClick={() => setShowForm(true)} disabled={showForm}>
+                            + New Note
+                        </button>
+                    </div>
+                </header>
 
-            <div className={styles.content}>
+                <div className={styles.content}>
                 {showForm && (
                     <div className={styles.formPanel}>
                         <input
@@ -142,11 +151,12 @@ export default function NotesPad() {
                 </div>
             )}
 
-            <div className={styles.statusBar}>
-                <span className={styles.statusItem}>
-                    {notes.length} note{notes.length !== 1 ? 's' : ''}
-                    {totalPages > 1 ? ` · Page ${page + 1} of ${totalPages}` : ''}
-                </span>
+                <div className={styles.statusBar}>
+                    <span className={styles.statusItem}>
+                        {notes.length} note{notes.length !== 1 ? 's' : ''}
+                        {totalPages > 1 ? ` · Page ${page + 1} of ${totalPages}` : ''}
+                    </span>
+                </div>
             </div>
         </div>
     );

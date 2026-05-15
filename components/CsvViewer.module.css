@@ -1,135 +1,89 @@
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'JetBrains Mono', monospace;
-}
+/* CSV Viewer — Clay-themed, lives inside shell.scroll/container. Mono font
+   reserved for the data surfaces (textarea + table cells); UI chrome stays
+   in Inter to match the rest of the toolkit. */
 
-/* ── Toolbar ── */
+/* ── Secondary toolbar (delimiter selector) ── */
 .toolbar {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    height: 36px;
-    min-height: 36px;
-    padding: 0 12px;
-    background: var(--bg-titlebar);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: var(--clay-space-md);
+    background: var(--clay-surface-soft);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-md);
 }
 
-.toolbarLabel {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.toolbarActions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* ── Shared button ── */
-.actionBtn {
-    padding: 3px 8px;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text-secondary);
+.delimLabel {
     font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
-    cursor: pointer;
-    transition: all 0.12s;
-    white-space: nowrap;
-}
-
-.actionBtn:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-}
-
-.actionBtn:disabled {
-    opacity: 0.4;
-    cursor: default;
-}
-
-.actionBtnDanger:hover:not(:disabled) {
-    color: #e06c75;
-    border-color: #e06c75;
-}
-
-/* ── Input controls row ── */
-.inputControls {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--clay-muted);
 }
 
 .delimSelect {
-    padding: 3px 6px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text-primary);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    height: 28px;
+    padding: 0 10px;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    color: var(--clay-ink);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
     outline: none;
+    transition: border-color 120ms ease;
 }
 
-.delimSelect:focus {
-    border-color: var(--accent);
-}
+.delimSelect:focus { border-color: var(--clay-ink); }
 
-/* ── Input textarea ── */
+/* ── Input textarea (CSV paste area) — mono surface, cream framing ── */
 .inputArea {
-    flex-shrink: 0;
-    height: 120px;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--clay-space-md);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
+    overflow: hidden;
+    background: var(--clay-canvas);
 }
 
 .textarea {
     width: 100%;
-    height: 100%;
-    resize: none;
-    background: var(--bg-primary);
+    height: 160px;
+    resize: vertical;
+    min-height: 120px;
+    background: var(--clay-canvas);
     border: none;
     outline: none;
-    padding: 8px 12px;
+    padding: var(--clay-space-md);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.6;
-    color: var(--text-primary);
-    caret-color: var(--cursor);
+    color: var(--clay-ink);
     box-sizing: border-box;
 }
 
 .textarea::placeholder {
-    color: var(--text-dim);
+    color: var(--clay-muted-soft);
 }
 
-/* ── Table section ── */
+/* ── Table section — same boxed treatment as other editor surfaces ── */
 .tableSection {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-lg);
     overflow: hidden;
+    background: var(--clay-canvas);
 }
 
 .tableControls {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
+    gap: 10px;
+    padding: 10px var(--clay-space-md);
+    background: var(--clay-surface-soft);
+    border-bottom: 1px solid var(--clay-hairline);
     flex-shrink: 0;
 }
 
@@ -139,169 +93,177 @@
 }
 
 .searchInput {
-    width: 220px;
-    padding: 4px 8px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text-primary);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    width: 240px;
+    height: 32px;
+    padding: 0 10px;
+    background: var(--clay-canvas);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    color: var(--clay-ink);
+    font-family: var(--clay-font-body);
+    font-size: 13px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 120ms ease;
 }
 
-.searchInput:focus {
-    border-color: var(--accent);
+.searchInput:focus { border-color: var(--clay-ink); }
+.searchInput::placeholder { color: var(--clay-muted-soft); }
+
+/* ── Inline action buttons (within tableControls) ── */
+.actionBtn {
+    height: 32px;
+    padding: 0 12px;
+    background: var(--clay-canvas);
+    color: var(--clay-ink);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--clay-font-body);
+    border: 1px solid var(--clay-hairline);
+    border-radius: var(--clay-radius-sm);
+    cursor: pointer;
+    transition: border-color 120ms ease;
+    white-space: nowrap;
 }
 
-.searchInput::placeholder {
-    color: var(--text-dim);
+.actionBtn:hover { border-color: var(--clay-ink); }
+.actionBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.actionBtnDanger:hover:not(:disabled) {
+    border-color: var(--clay-error);
+    color: var(--clay-error);
 }
 
-/* ── Table ── */
+/* ── Table — mono cells on cream rows. Sticky header keeps context. ── */
 .tableWrap {
-    flex: 1;
+    height: calc(100vh - 540px);
+    min-height: 360px;
     overflow: auto;
 }
 
-.tableWrap::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-.tableWrap::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.tableWrap::-webkit-scrollbar-thumb {
-    background: var(--scrollbar);
-    border-radius: 3px;
-}
-
-.tableWrap::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-hover);
-}
+.tableWrap::-webkit-scrollbar { width: 8px; height: 8px; }
+.tableWrap::-webkit-scrollbar-track { background: transparent; }
+.tableWrap::-webkit-scrollbar-thumb { background: var(--clay-hairline); border-radius: 4px; }
+.tableWrap::-webkit-scrollbar-thumb:hover { background: var(--clay-muted-soft); }
 
 .placeholder {
-    padding: 40px 24px;
+    padding: var(--clay-space-xxl) var(--clay-space-lg);
     text-align: center;
-    font-size: 12px;
-    color: var(--text-dim);
+    font-family: var(--clay-font-script);
+    font-size: 22px;
+    color: var(--clay-muted-soft);
+    letter-spacing: 0.2px;
 }
 
 .table {
     width: max-content;
     min-width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
 }
 
 .th {
     position: sticky;
     top: 0;
     z-index: 2;
-    background: var(--bg-titlebar);
-    border-bottom: 2px solid var(--border);
-    border-right: 1px solid var(--border);
-    padding: 6px 12px;
+    background: var(--clay-surface-card);
+    border-bottom: 1px solid var(--clay-hairline);
+    border-right: 1px solid var(--clay-hairline-soft);
+    padding: 8px 14px;
     text-align: left;
     font-weight: 600;
-    color: var(--text-primary);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
+    color: var(--clay-ink);
+    letter-spacing: 0.2px;
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
-    transition: background 0.1s;
+    transition: background 100ms ease;
 }
 
-.th:hover {
-    background: var(--bg-hover);
-}
+.th:hover { background: var(--clay-surface-strong); }
 
 .rowNumHeader {
     position: sticky;
     top: 0;
     z-index: 3;
-    background: var(--bg-titlebar);
-    border-bottom: 2px solid var(--border);
-    border-right: 1px solid var(--border);
-    padding: 6px 8px;
+    background: var(--clay-surface-card);
+    border-bottom: 1px solid var(--clay-hairline);
+    border-right: 1px solid var(--clay-hairline);
+    padding: 8px 10px;
     text-align: right;
     font-weight: 600;
-    color: var(--text-dim);
-    width: 36px;
-    min-width: 36px;
+    color: var(--clay-muted-soft);
+    width: 44px;
+    min-width: 44px;
+    font-family: var(--clay-font-body);
     font-size: 10px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
 }
 
 .sortArrow {
-    font-size: 9px;
-    color: var(--accent);
+    font-size: 10px;
+    color: var(--clay-brand-pink);
+    margin-left: 4px;
 }
 
 .td {
-    border-bottom: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    padding: 5px 12px;
+    border-bottom: 1px solid var(--clay-hairline-soft);
+    border-right: 1px solid var(--clay-hairline-soft);
+    padding: 7px 14px;
     white-space: nowrap;
-    color: var(--text-primary);
-    transition: background 0.08s;
+    color: var(--clay-body-strong);
+    transition: background 80ms ease;
 }
 
 .rowNum {
-    border-bottom: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    padding: 5px 8px;
+    border-bottom: 1px solid var(--clay-hairline-soft);
+    border-right: 1px solid var(--clay-hairline);
+    padding: 7px 10px;
     text-align: right;
-    color: var(--text-dim);
-    font-size: 10px;
-    background: var(--bg-secondary);
-    width: 36px;
-    min-width: 36px;
+    color: var(--clay-muted-soft);
+    font-size: 10.5px;
+    background: var(--clay-surface-soft);
+    width: 44px;
+    min-width: 44px;
+    font-variant-numeric: tabular-nums;
 }
 
-.rowEven td {
-    background: var(--bg-primary);
-}
-
-.rowOdd td {
-    background: var(--bg-secondary);
-}
-
-.rowEven .rowNum {
-    background: var(--bg-secondary);
-}
-
-.rowOdd .rowNum {
-    background: var(--bg-secondary);
-}
+.rowEven td { background: var(--clay-canvas); }
+.rowOdd td  { background: var(--clay-surface-soft); }
+.rowEven .rowNum,
+.rowOdd .rowNum { background: var(--clay-surface-soft); }
 
 .colHighlight {
-    background: color-mix(in srgb, var(--accent) 8%, transparent) !important;
+    background: color-mix(in srgb, var(--clay-brand-pink) 7%, transparent) !important;
 }
 
-/* ── Status bar ── */
+/* ── Status bar — Clay strip, sits below the table card. ── */
 .statusBar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    height: 24px;
-    min-height: 24px;
-    padding: 0 12px;
-    background: var(--bg-statusbar);
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.85);
+    gap: 10px;
+    height: 32px;
+    padding: 0 var(--clay-space-md);
+    margin-top: var(--clay-space-sm);
+    color: var(--clay-muted);
+    font-family: var(--clay-font-body);
+    font-size: 12px;
     flex-shrink: 0;
 }
 
-.statusItem {
-    white-space: nowrap;
-}
-
-.statusDivider {
-    opacity: 0.4;
-}
-
+.statusItem { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.statusDivider { color: var(--clay-hairline); }
 .statusWarning {
-    color: #e5c07b;
+    color: var(--clay-warning);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .tableControls { flex-direction: column; align-items: stretch; }
+    .searchInput { width: 100%; }
+    .tableControlsRight { justify-content: flex-end; }
+    .tableWrap { height: calc(100vh - 600px); min-height: 280px; }
 }
